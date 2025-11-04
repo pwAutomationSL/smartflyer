@@ -1,0 +1,76 @@
+Playwright Setup Document
+Install Visual Studio Code (VS Code)
+
+Download and install from https://code.visualstudio.com/
+
+During installation, check:
+
+-Add to PATH
+
+-Register as default editor for supported file types
+
+Launch VS Code and install the following extensions:
+
+-Playwright Test 
+-ESLint 
+-Prettier 
+-GitLens 
+
+
+Install Node.js (LTS version)
+
+Download from https://nodejs.org
+
+During installation:
+
+-Add to PATH
+-Automatically install necessary tools (if available)
+
+Verify installation in powershell:
+
+node -v
+npm -v
+
+
+If PowerShell blocks npm scripts:
+Open PowerShell
+Type Command:
+ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+(Yes to All)
+
+Restart PowerShell and run:
+-npm -v
+
+Install Git
+
+Download from https://git-scm.com/download/win
+Verify:
+git --version
+
+
+
+
+Create a New Playwright Project
+
+Create a folder:
+
+playwright
+cd playwright in terminal
+
+
+Initialize npm:
+
+npm init -y
+
+
+Generate Playwright project:
+
+npm create playwright@latest
+
+Follow the prompts:
+
+Choose TypeScript
+
+Optionally: Add GitHub Actions workflow
+
+Install Playwright browsers → Yes

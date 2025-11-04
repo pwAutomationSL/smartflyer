@@ -1,0 +1,17 @@
+{
+  "include": ["**/*.ts"],
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "types": ["@playwright/test", "node"],
+    "skipLibCheck": true,
+    "baseUrl": "https://crm.test.smartflyer.com/",
+    "paths": {
+      "path": ["page-objects"]
+    }
+  }
+}
