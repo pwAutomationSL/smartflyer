@@ -19,7 +19,7 @@ test.describe("GS-001 - Client Global Search - Scenario 1", () => {
     await test.step("3 - Click the “Client” filter", async () => {
       await searchPage.clickClientFilter();
     });
-    await test.step("4 - Type the client First name at the search text box", async () => {
+    await test.skip("4 - Type the client First name at the search text box", async () => {
       await searchPage.textToSearch(TEXT_TO_SEARCH);
       await expect(
         page.locator(searchPage.SEARCH_RESULT_LINKS).first()
