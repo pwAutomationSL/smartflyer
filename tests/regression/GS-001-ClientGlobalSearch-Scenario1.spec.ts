@@ -7,7 +7,7 @@ test.describe("GS-001 - Client Global Search - Scenario 1", () => {
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
     });
     await test.step("2 - Go to “Search” under the main navigation menu of Society", async () => {
-      await loginPage.login();
+      // await loginPage.login();
     });
   });
 });
