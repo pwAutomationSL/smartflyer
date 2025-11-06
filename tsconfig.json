@@ -1,5 +1,11 @@
 {
-  "include": ["**/*.ts"],
+  "include": [
+    "fixtures/**/*",
+    "page-objects/**/*",
+    "tests/**/*",
+    "playwright.config.ts",
+    "**/*.ts"
+  ],
   "compilerOptions": {
     "target": "ESNext",
     "module": "CommonJS",
