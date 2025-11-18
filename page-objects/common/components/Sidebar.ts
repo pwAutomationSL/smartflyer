@@ -8,7 +8,7 @@ export class SideBar {
   public readonly MODULE_BY_TEXT = (module: string) =>
     `//div[@class="body-sidebar"]//a[contains(.,'${module}')]`;
   public async goToModule(module: string) {
-    await this.page.locator(this.MODULE_BY_TEXT(module)).click();
+    await this.page.locator(this.MODULE_BY_TEXT(module)).first().click();
   }
 }
 export const sidebar = (page: Page) => new SideBar({ page });
