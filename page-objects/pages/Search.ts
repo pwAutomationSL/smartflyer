@@ -9,6 +9,8 @@ export class SearchPage {
   public readonly CLIENT_FILTER_BUTTON = `//span[contains(.,'Clients')]/../../button`;
   public readonly ANNOUNCEMENTS_FILTER_BUTTON = `//span[contains(.,'Announcements')]/../../button`;
   public readonly CLIENTS_FILTER_BUTTON = `//span[contains(.,'Clients')]/../../button`;
+  public readonly PARTNERS_FILTER_BUTTON = `//span[contains(.,'Partners')]/../../button`;
+  public readonly PARTNERS_BRAND_FILTER_CHECKBOX = `//span[contains(.,'Brand')]/../../label/input`;
   public readonly SEARCH_RESULT_LINKS = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https')]`;
   public readonly SEARCH_RESULT_MATCHES = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https')]/div/div/div/p/span//mark`;
   public readonly SEARCH_RESULT_MATCHES_A = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//mark`;
@@ -26,6 +28,12 @@ export class SearchPage {
   }
   public async getResultsCount(): Promise<number> {
     return await this.page.locator(this.SEARCH_RESULT_LINKS).count();
+  }
+  public async clickPartnerFilter() {
+    await this.page.locator(this.PARTNERS_FILTER_BUTTON).click();
+  }
+  public async checkPartnerBrandFilter() {
+    await this.page.locator("label").filter({ hasText: "Brand" }).check();
   }
   public async clickAnnouncementsFilter() {
     await this.page.locator(this.ANNOUNCEMENTS_FILTER_BUTTON).click();

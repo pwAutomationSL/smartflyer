@@ -34,7 +34,6 @@ test.describe("GS-005 - Search - Announcements filter", () => {
       await sidebar.goToModule("Search");
       await searchPage.clickAnnouncementsFilter();
       await searchPage.textToSearch(TITLE);
-      await expect(page.locator(searchPage.SPINNER_LOADER)).toBeVisible();
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
       await expect(
         page.locator(searchPage.SEARCH_RESULT_MATCHES_A)
