@@ -1,6 +1,6 @@
-import { test, expect } from "../../fixtures/PlaywrightFixtures";
-import { uniqueId } from "../../page-objects";
-import { HOTEL_REQUIRED_FIELDS, DESTINATIONS } from "../../data";
+import { test, expect } from "../../../fixtures/PlaywrightFixtures";
+import { uniqueId } from "../../../page-objects";
+import { HOTEL_REQUIRED_FIELDS, DESTINATIONS } from "../../../data";
 const SHARE_FORM_DATA = {
   partnerType: "Hotel",
   destinaton: "Americas",

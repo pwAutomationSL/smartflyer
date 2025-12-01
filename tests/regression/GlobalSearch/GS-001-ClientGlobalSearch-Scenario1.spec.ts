@@ -1,4 +1,4 @@
-import { test, expect } from "../../fixtures/PlaywrightFixtures";
+import { test, expect } from "../../../fixtures/PlaywrightFixtures";
 
 const TEXT_TO_SEARCH = "Fairmont";
 test.describe("GS-001 - Client Global Search - Scenario 1", () => {

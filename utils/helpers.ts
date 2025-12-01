@@ -1,1 +1,1 @@
-export const uniqueId = () => Math.floor(Math.random() * 100000);
+export const uniqueId = () => Math.floor(100000 + Math.random() * 900000);

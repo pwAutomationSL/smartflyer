@@ -1,11 +1,12 @@
-import { Page, APIResponse } from "@playwright/test";
-import { uniqueId } from "../../page-objects";
+import { Page } from "@playwright/test";
+const env = process.env.ENVIRONMENT ?? "test";
+
 export class Partners {
   public readonly page: Page;
   constructor({ page }: { page: Page }) {
     this.page = page;
   }
-  private shareEndpoint = "https://crm.test.smartflyer.com/share_link";
+  private shareEndpoint = `https://crm.${env}.smartflyer.com/share_link`;
   public readonly HEADER = `//h1`;
   public readonly CONTACTS_TAB_TOP = `//button[@id="pills-contact-tab"]`;
   public readonly PROPERTIES_TAB_TOP = `//button[@id="pills-property-tab"]`;
@@ -19,9 +20,13 @@ export class Partners {
   public readonly CREATE_BUTTON_MODAL = `(//div[contains(@class,'modal')]//button[contains(.,'Create')])[2]`;
   public readonly SEARCH_RESULT_MATCHES = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https')]/div/div/div/p/span//mark`;
   public readonly PARTNER_TYPE_SELECT = `//select[@id="form_type"]`;
+  public readonly PARTNER_SEARCH = `//input[@id="search_term"]`;
+  public readonly SEARCH_BUTTON = `//button[contains(.,'SEARCH')]`;
   public readonly DESTINATION_SELECT = `//select[@id="new_destination_id"]`;
   public readonly PARTNER_PROGRAM_SELECT = `//select[@id="partner_program2"]`;
   public readonly PROPERTY_NAME = `//input[@id="share_title"]`;
+  public readonly DRAFT_BUTTON_FIRST = `(//table[@id="partner_table"]//span)[1]`;
+  public readonly CONFIRM_POPUP = `//button[contains(.,'Yes , Proceed!')]`;
   public readonly BRAND_SUBMISSION_FORM_H1 = `//H1`;
   public readonly PROPERTIES_OPTIONS_RESULTS = `//ul[contains(@class,'results')]/li`;
   public readonly DESTINATIONS_CHECKBOXES = (destination: string) =>
@@ -225,6 +230,17 @@ export class Partners {
   }
   public async fillPropertyName(text: string) {
     await this.page.locator('input[type="search"]').fill(text);
+  }
+  public async searchPartner(partner: string) {
+    await this.page.locator(this.PARTNER_SEARCH).fill(partner);
+    await this.page.locator(this.SEARCH_BUTTON).click();
+  }
+  public async approveNewPartner() {
+    await this.page.locator(this.DRAFT_BUTTON_FIRST).click();
+    await this.confirmApprove();
+  }
+  public async confirmApprove() {
+    await this.page.locator(this.CONFIRM_POPUP).click();
   }
   public async selectFirstOtion() {
     await this.page.locator(this.PROPERTIES_OPTIONS_RESULTS).first().click;

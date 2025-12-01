@@ -1,4 +1,4 @@
-import { test, expect } from "../../fixtures/PlaywrightFixtures";
+import { test, expect } from "../../../fixtures/PlaywrightFixtures";
 
 test.describe("CLI-001 - Client - Add Client", () => {
   test("Login at Society (env) as an Admin", async ({

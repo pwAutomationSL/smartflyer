@@ -1,5 +1,5 @@
-import { test, expect } from "../../fixtures/PlaywrightFixtures";
-import { uniqueId } from "../../page-objects";
+import { test, expect } from "../../../fixtures/PlaywrightFixtures";
+import { uniqueId } from "../../../page-objects";
 
 const TITLE = `New forum post ` + uniqueId();
 const DETAILS = `This is a description ` + uniqueId();

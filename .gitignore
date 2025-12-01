@@ -11,4 +11,5 @@ playwright-report/
 html-report/
 test-results/
 allure-results/
+allure-report/
 clean_report/

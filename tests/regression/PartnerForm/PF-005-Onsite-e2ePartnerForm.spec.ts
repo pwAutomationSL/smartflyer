@@ -1,5 +1,5 @@
-import { test, expect } from "../../fixtures/PlaywrightFixtures";
-import { uniqueId } from "../../page-objects";
+import { test, expect } from "../../../fixtures/PlaywrightFixtures";
+import { uniqueId } from "../../../page-objects";
 const SHARE_FORM_DATA = {
   partnerType: "Onsite",
   destinaton: "Americas",

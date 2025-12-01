@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test --headed",
+    "test:chromium:allure": "npx playwright test --project=chromium",
+    "test:chromium:allure:stage": "node scripts/run-stage.ts",
     "test:ui": "playwright test --ui",
-    "report": "playwright show-report",
+    "report": "npx allure generate allure-results --clean --single-file",
     "codegen": "playwright codegen"
   },
   "keywords": [],

@@ -7,6 +7,9 @@ import { SearchPage } from "../page-objects/pages/Search";
 import { Forum } from "../page-objects/pages/Forum";
 import { Partners } from "../page-objects/pages/Partners";
 import { Clients } from "../page-objects/pages/Clients";
+import { GalleryPage } from "../page-objects/pages/Gallery";
+import { Directories } from "../page-objects/pages/Directories";
+import { Faqs } from "../page-objects/pages/Faqs";
 import { PartnersHotel } from "../page-objects/pages/PartnersHotel";
 import { PartnersOnsite } from "../page-objects/pages/PartnersOnsite";
 import { Toast } from "../page-objects/pages/Toast";
@@ -14,8 +17,11 @@ export interface PlaywrightFixtures {
   commonActions: CommonActions;
   loginPage: LoginPage;
   searchPage: SearchPage;
+  galleryPage: GalleryPage;
+  faqs: Faqs;
   sidebar: SideBar;
   partners: Partners;
+  directories: Directories;
   clients: Clients;
   forum: Forum;
   partnersHotel: PartnersHotel;
@@ -42,8 +48,17 @@ export const test = base.extend<PlaywrightFixtures>({
   partners: async ({ page }, use) => {
     await use(new Partners({ page }));
   },
+  directories: async ({ page }, use) => {
+    await use(new Directories({ page }));
+  },
   clients: async ({ page }, use) => {
     await use(new Clients({ page }));
+  },
+  faqs: async ({ page }, use) => {
+    await use(new Faqs({ page }));
+  },
+  galleryPage: async ({ page }, use) => {
+    await use(new GalleryPage({ page }));
   },
   partnersOnsite: async ({ page }, use) => {
     await use(new PartnersOnsite({ page }));

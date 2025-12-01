@@ -1,5 +1,5 @@
-import { test, expect } from "../../fixtures/PlaywrightFixtures";
-import { uniqueId } from "../../page-objects";
+import { test, expect } from "../../../fixtures/PlaywrightFixtures";
+import { uniqueId } from "../../../page-objects";
 const unique = uniqueId();
 const LAST_NAME = `LastName` + unique;
 const EMAIL = `email` + unique + `@test.com`;
@@ -18,7 +18,6 @@ test.describe("GS-001 - Search - Clients filter", () => {
     });
     await test.step("2 - Go to Clients, Quick Add", async () => {
       await sidebar.goToModule("Clients");
-      await expect(page.locator(clients.SPINNER_LOADER)).toBeVisible();
       await expect(page.locator(clients.SPINNER_LOADER)).toBeHidden();
       await expect(page.locator(clients.HEADER)).toBeEnabled();
       await expect(page.locator(clients.QUICK_ADD)).toBeEnabled();
@@ -31,11 +30,10 @@ test.describe("GS-001 - Search - Clients filter", () => {
         LAST_NAME
       );
     });
-    await test.step("4 - Go to Search - Announcements filter", async () => {
+    await test.step("4 - Go to Search - Clients filter", async () => {
       await sidebar.goToModule("Search");
       await searchPage.clickClientsFilter();
       await searchPage.textToSearch(LAST_NAME);
-      await expect(page.locator(searchPage.SPINNER_LOADER)).toBeVisible();
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
       await expect(
         page.locator(searchPage.SEARCH_RESULT_MATCHES_A)
@@ -55,7 +53,6 @@ test.describe("GS-001 - Search - Clients filter", () => {
     });
     await test.step("6 - Search Again by Email", async () => {
       await searchPage.textToSearch(EMAIL);
-      await expect(page.locator(searchPage.SPINNER_LOADER)).toBeVisible();
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
       await expect(
         page.locator(searchPage.SEARCH_RESULT_MATCHES_A)

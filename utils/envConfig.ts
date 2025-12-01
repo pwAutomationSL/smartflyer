@@ -6,11 +6,11 @@ interface EnvConfig {
 
 export function getEnvConfig(): EnvConfig {
   const env = process.env.ENVIRONMENT ?? "test";
-
+  console.log(">>> USING ENVIRONMENT:", process.env.ENVIRONMENT);
   switch (env) {
-    case "staging":
+    case "stage":
       return {
-        BASE_URL: "https://crm.staging.smartflyer.com/",
+        BASE_URL: "https://crm.stage.smartflyer.com/",
         USERNAME: process.env.STAGING_USER ?? "",
         PASSWORD: process.env.STAGING_PASS ?? "",
       };
