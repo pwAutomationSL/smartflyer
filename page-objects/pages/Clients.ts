@@ -148,6 +148,30 @@ export class Clients {
       .getByPlaceholder("Clear Membership Expiry Date")
       .fill("2028-11-21");
   }
-  public async importantDates() {}
+  public async selectAgentAndContinue() {
+    await this.page
+      .locator("div")
+      .filter({ hasText: /^Select an agent$/ })
+      .nth(1)
+      .click();
+    await this.page
+      .locator(`(//div[contains(@id,'listbox')]/div/p)[1]`)
+      .click();
+    await this.page.getByRole("button", { name: "Continue" }).click();
+  }
+  public async startFromScrath() {
+    await this.page.getByRole("button", { name: "Start from scratch" }).click();
+  }
+  public async clickAirRequest() {
+    await this.page.getByRole("button", { name: "Air Request" }).click();
+  }
+  public async goToCreditCard() {
+    await this.page.getByRole("tab", { name: "credit card" }).click();
+  }
+  public async searchClient(client: string) {
+    await this.page.getByRole("textbox", { name: "Search" }).fill(client);
+    await this.page.getByRole("textbox", { name: "Search" }).press("Enter");
+    await this.page.getByText("Candice & Ben (Conway)").click();
+  }
 }
 export const clients = (page: Page) => new Clients({ page });

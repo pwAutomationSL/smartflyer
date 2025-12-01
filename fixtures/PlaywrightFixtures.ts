@@ -7,6 +7,7 @@ import { SearchPage } from "../page-objects/pages/Search";
 import { Forum } from "../page-objects/pages/Forum";
 import { Partners } from "../page-objects/pages/Partners";
 import { Clients } from "../page-objects/pages/Clients";
+import { AirRequest } from "../page-objects/pages/AirRequest";
 import { GalleryPage } from "../page-objects/pages/Gallery";
 import { Directories } from "../page-objects/pages/Directories";
 import { Faqs } from "../page-objects/pages/Faqs";
@@ -23,6 +24,7 @@ export interface PlaywrightFixtures {
   partners: Partners;
   directories: Directories;
   clients: Clients;
+  airRequest: AirRequest;
   forum: Forum;
   partnersHotel: PartnersHotel;
   partnersOnsite: PartnersOnsite;
@@ -53,6 +55,9 @@ export const test = base.extend<PlaywrightFixtures>({
   },
   clients: async ({ page }, use) => {
     await use(new Clients({ page }));
+  },
+  airRequest: async ({ page }, use) => {
+    await use(new AirRequest({ page }));
   },
   faqs: async ({ page }, use) => {
     await use(new Faqs({ page }));
