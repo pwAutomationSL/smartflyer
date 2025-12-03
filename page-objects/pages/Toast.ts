@@ -7,6 +7,7 @@ export class Toast {
     this.page = page;
   }
   public readonly TOAST_MESSAGE = `//div[contains(@class,'notyf__message')]`;
+  public readonly TOAST_MESSAGE_APP = `//div[@role="alert"]`;
   public readonly TOAST_CLOSE_BUTTON = `//div[contains(@class,'notyf__wrapper')]//i`;
 
   public async closeToastMessage() {

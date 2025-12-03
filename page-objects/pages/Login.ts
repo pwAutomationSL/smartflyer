@@ -1,4 +1,4 @@
-import { Page, expect } from "@playwright/test";
+import { Page } from "@playwright/test";
 
 import { getEnvConfig } from "../../utils/envConfig";
 export class LoginPage {

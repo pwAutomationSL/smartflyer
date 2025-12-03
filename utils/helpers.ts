@@ -15,13 +15,15 @@ export const getPresentDate = (
 export const getPresentTime = (
   options: { hour: "numeric" | "2-digit"; minute: "numeric" | "2-digit" },
   locale = "en-US",
-  twelveHour = true
+  twelveHour = true,
+  timeZone = "America/New_York"
 ) => {
   const currentTime = new Date();
   const time = new Intl.DateTimeFormat(locale, {
     hour: options.hour,
     minute: options.minute,
     hour12: twelveHour,
+    timeZone,
   }).format(currentTime);
   return time;
 };

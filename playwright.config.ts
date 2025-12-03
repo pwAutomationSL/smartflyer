@@ -32,6 +32,7 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "off",
     video: "off",
+    timezoneId: "America/New_York",
     screenshot: "only-on-failure",
   },
 

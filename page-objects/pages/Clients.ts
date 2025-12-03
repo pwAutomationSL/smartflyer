@@ -1,15 +1,15 @@
 import { Page } from "@playwright/test";
-import { uniqueId } from "..";
+
 export class Clients {
   public readonly page: Page;
   constructor({ page }: { page: Page }) {
     this.page = page;
   }
-  private shareEndpoint = "https://crm.test.smartflyer.com/share_link";
   public readonly HEADER = `//h1`;
   public readonly QUICK_ADD = `//button[contains(.,'Quick Add')]`;
   public readonly SPINNER_LOADER = `//div[@id="ClientTable_processing"]`;
   public readonly USERNAME_HEADER = `//div[contains(@class,'user-data')]//h4`;
+  public readonly ALL_ACTIVE_CLIENTS = `//tbody/tr//p`;
   public async clickCreate() {
     await this.page.locator(this.HEADER).click();
   }
@@ -164,6 +164,9 @@ export class Clients {
   }
   public async clickAirRequest() {
     await this.page.getByRole("button", { name: "Air Request" }).click();
+  }
+  public async clickFirstResult() {
+    await this.page.locator(this.ALL_ACTIVE_CLIENTS).first().click();
   }
   public async goToCreditCard() {
     await this.page.getByRole("tab", { name: "credit card" }).click();
