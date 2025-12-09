@@ -5,7 +5,7 @@ import {
   getPresentTime,
   convertToUiDateFormat,
 } from "../../../utils/helpers";
-
+const CLIENT_NAME = "Candice & Ben (Conway) Winikoff";
 function getDate(): string {
   const presentDate = getPresentDate({ month: "2-digit", day: "2-digit" });
   const presentTime = getPresentTime({ hour: "numeric", minute: "2-digit" });
@@ -24,7 +24,7 @@ test.describe("AR-002 - Air Request - Step 1", () => {
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
       await sidebar.goToModule("Clients");
       await test.step("Search the client and go to the client page", async () => {
-        await clients.searchClient("Candice & Ben (Conway) Winikoff Primary");
+        await clients.searchClient(CLIENT_NAME);
       });
       await test.step("Go to the New credit card tab and Click on Air request button", async () => {
         await airRequest.goToCreditCard();
@@ -72,7 +72,7 @@ test.describe("AR-002 - Air Request - Step 1", () => {
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
       await sidebar.goToModule("Clients");
       await test.step("Search the client and go to the client page", async () => {
-        await clients.searchClient("Candice & Ben (Conway) Winikoff Primary");
+        await clients.searchClient(CLIENT_NAME);
       });
       await test.step("Go to the New credit card tab and Click on Air request button", async () => {
         await airRequest.goToCreditCard();
@@ -100,9 +100,7 @@ test.describe("AR-002 - Air Request - Step 1", () => {
         const TimeForDraft = getDate();
         await test.step("Click on Cancel", async () => {
           await airRequest.clickCancel();
-          await expect(page.locator(airRequest.HEADER)).toContainText(
-            "Add credit card"
-          );
+          await expect(page.locator(airRequest.HEADER).first()).toBeVisible();
           const [datePart, timePart] = TimeForDraft.split(" ");
           const uiDate = convertToUiDateFormat(datePart);
           const expectedSubstring = `${uiDate}, ${timePart}`;

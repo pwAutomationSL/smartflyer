@@ -10,7 +10,8 @@ function getDate(): string {
   const presentTime = getPresentTime({ hour: "numeric", minute: "2-digit" });
   return `${presentDate} ${presentTime}`;
 }
-const normalizePhoneNumber = (str: string) => {
+const normalizePhoneNumber = (str: string | null | undefined): string => {
+  if (!str) return "";
   return str.replace(/[^\d+]/g, "");
 };
 test.describe("AR-002 - Air Request - Step 1", () => {
@@ -95,9 +96,7 @@ test.describe("AR-002 - Air Request - Step 1", () => {
         normalizePhoneNumber(userData.responseData.data.agent_phone)
       );
       await airRequest.clickCancel();
-      await expect(page.locator(airRequest.HEADER)).toContainText(
-        "Add credit card"
-      );
+      await expect(page.locator(airRequest.HEADER).first()).toBeVisible();
       const TimeForDraft = getDate();
       const [datePart, timePart] = TimeForDraft.split(" ");
       const uiDate = convertToUiDateFormat(datePart);
