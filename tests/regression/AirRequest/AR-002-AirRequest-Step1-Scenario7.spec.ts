@@ -1,16 +1,5 @@
 import { test, expect } from "../../../fixtures/PlaywrightFixtures";
 
-import {
-  getPresentDate,
-  getPresentTime,
-  convertToUiDateFormat,
-} from "../../../utils/helpers";
-
-function getDate(): string {
-  const presentDate = getPresentDate({ month: "2-digit", day: "2-digit" });
-  const presentTime = getPresentTime({ hour: "numeric", minute: "2-digit" });
-  return `${presentDate} ${presentTime}`;
-}
 const CLIENT_NAME = "Candice & Ben (Conway) Winikoff";
 test.describe("AR-002 - Air Request - Step 1", () => {
   test("Scenario 7 - Search draft by ID", async ({
@@ -18,7 +7,6 @@ test.describe("AR-002 - Air Request - Step 1", () => {
     page,
     sidebar,
     clients,
-    toast,
     airRequest,
   }) => {
     await test.step("Go to the Client tab", async () => {

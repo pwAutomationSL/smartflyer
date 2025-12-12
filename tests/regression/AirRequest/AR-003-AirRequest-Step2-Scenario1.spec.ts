@@ -3,7 +3,7 @@ const CLIENT_NAME = "Candice & Ben (Conway) Winikoff";
 const PASSENGER_FIRST_NAME = "Candice & Ben";
 const PASSENGER_LAST_NAME = "(Conway) Winikoff";
 const EMAIL = "fake_candiceconway84@gmail.com";
-const PHONE = "18000000000";
+const PHONE = "18333333333";
 const WRONG_PHONE = "800000";
 const WRONG_EMAIL = "fake_candiceconway84gmail.com";
 const CLIENT_ID = "SQ4715";
@@ -53,13 +53,13 @@ test.describe("AR-003 - Air Request - Step 2", () => {
       });
       await test.step("ER 1 - Domestic checked by default, first name and last name pre filled", async () => {
         await expect(page.locator(airRequest.DOMESTIC_RADIO)).toBeChecked();
-        await expect(page.locator(airRequest.FIRST_NAME_PASSENGER)).toHaveValue(
-          PASSENGER_FIRST_NAME
-        );
-        await expect(page.locator(airRequest.LAST_NAME_PASSENGER)).toHaveValue(
-          PASSENGER_LAST_NAME
-        );
-        await expect(page.locator(airRequest.PASSENGER_EMAIL)).toHaveValue(
+        await expect(
+          page.locator(airRequest.FIRST_NAME_PASSENGER(0))
+        ).toHaveValue(PASSENGER_FIRST_NAME);
+        await expect(
+          page.locator(airRequest.LAST_NAME_PASSENGER(0))
+        ).toHaveValue(PASSENGER_LAST_NAME);
+        await expect(page.locator(airRequest.PASSENGER_EMAIL(0))).toHaveValue(
           EMAIL
         );
       });
@@ -81,6 +81,9 @@ test.describe("AR-003 - Air Request - Step 2", () => {
       await test.step("ER 3 - Insert incorrect email and warning message is visible", async () => {
         await airRequest.fillPassengerEmail(WRONG_EMAIL);
         await airRequest.clickLabel();
+        await expect(page.locator(airRequest.PASSENGER_EMAIL(0))).toHaveClass(
+          /border-red/i
+        );
         await expect(page.locator(airRequest.WARNING_EMAIL)).toContainText(
           "Email must be a valid email address."
         );
@@ -89,6 +92,9 @@ test.describe("AR-003 - Air Request - Step 2", () => {
       await test.step("ER 3 - 6 Insert incorrect Phone number and warning message is visible", async () => {
         await airRequest.fillPassengerPhone(WRONG_PHONE);
         await airRequest.clickLabel();
+        await expect(
+          page.locator(airRequest.PHONE_INPUT_PASSENGER_DIV(0))
+        ).toHaveClass(/border-red/i);
         await expect(page.locator(airRequest.WARNING_PHONE)).toContainText(
           "Invalid phone number"
         );
@@ -97,8 +103,8 @@ test.describe("AR-003 - Air Request - Step 2", () => {
       await test.step("ER 4 - 6 Insert incorrect Phone number and warning message is visible", async () => {
         await expect(page.locator(airRequest.PHONE_FLAG)).toBeVisible();
         await expect(
-          page.locator(airRequest.PHONE_INPUT_PASSENGER)
-        ).toHaveValue("+1 (800) 000-0000");
+          page.locator(airRequest.PHONE_INPUT_PASSENGER(0))
+        ).toHaveValue("+1 (833) 333-3333");
       });
       await test.step("ER 5 - Add passport information toggle OFF by default", async () => {
         await expect(
