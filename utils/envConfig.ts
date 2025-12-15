@@ -5,7 +5,7 @@ interface EnvConfig {
 }
 
 export function getEnvConfig(): EnvConfig {
-  const env = process.env.ENVIRONMENT ?? "stage";
+  const env = process.env.ENVIRONMENT ?? "test";
   switch (env) {
     case "stage":
       return {
