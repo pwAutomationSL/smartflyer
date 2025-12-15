@@ -83,7 +83,9 @@ test.describe("AR-003 - Air Request - Step 2", () => {
         await expect(
           page.locator(airRequest.UPLOAD_FILE_P).nth(1)
         ).toContainText("PDF, JPG or PNG (max 25MB per file)");
-        await airRequest.add2FilesPassport();
+        await airRequest.addFilePassport("testImage.jpg");
+        await expect(page.locator(airRequest.INPUT_FILE)).toBeEnabled();
+        await airRequest.addFilePassport("testImage2.png");
         await expect(
           page.locator(airRequest.FILES_UPLOAD_POPUP_UPLOAD_FILES)
         ).toBeVisible();
@@ -101,6 +103,9 @@ test.describe("AR-003 - Air Request - Step 2", () => {
           .count();
         expect(imgCount).toBe(2);
         await airRequest.uploadAddedFiles();
+        await expect(
+          page.locator(airRequest.UPLOADED_IMAGES).first()
+        ).toBeVisible();
         const uploadedImgCount = await page
           .locator(airRequest.UPLOADED_IMAGES)
           .count();

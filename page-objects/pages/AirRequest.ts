@@ -250,18 +250,16 @@ export class AirRequest {
       buffer: largeBuffer,
     });
   }
-  public async add2FilesPassport() {
+  public async addFilePassport(image: string) {
     await this.page
       .locator(this.INPUT_FILE)
-      .setInputFiles("./data/images/testImage.jpg");
-    await this.page
-      .locator(this.INPUT_FILE)
-      .setInputFiles("./data/images/testImage2.png");
+      .setInputFiles(`./data/images/${image}`);
     await this.page.waitForTimeout(1500);
   }
   public async uploadAddedFiles() {
-    await this.page.waitForTimeout(1000);
-    await this.page.locator(this.FILES_UPLOAD_POPUP_UPLOAD_FILES).click();
+    await this.page
+      .locator(this.FILES_UPLOAD_POPUP_UPLOAD_FILES)
+      .click({ delay: 500 });
     await this.page.waitForTimeout(4500);
   }
   public async closePopUp() {

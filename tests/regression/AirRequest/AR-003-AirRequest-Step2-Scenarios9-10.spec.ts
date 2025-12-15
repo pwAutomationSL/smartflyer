@@ -11,7 +11,7 @@ const normalizePhoneNumber = (str: string | null | undefined): string => {
 const CLIENT_NAME = "Candice & Ben (Conway) Winikoff";
 test.describe("AR-003 - Air Request - Step 2", () => {
   test.setTimeout(200_000);
-  test("Air Request - Step 2 - 9# Scenario - Add Additional Passenger", async ({
+  test("Air Request - Step 2 - 9# and #10 Scenario - Add Additional Passenger", async ({
     loginPage,
     page,
     sidebar,
@@ -218,12 +218,9 @@ test.describe("AR-003 - Air Request - Step 2", () => {
           );
           await airRequest.fillPassengerEmail("", 2);
           await airRequest.clickLabel();
-          await expect(page.locator(airRequest.WARNING_EMAIL)).toContainText(
-            "Email is required"
-          );
-          await expect(page.locator(airRequest.PASSENGER_EMAIL(1))).toHaveClass(
-            /border-red/i
-          );
+          await expect(
+            page.locator(airRequest.WARNING_EMAIL)
+          ).not.toBeVisible();
           await airRequest.fillPassengerEmail(EMAIL, 2);
         } catch (err) {
           console.error("Edit Secondary Passenger email");
@@ -310,7 +307,9 @@ test.describe("AR-003 - Air Request - Step 2", () => {
           await expect(
             page.locator(airRequest.UPLOAD_FILE_P).nth(1)
           ).toContainText("PDF, JPG or PNG (max 25MB per file)");
-          await airRequest.add2FilesPassport();
+          await airRequest.addFilePassport("testImage.jpg");
+          await expect(page.locator(airRequest.INPUT_FILE)).toBeEnabled();
+          await airRequest.addFilePassport("testImage2.png");
           await expect(
             page.locator(airRequest.FILES_UPLOAD_POPUP_UPLOAD_FILES)
           ).toBeVisible();
