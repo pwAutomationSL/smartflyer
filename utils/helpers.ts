@@ -2,13 +2,15 @@ export const uniqueId = () => Math.floor(100000 + Math.random() * 900000);
 
 export const getPresentDate = (
   options: { month: "numeric" | "2-digit"; day: "numeric" | "2-digit" },
-  locale = "en-US"
+  locale = "en-US",
+  timeZone = "America/New_York"
 ) => {
   const currentDate = new Date();
   const date = new Intl.DateTimeFormat(locale, {
     year: "numeric",
     day: options.day,
     month: options.month,
+    timeZone,
   }).format(currentDate);
   return date;
 };

@@ -108,7 +108,7 @@ test.describe("AR-003 - Air Request - Step 2", () => {
       });
       await test.step("ER 5 - Add passport information toggle OFF by default", async () => {
         await expect(
-          page.locator(airRequest.ADD_PASSPORT_INFORMATION)
+          page.locator(airRequest.ADD_PASSPORT_INFORMATION(1))
         ).toHaveAttribute("aria-checked", "false");
       });
       await test.step("ER 7 - I certify the information ... chechbox not checked by default", async () => {

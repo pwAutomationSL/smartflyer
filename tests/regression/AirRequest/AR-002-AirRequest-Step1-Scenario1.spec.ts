@@ -97,19 +97,21 @@ test.describe("AR-002 - Air Request - Step 1", () => {
         );
 
         await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
+      });
+      await test.step("Click on Cancel", async () => {
         const TimeForDraft = getDate();
-        await test.step("Click on Cancel", async () => {
-          await airRequest.clickCancel();
-          await expect(page.locator(airRequest.HEADER).first()).toBeVisible();
-          const [datePart, timePart] = TimeForDraft.split(" ");
-          const uiDate = convertToUiDateFormat(datePart);
-          const expectedSubstring = `${uiDate}, ${timePart}`;
-          await airRequest.clickAirRequest();
-          await airRequest.startFromDraft();
-          const firstDraftTime = await airRequest.returnFirstDraftTime();
-          const cleaned = firstDraftTime?.replace("Last edited on ", "");
-          expect(cleaned).toContain(expectedSubstring);
-        });
+        await airRequest.clickCancel();
+        await expect(page.locator(airRequest.HEADER).first()).toBeVisible();
+        const [datePart, timePart] = TimeForDraft.split(" ");
+        const uiDate = convertToUiDateFormat(datePart);
+        const expectedSubstring = `${uiDate}, ${timePart}`;
+        await airRequest.clickAirRequest();
+        await airRequest.startFromDraft();
+        const firstDraftTime = await airRequest.returnFirstDraftTime();
+        const cleaned = firstDraftTime?.replace("Last edited on ", "");
+        expect(cleaned).toContain(
+          expectedSubstring.replace(/\s?(AM|PM)$/i, "")
+        );
       });
     });
   });

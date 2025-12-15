@@ -148,14 +148,18 @@ export class Partners {
     await this.page
       .getByRole("textbox", { name: "Enter Virtuoso amenity here," })
       .fill("Virtuoso Test");
+    await this.page.waitForTimeout(1000);
     await this.page
       .locator("#vistouso_amenities_container_div")
       .getByRole("button", { name: "ADD MORE" })
       .click();
-    await this.page.getByRole("radio", { name: "Elevate amenities" }).check();
     await this.page
-      .getByRole("radio", { name: "Preferred Partner amenities" })
-      .check();
+      .getByRole("checkbox", { name: "Elevate amenities" })
+      .first()
+      .click();
+    await this.page
+      .getByRole("checkbox", { name: "Preferred Partner amenities" })
+      .click();
     await this.page.getByRole("radio", { name: "Virtuoso amenities" }).check();
   }
   public async fillGlobalContactInfo() {

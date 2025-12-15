@@ -67,7 +67,7 @@ test.describe("AR-002 - Air Request - Step 1", () => {
         getPrefilledData.agent
       );
       await expect(
-        page.locator(airRequest.EMAIL_INPUT).inputValue()
+        page.locator(airRequest.EMAIL_INPUT(1)).inputValue()
       ).resolves.toBe(getPrefilledData.email);
     });
   });

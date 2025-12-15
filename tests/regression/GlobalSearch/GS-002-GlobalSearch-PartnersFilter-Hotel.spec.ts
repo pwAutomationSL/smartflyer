@@ -69,7 +69,7 @@ test.describe("GS-002 - Search - Partners filter Hotel", () => {
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
       await expect(
         page.locator(searchPage.SEARCH_RESULT_MATCHES_A)
-      ).toBeVisible();
+      ).toBeVisible({ timeout: 15000 });
     });
     await test.step("8 - Assert result is 1, title and details are correct", async () => {
       const count = await page

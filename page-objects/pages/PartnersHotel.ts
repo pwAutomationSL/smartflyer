@@ -5,7 +5,6 @@ export class PartnersHotel {
   constructor({ page }: { page: Page }) {
     this.page = page;
   }
-  private shareEndpoint = "https://crm.test.smartflyer.com/share_link";
   public readonly HEADER = `//h1`;
   public readonly CONTACTS_TAB_TOP = `//button[@id="pills-contact-tab"]`;
   public readonly PROPERTIES_TAB_TOP = `//button[@id="pills-property-tab"]`;
@@ -367,6 +366,7 @@ export class PartnersHotel {
       .click();
     await this.page
       .getByRole("treeitem", { name: "Rachel Braylovsky" })
+      .first()
       .click();
     await this.page
       .getByRole("textbox", { name: "Write Feedback..." })
@@ -384,6 +384,7 @@ export class PartnersHotel {
       .click();
     await this.page
       .getByRole("treeitem", { name: "Rachel Braylovsky" })
+      .first()
       .click();
     await this.page
       .locator(

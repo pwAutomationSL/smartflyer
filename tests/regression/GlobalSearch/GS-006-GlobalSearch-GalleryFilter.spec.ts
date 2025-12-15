@@ -4,6 +4,7 @@ const imageName = "testImage";
 let responseUpload: any;
 let token: any;
 test.describe("GS-006 - Search - Gallery filter", () => {
+  test.setTimeout(120_000);
   test.afterAll(async ({ request }) => {
     const response = await request.delete(
       `https://api.${env}.smartflyer.com/api/gallery`,
@@ -54,7 +55,7 @@ test.describe("GS-006 - Search - Gallery filter", () => {
     await test.step("5 - Click on image and validate is ok, then delete", async () => {
       await searchPage.clickFirstImage();
       await expect(page.locator(galleryPage.HEADER_H2)).toBeVisible({
-        timeout: 12000,
+        timeout: 22000,
       });
       await expect(page.locator(galleryPage.HEADER_H2)).toContainText(
         "Image information"

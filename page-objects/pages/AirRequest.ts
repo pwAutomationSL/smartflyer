@@ -43,7 +43,8 @@ export class AirRequest {
     `(//div[contains(.,'Select...') and contains(@id,'select')]/../../div[2])[${index}]`;
   public readonly MALE_DROPDOWN = `//div[@role="listbox"]//p[contains(.,'Male')]`;
   public readonly FEMALE_DROPDOWN = `//div[@role="listbox"]//p[contains(.,'Female')]`;
-  public readonly ADD_PASSPORT_INFORMATION = `//label[contains(.,'Add passport information')]//..//button`;
+  public readonly ADD_PASSPORT_INFORMATION = (index: number = 1) =>
+    `(//label[contains(.,'Add passport information')]//..//button)[${index}]`;
   public readonly ADD_ADDITIONAL_PASSENGER = `//button[contains(.,'Add Additional Passenger')]`;
   public readonly CERTIFY_CHECKBOX = `//span[contains(.,'I certify the information')]//..//span`;
   public readonly DELETE_TRAVELER_BUTTON = `//button[contains(.,'Delete traveler')]`;
@@ -82,6 +83,7 @@ export class AirRequest {
   public readonly AVAILABLE_CHECKBOXES = `//dialog//input[contains(@type,"checkbox")]/../span[1]`;
   public readonly NAMES_FOR_AVAILABLE_CHECKBOXES = `//dialog//input[contains(@type,"checkbox")]/../span[2]`;
   public readonly SELECTED_PASSENGER_IN_INPUT = `//dialog/div/div/div/div/span`;
+  public readonly UPLOAD_MORE_FILES = `//button[contains(.,'Upload More Files')]`;
 
   public async clickCancel() {
     await this.page.locator(this.CANCEL_BUTTON).click();
@@ -143,7 +145,9 @@ export class AirRequest {
     return { responseData };
   }
   public async startFromDraft() {
-    await this.page.getByRole("button", { name: "Choose from Draft" }).click();
+    await this.page
+      .getByRole("button", { name: "Choose from Draft" })
+      .click({ delay: 400 });
   }
   public async returnFirstDraftTime() {
     return await this.page
@@ -226,8 +230,8 @@ export class AirRequest {
     await this.page.locator(this.DOB_MONTH(index)).click();
     await this.page.locator(this.JANUARY_OPTION).click();
   }
-  public async addPassportInformation() {
-    await this.page.locator(this.ADD_PASSPORT_INFORMATION).click();
+  public async addPassportInformation(index: number = 1) {
+    await this.page.locator(this.ADD_PASSPORT_INFORMATION(index)).click();
   }
   public async addAdditionalPassenger() {
     await this.page.locator(this.ADD_ADDITIONAL_PASSENGER).click();
@@ -237,6 +241,15 @@ export class AirRequest {
       .locator(this.INPUT_FILE)
       .setInputFiles("./data/docs/testDoc.txt");
   }
+  public async addLargeSizeFile() {
+    const largeBuffer = Buffer.alloc(26 * 1024 * 1024); // 26 MB
+
+    await this.page.setInputFiles(this.INPUT_FILE, {
+      name: "fake-large.pdf",
+      mimeType: "application/pdf",
+      buffer: largeBuffer,
+    });
+  }
   public async add2FilesPassport() {
     await this.page
       .locator(this.INPUT_FILE)
@@ -244,10 +257,12 @@ export class AirRequest {
     await this.page
       .locator(this.INPUT_FILE)
       .setInputFiles("./data/images/testImage2.png");
+    await this.page.waitForTimeout(1500);
   }
   public async uploadAddedFiles() {
+    await this.page.waitForTimeout(1000);
     await this.page.locator(this.FILES_UPLOAD_POPUP_UPLOAD_FILES).click();
-    await this.page.waitForTimeout(3500);
+    await this.page.waitForTimeout(4500);
   }
   public async closePopUp() {
     await this.page.locator(this.FILES_UPLOAD_POPUP_CLOSE).click();

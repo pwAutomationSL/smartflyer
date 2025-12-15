@@ -10,11 +10,13 @@ const normalizePhoneNumber = (str: string | null | undefined): string => {
 };
 const CLIENT_NAME = "Candice & Ben (Conway) Winikoff";
 test.describe("AR-003 - Air Request - Step 2", () => {
-  test("Air Request - Step 2 - 9# Scenario", async ({
+  test.setTimeout(200_000);
+  test("Air Request - Step 2 - 9# Scenario - Add Additional Passenger", async ({
     loginPage,
     page,
     sidebar,
     clients,
+    toast,
     airRequest,
   }, testInfo) => {
     await test.step("1 - Go to the Client tab", async () => {
@@ -22,24 +24,29 @@ test.describe("AR-003 - Air Request - Step 2", () => {
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
       await sidebar.goToModule("Clients");
     });
+
     await test.step("2 - Search the client and go to the client page", async () => {
       await clients.searchClient(CLIENT_NAME);
     });
+
     await test.step("3 - 4 - Go to the New credit card tab and Click on Air request button", async () => {
       await airRequest.goToCreditCard();
       await airRequest.clickAirRequest();
     });
+
     await test.step("5 - Click on Start from scratch", async () => {
       await airRequest.startFromScrath();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
       await expect(page.locator(airRequest.AGENT_SELECT)).toContainText(
         "Select an agent"
       );
+
       await test.step("6 - Select the Agent and Click on Continue button", async () => {
         await airRequest.selectAgent();
         await airRequest.selectFirstAgent();
         await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
       });
+
       await test.step("7 - Click on Continue", async () => {
         await airRequest.clickContinue();
         await expect(page.locator(airRequest.HEADER)).toContainText(
@@ -50,6 +57,7 @@ test.describe("AR-003 - Air Request - Step 2", () => {
           "rgb(46, 139, 87)"
         );
       });
+
       await test.step("9# Add passport information for Primary Passenger", async () => {
         await airRequest.addAdditionalPassenger();
         await expect(page.locator(airRequest.POP_UP_DIALOG)).toBeVisible();
@@ -64,6 +72,7 @@ test.describe("AR-003 - Air Request - Step 2", () => {
           "Select additional travelers from your client list to include in this request."
         );
       });
+
       await test.step("9# Add first passenger", async () => {
         try {
           const passengerName = await page
@@ -104,7 +113,8 @@ test.describe("AR-003 - Air Request - Step 2", () => {
           });
         }
       });
-      await test.step("ER - Gender has red asterisk and its mandatory", async () => {
+
+      await test.step("9# - ER - Gender has red asterisk and its mandatory", async () => {
         await expect(
           page.locator(airRequest.GENDER_RED_ASTERISK).last()
         ).toBeVisible();
@@ -114,7 +124,8 @@ test.describe("AR-003 - Air Request - Step 2", () => {
         await airRequest.selectMale();
         await expect(page.locator(airRequest.PHONE_FLAG).last()).toBeVisible();
       });
-      await test.step("ER - Edit Secondary Passenger phone number", async () => {
+
+      await test.step("9# - ER - Edit Secondary Passenger phone number", async () => {
         try {
           await airRequest.fillPassengerPhone("", 1);
           await airRequest.clickLabel();
@@ -138,13 +149,14 @@ test.describe("AR-003 - Air Request - Step 2", () => {
             page.locator(airRequest.PHONE_INPUT_PASSENGER_DIV(1))
           ).not.toHaveClass(/border-red/i);
         } catch (err) {
-          console.error("Primary Passenger phone number");
+          console.error(" Edit Secondary Passenger phone number");
           test.info().errors.push({
             message: String(err),
           });
         }
       });
-      await test.step("ER Secondary Passenger DoB", async () => {
+
+      await test.step("9# - ER Secondary Passenger DoB", async () => {
         try {
           await airRequest.fillDayOfBirth("", 2);
           await airRequest.fillMonth(2);
@@ -181,18 +193,20 @@ test.describe("AR-003 - Air Request - Step 2", () => {
             /border-red/i
           );
         } catch (err) {
-          console.error("Edit Primary Passenger DoB");
+          console.error("ER Secondary Passenger DoB");
           test.info().errors.push({
             message: String(err),
           });
         }
       });
-      await test.step("ER  - Add passport information toggle OFF by default", async () => {
+
+      await test.step("9# - ER  - Add passport information toggle OFF by default", async () => {
         await expect(
-          page.locator(airRequest.ADD_PASSPORT_INFORMATION).last()
+          page.locator(airRequest.ADD_PASSPORT_INFORMATION(2)).last()
         ).toHaveAttribute("aria-checked", "false");
       });
-      await test.step("ER  - Edit Secondary Passenger email", async () => {
+
+      await test.step("9# - ER  - Edit Secondary Passenger email", async () => {
         try {
           await airRequest.fillPassengerEmail(WRONG_EMAIL, 2);
           await airRequest.clickLabel();
@@ -212,13 +226,14 @@ test.describe("AR-003 - Air Request - Step 2", () => {
           );
           await airRequest.fillPassengerEmail(EMAIL, 2);
         } catch (err) {
-          console.error("Edit Primary Passenger email");
+          console.error("Edit Secondary Passenger email");
           test.info().errors.push({
             message: String(err),
           });
         }
       });
-      await test.step("ER  - Verify that already selected passengers don’t appear on “Who is traveling” popup", async () => {
+
+      await test.step("9# - ER  - Verify that already selected passengers don’t appear on “Who is traveling” popup", async () => {
         try {
           await airRequest.addAdditionalPassenger();
           await expect(page.locator(airRequest.POP_UP_DIALOG)).toBeVisible();
@@ -233,8 +248,118 @@ test.describe("AR-003 - Air Request - Step 2", () => {
             .locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES)
             .allTextContents();
           await expect(allNames).not.toContain(passengerCompleteName);
+          await airRequest.clickCancel();
         } catch (err) {
-          console.error("Edit Primary Passenger email");
+          console.error(
+            "Verify that already selected passengers don’t appear on “Who is traveling” popup"
+          );
+          test.info().errors.push({
+            message: String(err),
+          });
+        }
+      });
+
+      await test.step("10# - ER  - Add Additional Passenger passport - Verify if user try to upload file format that isn’t allowed the validation appear", async () => {
+        try {
+          await expect(
+            page.locator(airRequest.ADD_PASSPORT_INFORMATION(2))
+          ).toBeVisible();
+          await airRequest.addPassportInformation(2);
+          await airRequest.addIncorrectFile();
+          await expect(
+            page.locator(airRequest.UPLOAD_FILE_BUTTON)
+          ).toBeVisible();
+          await expect(
+            page.locator(airRequest.UPLOAD_FILE_P).last()
+          ).toContainText("File type(s) not supported");
+        } catch (err) {
+          console.error(
+            " Verify if user try to upload file format that isn’t allowed the validation appear"
+          );
+          test.info().errors.push({
+            message: String(err),
+          });
+        }
+      });
+
+      await test.step("10# - ER  - Verify if user try to upload the 1 file more than 25 MB the validation appear", async () => {
+        try {
+          await airRequest.addLargeSizeFile();
+          await expect(
+            page.locator(airRequest.UPLOAD_FILE_P).last()
+          ).toContainText("File size limits");
+          await airRequest.clickCancel();
+        } catch (err) {
+          console.error(
+            "Verify if user try to upload the 1 file more than 25 MB the validation appear"
+          );
+          test.info().errors.push({
+            message: String(err),
+          });
+        }
+      });
+
+      await test.step("10# - ER  - Upload 2 files and assert they are visible with thumbnail", async () => {
+        try {
+          await expect(
+            page.locator(airRequest.UPLOAD_FILE_BUTTON)
+          ).toBeVisible();
+          await expect(
+            page.locator(airRequest.UPLOAD_FILE_P).first()
+          ).toContainText("Drag your file(s) to start uploading");
+          await expect(
+            page.locator(airRequest.UPLOAD_FILE_P).nth(1)
+          ).toContainText("PDF, JPG or PNG (max 25MB per file)");
+          await airRequest.add2FilesPassport();
+          await expect(
+            page.locator(airRequest.FILES_UPLOAD_POPUP_UPLOAD_FILES)
+          ).toBeVisible();
+          await expect(
+            page.locator(airRequest.FILES_UPLOAD_POPUP_CANCEL)
+          ).toBeVisible();
+          const txt = (
+            await page.locator(airRequest.FILES_UPLOAD_POPUP_TITLE).innerText()
+          )
+            .replace(/\s+/g, " ")
+            .trim();
+          expect(txt).toBe("Passenger 2 - Uploads (2)");
+          const imgCount = await page
+            .locator(airRequest.FILES_UPLOAD_POPUP_IMG)
+            .count();
+          expect(imgCount).toBe(2);
+          await airRequest.uploadAddedFiles();
+          await expect(
+            page.locator(airRequest.FILES_UPLOAD_POPUP_SUCCESS_BAR)
+          ).toBeVisible({ timeout: 10000 });
+          await expect(
+            page.locator(airRequest.FILES_UPLOAD_POPUP_SUCCESS_BAR_2)
+          ).toBeVisible();
+          const uploadedImgCount = await page
+            .locator(airRequest.UPLOADED_IMAGES)
+            .count();
+          expect(uploadedImgCount).toBe(2);
+        } catch (err) {
+          console.error(
+            " Upload 2 files and assert they are visible with thumbnail"
+          );
+          test.info().errors.push({
+            message: String(err),
+          });
+        }
+      });
+      await test.step("10# - ER  - Verify that user can upload max 2 files for passenger", async () => {
+        try {
+          await airRequest.closePopUp();
+          await expect(
+            page.locator(airRequest.FILES_UPLOAD_POPUP_IMG)
+          ).not.toBeVisible();
+          await expect(
+            page.locator(airRequest.UPLOAD_MORE_FILES)
+          ).toBeDisabled();
+        } catch (err) {
+          console.error(
+            "Verify that user can upload max 2 files for passenger"
+          );
           test.info().errors.push({
             message: String(err),
           });

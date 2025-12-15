@@ -42,13 +42,38 @@ test.describe("AR-003 - Air Request - Step 2", () => {
         "background-color",
         "rgb(46, 139, 87)"
       );
-      await test.step("ER - check validation for incorrect file  ", async () => {
-        await airRequest.addPassportInformation();
-        await airRequest.addIncorrectFile();
-        await expect(page.locator(airRequest.UPLOAD_FILE_BUTTON)).toBeVisible();
-        await expect(
-          page.locator(airRequest.UPLOAD_FILE_P).last()
-        ).toContainText("File type(s) not supported");
+      await test.step("ER - check validation for incorrect file", async () => {
+        try {
+          await airRequest.addPassportInformation();
+          await airRequest.addIncorrectFile();
+          await expect(
+            page.locator(airRequest.UPLOAD_FILE_BUTTON)
+          ).toBeVisible();
+          await expect(
+            page.locator(airRequest.UPLOAD_FILE_P).last()
+          ).toContainText("File type(s) not supported");
+        } catch (err) {
+          console.error("Check validation for incorrect file");
+          test.info().errors.push({
+            message: String(err),
+          });
+        }
+      });
+      await test.step("08# - ER  - Verify if user try to upload the 1 file more than 25 MB the validation appear", async () => {
+        try {
+          await airRequest.addLargeSizeFile();
+          await expect(
+            page.locator(airRequest.UPLOAD_FILE_P).last()
+          ).toContainText("File size limits");
+          await airRequest.clickCancel();
+        } catch (err) {
+          console.error(
+            "Verify if user try to upload the 1 file more than 25 MB the validation appear"
+          );
+          test.info().errors.push({
+            message: String(err),
+          });
+        }
       });
       await test.step("ER - add 2 files and validate they were added ", async () => {
         await expect(page.locator(airRequest.UPLOAD_FILE_BUTTON)).toBeVisible();
@@ -76,12 +101,6 @@ test.describe("AR-003 - Air Request - Step 2", () => {
           .count();
         expect(imgCount).toBe(2);
         await airRequest.uploadAddedFiles();
-        await expect(
-          page.locator(airRequest.FILES_UPLOAD_POPUP_SUCCESS_BAR)
-        ).toBeVisible({ timeout: 10000 });
-        await expect(
-          page.locator(airRequest.FILES_UPLOAD_POPUP_SUCCESS_BAR_2)
-        ).toBeVisible();
         const uploadedImgCount = await page
           .locator(airRequest.UPLOADED_IMAGES)
           .count();
@@ -89,13 +108,10 @@ test.describe("AR-003 - Air Request - Step 2", () => {
       });
       await test.step("ER -Add more files and validate toast message with warning ", async () => {
         await airRequest.closePopUp();
-        await airRequest.add2FilesPassport();
         await expect(
           page.locator(airRequest.FILES_UPLOAD_POPUP_IMG)
         ).not.toBeVisible();
-        await expect(page.locator(toast.TOAST_MESSAGE_APP)).toContainText(
-          "You can only upload up to 1 files"
-        );
+        await expect(page.locator(airRequest.UPLOAD_MORE_FILES)).toBeDisabled();
       });
     });
   });

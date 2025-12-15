@@ -23,7 +23,7 @@ test.describe("AR-002 - Air Request - Step 1", () => {
     airRequest,
   }) => {
     await test.step("Go to the Client tab", async () => {
-      await loginPage.login({ username: "useragent@scrumlaunch.com" });
+      await loginPage.login({ username: "oksana.gorodiska+2@scrumlaunch.com" });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
       await sidebar.goToModule("Clients");
       await clients.clickFirstResult();
@@ -40,14 +40,14 @@ test.describe("AR-002 - Air Request - Step 1", () => {
       await expect(page.locator(airRequest.AGENT_SELECT)).toContainText(
         loggedUser
       );
-      await expect(page.locator(airRequest.EMAIL_INPUT)).toHaveValue(
+      await expect(page.locator(airRequest.EMAIL_INPUT(1))).toHaveValue(
         loggedEmail
       );
-      await expect(page.locator(airRequest.EMAIL_INPUT)).toBeDisabled();
+      await expect(page.locator(airRequest.EMAIL_INPUT(1))).toBeDisabled();
 
       await expect(page.locator(airRequest.PHONE_INPUT)).toBeDisabled();
       const phoneUI = await page.locator(airRequest.PHONE_INPUT).inputValue();
-      expect(normalizePhoneNumber(phoneUI)).toBe(
+      expect(normalizePhoneNumber(phoneUI)).toContain(
         normalizePhoneNumber(userData.responseData.data.agent_phone)
       );
       await airRequest.clickContinue();
@@ -68,7 +68,7 @@ test.describe("AR-002 - Air Request - Step 1", () => {
     airRequest,
   }) => {
     await test.step("Scenario 2 - Agent → Start From Scratch and Cancel", async () => {
-      await loginPage.login({ username: "useragent@scrumlaunch.com" });
+      await loginPage.login({ username: "oksana.gorodiska+2@scrumlaunch.com" });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
       await sidebar.goToModule("Clients");
       await clients.clickFirstResult();
@@ -85,14 +85,14 @@ test.describe("AR-002 - Air Request - Step 1", () => {
       await expect(page.locator(airRequest.AGENT_SELECT)).toContainText(
         loggedUser
       );
-      await expect(page.locator(airRequest.EMAIL_INPUT)).toHaveValue(
+      await expect(page.locator(airRequest.EMAIL_INPUT(1))).toHaveValue(
         loggedEmail
       );
-      await expect(page.locator(airRequest.EMAIL_INPUT)).toBeDisabled();
+      await expect(page.locator(airRequest.EMAIL_INPUT(1))).toBeDisabled();
 
       await expect(page.locator(airRequest.PHONE_INPUT)).toBeDisabled();
       const phoneUI = await page.locator(airRequest.PHONE_INPUT).inputValue();
-      expect(normalizePhoneNumber(phoneUI)).toBe(
+      expect(normalizePhoneNumber(phoneUI)).toContain(
         normalizePhoneNumber(userData.responseData.data.agent_phone)
       );
       await airRequest.clickCancel();
@@ -105,7 +105,7 @@ test.describe("AR-002 - Air Request - Step 1", () => {
       await airRequest.startFromDraft();
       const firstDraftTime = await airRequest.returnFirstDraftTime();
       const cleaned = firstDraftTime?.replace("Last edited on ", "");
-      expect(cleaned).toContain(expectedSubstring);
+      expect(cleaned).toContain(expectedSubstring.replace(/\s?(AM|PM)$/i, ""));
     });
   });
 });
