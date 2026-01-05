@@ -1,0 +1,106 @@
+import { test, expect } from "../../../fixtures/PlaywrightFixtures";
+
+const PHONE = "123123123";
+const CLIENT_NAME = "Candice & Ben (Conway) Winikoff";
+test.describe("AR-003 - Air Request - Step #22 ", () => {
+  test.setTimeout(200_000);
+  test("Air Request - Step 2 - 22# Scenario - Add Frequent Flyer", async ({
+    loginPage,
+    page,
+    sidebar,
+    clients,
+    airRequest,
+  }) => {
+    await test.step("1 - Go to the Client tab", async () => {
+      await loginPage.login();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await sidebar.goToModule("Clients");
+    });
+
+    await test.step("2 - Search the client and go to the client page", async () => {
+      await clients.searchClient(CLIENT_NAME);
+    });
+
+    await test.step("3 - 4 - Go to the New credit card tab and Click on Air request button", async () => {
+      await airRequest.goToCreditCard();
+      await airRequest.clickAirRequest();
+    });
+
+    await test.step("5 - Click on Start from scratch", async () => {
+      await airRequest.startFromScrath();
+      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
+      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText(
+        "Select an agent"
+      );
+    });
+    await test.step("6 - Select the Agent and Click on Continue button", async () => {
+      await airRequest.selectAgent();
+      await airRequest.selectFirstAgent();
+      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
+    });
+
+    await test.step("7 - Click on Continue", async () => {
+      await airRequest.clickContinue();
+      await expect(page.locator(airRequest.HEADER)).toContainText(
+        "Passenger details"
+      );
+      await expect(page.locator(airRequest.AGENT_SUCCESS)).toHaveCSS(
+        "background-color",
+        "rgb(46, 139, 87)"
+      );
+    });
+
+    await test.step("22# Scenario - Add Frequent Flyer", async () => {
+      await airRequest.addFrequentFlyerProgram();
+      await expect(
+        page.locator(airRequest.P_BY_TEXT("Airline program"))
+      ).toBeVisible();
+      await expect(
+        page.locator(airRequest.LABEL_BY_TEXT("Program number"))
+      ).toBeVisible();
+      await airRequest.selectFrequentFlyerProgram();
+      await expect(
+        page.locator(airRequest.AIRLINE_PROGRAMS).first()
+      ).toBeVisible();
+      const allAirlinePrograms = await page
+        .locator(airRequest.AIRLINE_PROGRAMS)
+        .allTextContents();
+      const hasDuplicates =
+        new Set(allAirlinePrograms).size !== allAirlinePrograms.length;
+
+      expect(hasDuplicates).toBe(false);
+      await expect(page.locator(airRequest.PROGRAM_NUMBER(1))).toBeEnabled();
+      await expect(page.locator(airRequest.DELETE_FF_PROGRAM)).toBeDisabled();
+      await airRequest.selectoptionGGProgram("American Airlines: AAdvantage");
+      await airRequest.fillProgramNumber(PHONE);
+      await expect(
+        page.locator(airRequest.PROGRAM_NUMBER(1)).last()
+      ).toHaveValue(PHONE);
+      await airRequest.addFrequentFlyerProgram();
+      await expect(
+        page.locator(airRequest.DELETE_FF_PROGRAM).first()
+      ).toBeEnabled();
+      await expect(
+        page.locator(airRequest.DELETE_FF_PROGRAM).last()
+      ).toBeEnabled();
+    });
+    await test.step("22# Verify that additional Frequent Flyer Program can be added for Additional travelers", async () => {
+      await airRequest.addAdditionalPassenger();
+      await airRequest.selectFirstPassenger();
+      const addedPassenger = await airRequest.addPassenger();
+      await expect(page.locator(airRequest.PASSENGER_EMAIL(1))).toHaveValue(
+        addedPassenger.email
+      );
+      await expect(
+        page.locator(airRequest.FREQUENT_FLYER_PROGRAM_SELECT).last()
+      ).toBeVisible();
+      await airRequest.addFrequentFlyerProgram();
+      await airRequest.selectFrequentFlyerProgram();
+      await airRequest.selectoptionGGProgram("Delta: SkyMiles");
+      await airRequest.fillProgramNumber(PHONE, 2);
+      await expect(
+        page.locator(airRequest.PROGRAM_NUMBER(2)).last()
+      ).toHaveValue(PHONE);
+    });
+  });
+});

@@ -18,6 +18,7 @@ export class AirRequest {
   public readonly DRAFTS_ELEMENTS_TIME_ONLY = `//div[@id="modal-content"]/div/div/div[2]/div/div[2]/p[2]`;
   public readonly DRAFTS_ELEMENTS_ID_ONLY = `//div[@id="modal-content"]/div/div/div[2]/div/div[2]/p[1]`;
   public readonly HEADER = `//h2`;
+  public readonly HEADER_H4 = `//h4`;
   public readonly USERNAME_HEADER = `//button//h4`;
   public readonly DELETE_DRAFTS = `//div[@id="modal-content"]/div/div/div[2]/div/button`;
   public readonly CONFIRM_DELETE_DRAFTS = `//dialog//button[contains(.,'Delete Draft')]`;
@@ -29,6 +30,7 @@ export class AirRequest {
   public readonly POP_UP_ADD_PASSENGERS = `//dialog//button[contains(.,'Add Passengers')]`;
   public readonly SPINNER_LOADER = `(//div[contains(@class,'Spinner')])[1]`;
   public readonly DOMESTIC_RADIO = `//label[contains(.,'Domestic')]//../input`;
+  public readonly AIRPORTS_VALID_RESULTS = `//div/div/../label/span`;
   public readonly FIRST_NAME_PASSENGER = (index: number) =>
     `//input[contains(@name,'${index}.first_name')]`;
   public readonly MIDDLE_NAME_PASSENGER = (index: number) =>
@@ -41,6 +43,7 @@ export class AirRequest {
   public readonly GENDER_RED_ASTERISK = `//input[contains(@name,'gender')]//..//p[contains(@class,'after:text-red-500')]`;
   public readonly GENDER_DROPDOWN = (index: number = 1) =>
     `(//div[contains(.,'Select...') and contains(@id,'select')]/../../div[2])[${index}]`;
+  public readonly GENDER_DROPDOWN_POPUP = `//dialog//div[contains(.,'Select...') and contains(@id,'select')]/../../div[2]`;
   public readonly MALE_DROPDOWN = `//div[@role="listbox"]//p[contains(.,'Male')]`;
   public readonly FEMALE_DROPDOWN = `//div[@role="listbox"]//p[contains(.,'Female')]`;
   public readonly ADD_PASSPORT_INFORMATION = (index: number = 1) =>
@@ -68,6 +71,8 @@ export class AirRequest {
   public readonly DOB_MONTH = (index: number = 1) =>
     `(//div[contains(@id,'select') and contains(.,'Month')]/../../div[2])[${index}]`;
   public readonly JANUARY_OPTION = `//div[contains(@id,'option') and contains(.,'January')]`;
+  public readonly MONTH_OPTION = (month: string) =>
+    `//div[contains(@id,'option') and contains(.,'${month}')]`;
   public readonly UPLOAD_FILE_BUTTON = `//button[contains(.,'Upload Files')]`;
   public readonly UPLOAD_FILE_P = `//button[contains(.,'Upload Files')]//../../p`;
   public readonly INPUT_FILE = `//input[contains(@id,'passportFileInput')]`;
@@ -84,6 +89,35 @@ export class AirRequest {
   public readonly NAMES_FOR_AVAILABLE_CHECKBOXES = `//dialog//input[contains(@type,"checkbox")]/../span[2]`;
   public readonly SELECTED_PASSENGER_IN_INPUT = `//dialog/div/div/div/div/span`;
   public readonly UPLOAD_MORE_FILES = `//button[contains(.,'Upload More Files')]`;
+  public readonly ADD_NEW_TRAVELER = `//button[contains(.,'Add New Traveler')]`;
+  public readonly GO_BACK_TO_THE_LIST = `//button[contains(.,'Go Back to the List')]`;
+  public readonly NT_FIRST_NAME = `//dialog//input[@name="first_name"]`;
+  public readonly NT_LAST_NAME = `//dialog//input[@name="last_name"]`;
+  public readonly NT_EMAIL = `//dialog//input[@name="email"]`;
+  public readonly NT_PHONE = `//dialog//input[@name="phone"]`;
+  public readonly SAVE_TO_CLIENTS_PROFILE = `//span[contains(.,"Save to client's profile")]//../span[1]`;
+  public readonly GROUP_OR_FAMILY_MEMBER = `//span[contains(.,"Group or family member")]//../span[1]`;
+  public readonly RELATIONSHIP = `//dialog//div[contains(.,'Relationship') and contains(@id,'select')]/../../div[2]`;
+  public readonly STEP_BACK = `//button[contains(.,'Step Back')]`;
+  public readonly RELATIONSHIP_OPTION = (relationship: string) =>
+    `//div[contains(@id,'option') and contains(.,'${relationship}')]`;
+  public readonly P_BY_TEXT = (text: string) => `//p[contains(.,'${text}')]`;
+  public readonly LABEL_BY_TEXT = (text: string) =>
+    `//label[contains(.,'${text}')]`;
+  public readonly PROGRAM_NUMBER = (index: number = 1) =>
+    `(//input[contains(@name,'0.program_number')])[${index}]`;
+  public readonly SEARCH_TRAVELERS = `//dialog//input[@placeholder="Search travelers"]`;
+  public readonly FREQUENT_FLYER_PROGRAM = `//button[contains(.,'Add Frequent Flyer Program')]`;
+  public readonly FREQUENT_FLYER_PROGRAM_SELECT = `(//p[contains(.,'Airline program')]/../div/div/div[2])`;
+  public readonly FREQUENT_FLYER_PROGRAM_SELECTED = `(//p[contains(.,'Airline program')]/../div/div/div[1]/div)[1]`;
+  public readonly AIRLINE_PROGRAMS = `//div[contains(@id,'listbox')]//div`;
+  public readonly DELETE_FF_PROGRAM = `//p[contains(.,'Frequent flyer program')]/../div//button`;
+  public readonly TRIP_NOTES = `//label[contains(.,'Additional trip notes')]/../div/textarea`;
+  public readonly CITY_COUNTRY_RESULT = `//div/div/../../../li/div/div/div/p[2]`;
+  public readonly EMPTY_RESULTS = `//div/div/div/ul/li/div`;
+  public readonly PREVIOUS_MONTH = `(//button[@aria-label="Previous Month"])[1]`;
+  public readonly AIRLINE_PROGRAM_BY_NAME = (text: string) =>
+    `//div[contains(@id,'listbox')]//div/p[contains(.,'${text}')]`;
 
   public async clickCancel() {
     await this.page.locator(this.CANCEL_BUTTON).click();
@@ -235,6 +269,7 @@ export class AirRequest {
   }
   public async addAdditionalPassenger() {
     await this.page.locator(this.ADD_ADDITIONAL_PASSENGER).click();
+    await this.page.waitForTimeout(2000);
   }
   public async addIncorrectFile() {
     await this.page
@@ -268,6 +303,9 @@ export class AirRequest {
   public async selectFirstPassenger() {
     await this.page.locator(this.AVAILABLE_CHECKBOXES).first().click();
   }
+  public async deleteTraveler() {
+    await this.page.locator(this.DELETE_TRAVELER_BUTTON).click();
+  }
   public async addPassenger() {
     const waitForCreate = this.page.waitForResponse(
       (res) =>
@@ -275,7 +313,7 @@ export class AirRequest {
         res.request().method() === "POST" &&
         res.url().includes("/api/air-request/")
     );
-    await this.page.locator(this.POP_UP_ADD_PASSENGERS).click();
+    await this.page.locator(this.POP_UP_ADD_PASSENGERS).click({ delay: 200 });
     const response = await waitForCreate;
     const json = await response.json();
     const passenger = json.data?.[0];
@@ -285,6 +323,163 @@ export class AirRequest {
       firstName: passenger.first_name ?? "",
       lastName: passenger.last_name ?? "",
     };
+  }
+
+  public async newTravelerDOB(
+    month: string,
+    day: string,
+    year: string,
+    index: number = 2
+  ) {
+    await this.page.locator(this.DOB_DAY(index)).fill(day);
+    await this.page.locator(this.DOB_YEAR(index)).fill(year);
+    await this.page.locator(this.DOB_MONTH(index)).click();
+    await this.page.locator(this.MONTH_OPTION(month)).click();
+  }
+  public async addNewTraveler() {
+    await this.page.locator(this.ADD_NEW_TRAVELER).click();
+  }
+  public async goBackToTheList() {
+    await this.page.locator(this.GO_BACK_TO_THE_LIST).click();
+  }
+  public async newTravelerName(name: string) {
+    await this.page.locator(this.NT_FIRST_NAME).fill(name);
+  }
+  public async newTravelerLastName(lastName: string) {
+    await this.page.locator(this.NT_LAST_NAME).fill(lastName);
+  }
+  public async newTravelerEmail(email: string) {
+    await this.page.locator(this.NT_EMAIL).fill(email);
+  }
+  public async newTravelerPhone(phone: string) {
+    await this.page.locator(this.NT_PHONE).fill(phone);
+  }
+  public async newTravelerGender() {
+    await this.page.locator(this.GENDER_DROPDOWN_POPUP).click();
+  }
+  public async checkFamilyMember() {
+    await this.page.locator(this.GROUP_OR_FAMILY_MEMBER).click();
+  }
+  public async saveToClientsProfile() {
+    await this.page.locator(this.SAVE_TO_CLIENTS_PROFILE).click();
+  }
+  public async goBack() {
+    await this.page.locator(this.STEP_BACK).click();
+  }
+  public async selectRelationship(relationship: string) {
+    await this.page.locator(this.RELATIONSHIP).click();
+    await this.page.locator(this.RELATIONSHIP_OPTION(relationship)).click();
+  }
+  public async searchTraveler(traveler: string) {
+    await this.page.locator(this.SEARCH_TRAVELERS).fill(traveler);
+    await this.page.waitForTimeout(1500);
+  }
+  public async addFrequentFlyerProgram() {
+    await this.page.waitForTimeout(300);
+    await this.page.locator(this.FREQUENT_FLYER_PROGRAM).last().click();
+  }
+  public async selectFrequentFlyerProgram() {
+    await this.page.locator(this.FREQUENT_FLYER_PROGRAM_SELECT).last().click();
+  }
+  public async deleteLastFrequentFlyerProgram() {
+    await this.page.locator(this.DELETE_FF_PROGRAM).last().click();
+  }
+  public async selectoptionGGProgram(option: string) {
+    await this.page
+      .locator(this.AIRLINE_PROGRAM_BY_NAME(option))
+      .last()
+      .click({ delay: 400 });
+  }
+  public async fillProgramNumber(number: string, index: number = 1) {
+    await this.page.waitForTimeout(800);
+    const input = this.page.locator(this.PROGRAM_NUMBER(index));
+    await input.click();
+    await input.clear();
+    await input.fill(number);
+    await this.page.waitForTimeout(800);
+  }
+  public async selectOneWayTrip() {
+    await this.page.getByRole("radio", { name: "One-way" }).click();
+    await this.page.waitForTimeout(800);
+  }
+
+  public async selectDepartureAirport(airport: string, airportShort: string) {
+    await this.page.getByRole("textbox", { name: "Departing from" }).click();
+    await this.page.getByRole("textbox", { name: "Departing from" }).clear();
+    await this.page
+      .getByRole("textbox", { name: "Departing from" })
+      .fill(airportShort);
+    await this.page
+      .locator(`//div[contains(.,'${airport}')]/../label/span`)
+      .first()
+      .click();
+  }
+
+  public async selectDepartureAirport2Letters(airportShort: string) {
+    await this.page.getByRole("textbox", { name: "Departing from" }).click();
+    await this.page
+      .getByRole("textbox", { name: "Departing from" })
+      .fill(airportShort);
+  }
+  public async selectArrivalAirport2Letters(airportShort: string) {
+    await this.page.getByRole("textbox", { name: "Arriving at" }).click();
+    await this.page.getByRole("textbox", { name: "Arriving at" }).clear();
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .fill(airportShort);
+  }
+  public async selectArrivalAirport(airport: string, airportShort: string) {
+    await this.page.getByRole("textbox", { name: "Arriving at" }).click();
+    await this.page.getByRole("textbox", { name: "Arriving at" }).clear();
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .fill(airportShort);
+    await this.page
+      .locator(`//div[contains(.,'${airport}')]/../label/span`)
+      .first()
+      .click();
+  }
+
+  public async selectTravelDate() {
+    await this.page.getByRole("textbox", { name: "Departure date" }).click();
+  }
+
+  public async confirmDates() {
+    await this.page
+      .locator(
+        `//div[contains(@aria-label,'15th') and contains(@aria-disabled,"false")]`
+      )
+      .last()
+      .click();
+    await this.page.getByRole("button", { name: "Confirm dates" }).click();
+  }
+  public async selectDepartureTime(time: string) {
+    await this.page
+      .locator(`//input/..//div[contains(.,'Departure time')]`)
+      .click();
+    await this.page
+      .locator(`//div[contains(.,'${time}')]/../label/span`)
+      .first()
+      .click();
+    await this.clickGeneric();
+  }
+  public async clickGeneric() {
+    await this.page.getByText("Trip type *").click();
+  }
+
+  public async selectCabinClass(cabin: string) {
+    await this.page
+      .locator(`//p[contains(.,'Preferred cabin class')]/../div/div/div/div[2]`)
+      .click();
+    await this.page
+      .locator(`//div[contains(.,'${cabin}')]/../label/span`)
+      .first()
+      .click();
+    await this.clickGeneric();
+  }
+
+  public async addAdditionalTripNotes(notes: string) {
+    await this.page.locator(this.TRIP_NOTES).fill(notes);
   }
 }
 export const airRequest = (page: Page) => new AirRequest({ page });

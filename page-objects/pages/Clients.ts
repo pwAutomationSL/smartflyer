@@ -1,4 +1,5 @@
 import { Page } from "@playwright/test";
+import { text } from "node:stream/consumers";
 
 export class Clients {
   public readonly page: Page;
@@ -6,10 +7,19 @@ export class Clients {
     this.page = page;
   }
   public readonly HEADER = `//h1`;
+  public readonly HEADER_H2 = `//h2`;
   public readonly QUICK_ADD = `//button[contains(.,'Quick Add')]`;
   public readonly SPINNER_LOADER = `//div[@id="ClientTable_processing"]`;
   public readonly USERNAME_HEADER = `//div[contains(@class,'user-data')]//h4`;
   public readonly ALL_ACTIVE_CLIENTS = `//tbody/tr//p`;
+  public readonly ALL_RELATED_TRAVELERS = `//tbody[@id="related_travellers_list"]/tr/td[2]/span`;
+  public readonly CONFIRM_DELETE = `//button[contains(.,'Yes, release it')]`;
+  public readonly CONFIRM_DELETE_FF = `//button[contains(.,'Yes, delete it!')]`;
+  public readonly LOYALTY_PROGRAMS_POPUP = `//form[@id="add-important-number-single"]`;
+  public readonly TRAVELER_ADDED = (traveler: string) =>
+    `//tbody[@id="related_travellers_list"]/tr/td[2]/span[contains(.,'${traveler}')]//../../td//button[contains(@id,'dropdown')]`;
+  public readonly REMOVE_TRAVELER_BY_NAME = (traveler: string) =>
+    `//tbody[@id="related_travellers_list"]/tr/td[2]/span[contains(.,'${traveler}')]//../../td//a[contains(.,'Remove')]`;
   public async clickCreate() {
     await this.page.locator(this.HEADER).click();
   }
@@ -165,6 +175,45 @@ export class Clients {
   public async clickAirRequest() {
     await this.page.getByRole("button", { name: "Air Request" }).click();
   }
+  public async clickRelatedTravelers() {
+    await this.page.getByRole("button", { name: "Related Travelers" }).click();
+  }
+  public async clickDatesAndNumbers() {
+    await this.page.getByRole("tab", { name: "Dates & Numbers" }).click();
+  }
+  public async clickDatesAndNumbersAPP() {
+    await this.page.getByRole("button", { name: "DATES & NUMBERS" }).click();
+  }
+  public async deleteLoyaltyProgram() {
+    await this.page
+      .locator(
+        `//a[contains(@class,'delete-item') and contains(@message_title,'Loyalty')]`
+      )
+      .click();
+  }
+  public async loyaltyProgramsFill(program: string, number: string) {
+    await this.page
+      .locator(
+        `(//div[@id="loyalty_programs_list"]//span[contains(@id,'select')]/../span)[2]`
+      )
+      .click();
+    await this.page
+      .locator(
+        `//ul//li[contains(@class,'option') and contains(.,'${program}')]`
+      )
+      .click({ delay: 500 });
+    await this.page.waitForTimeout(200);
+    await this.page
+      .locator(
+        `(//div[@id="loyalty_programs_list"]//input[@placeholder="Enter Number"])`
+      )
+      .fill(number);
+  }
+  public async loyaltyProgramsAdd() {
+    await this.page
+      .locator(`//h4[contains(.,'Loyalty programs')]/..//a`)
+      .click();
+  }
   public async clickFirstResult() {
     await this.page.locator(this.ALL_ACTIVE_CLIENTS).first().click();
   }
@@ -175,6 +224,23 @@ export class Clients {
     await this.page.getByRole("textbox", { name: "Search" }).fill(client);
     await this.page.getByRole("textbox", { name: "Search" }).press("Enter");
     await this.page.getByText("Candice & Ben (Conway)").click();
+  }
+
+  public async deleteAddedTraveler(traveler: string) {
+    await this.page.locator(this.TRAVELER_ADDED(traveler)).first().click();
+    await this.page
+      .locator(this.REMOVE_TRAVELER_BY_NAME(traveler))
+      .first()
+      .click();
+  }
+  public async confirmDelete() {
+    await this.page.locator(this.CONFIRM_DELETE).click();
+  }
+  public async confirmDeleteFF() {
+    await this.page.locator(this.CONFIRM_DELETE_FF).click();
+  }
+  public async clickOkPopUp() {
+    await this.page.getByRole("button", { name: "OK" }).click();
   }
 }
 export const clients = (page: Page) => new Clients({ page });
