@@ -95,6 +95,8 @@ export class AirRequest {
   public readonly NT_LAST_NAME = `//dialog//input[@name="last_name"]`;
   public readonly NT_EMAIL = `//dialog//input[@name="email"]`;
   public readonly NT_PHONE = `//dialog//input[@name="phone"]`;
+  public readonly FLIGHT_2_X = `//div/p[contains(.,'Flight 2')]//../div/div[1]/div[5]/button`;
+  public readonly FLIGHT_3_X = `//div/p[contains(.,'Flight 3')]//../div/div[1]/div[5]/button`;
   public readonly SAVE_TO_CLIENTS_PROFILE = `//span[contains(.,"Save to client's profile")]//../span[1]`;
   public readonly GROUP_OR_FAMILY_MEMBER = `//span[contains(.,"Group or family member")]//../span[1]`;
   public readonly RELATIONSHIP = `//dialog//div[contains(.,'Relationship') and contains(@id,'select')]/../../div[2]`;
@@ -116,6 +118,8 @@ export class AirRequest {
   public readonly CITY_COUNTRY_RESULT = `//div/div/../../../li/div/div/div/p[2]`;
   public readonly EMPTY_RESULTS = `//div/div/div/ul/li/div`;
   public readonly PREVIOUS_MONTH = `(//button[@aria-label="Previous Month"])[1]`;
+  public readonly ROUND_TRIP_RADIO = `//*[@id="radio-round-trip-0"]`;
+  public readonly ADDED_IMAGE_TRIP_OVERVIEW = `//form//img`;
   public readonly AIRLINE_PROGRAM_BY_NAME = (text: string) =>
     `//div[contains(@id,'listbox')]//div/p[contains(.,'${text}')]`;
 
@@ -402,7 +406,26 @@ export class AirRequest {
     await this.page.getByRole("radio", { name: "One-way" }).click();
     await this.page.waitForTimeout(800);
   }
+  public async selectRoundTrip() {
+    await this.page.getByRole("radio", { name: "Round-trip" }).click();
+    await this.page.waitForTimeout(800);
+  }
 
+  public async selectMultiCityTrip() {
+    await this.page.getByRole("radio", { name: "Multi-city" }).click();
+    await this.page.waitForTimeout(800);
+  }
+  public async selectSpecificFlight() {
+    await this.page
+      .getByRole("switch", { name: "Client requested a specific" })
+      .click();
+    await this.page.waitForTimeout(800);
+  }
+  public async enterFlightDetails(flightDetails: string) {
+    await this.page
+      .locator(`//textarea[@name="flight_details"]`)
+      .fill(flightDetails);
+  }
   public async selectDepartureAirport(airport: string, airportShort: string) {
     await this.page.getByRole("textbox", { name: "Departing from" }).click();
     await this.page.getByRole("textbox", { name: "Departing from" }).clear();
@@ -415,10 +438,72 @@ export class AirRequest {
       .click();
   }
 
+  public async selectDepartureAirportFlight1(
+    airport: string,
+    airportShort: string
+  ) {
+    await this.page
+      .getByRole("textbox", { name: "Departing from" })
+      .first()
+      .click();
+    await this.page
+      .getByRole("textbox", { name: "Departing from" })
+      .first()
+      .clear();
+    await this.page
+      .getByRole("textbox", { name: "Departing from" })
+      .first()
+      .fill(airportShort);
+    await this.page
+      .locator(`//div[contains(.,'${airport}')]/../label/span`)
+      .first()
+      .click();
+  }
+  public async selectDepartureAirportFlight2(
+    airport: string,
+    airportShort: string
+  ) {
+    await this.page
+      .getByRole("textbox", { name: "Departing from" })
+      .last()
+      .click();
+    await this.page
+      .getByRole("textbox", { name: "Departing from" })
+      .last()
+      .clear();
+    await this.page
+      .getByRole("textbox", { name: "Departing from" })
+      .last()
+      .fill(airportShort);
+    await this.page
+      .locator(`//div[contains(.,'${airport}')]/../label/span`)
+      .first()
+      .click();
+  }
   public async selectDepartureAirport2Letters(airportShort: string) {
     await this.page.getByRole("textbox", { name: "Departing from" }).click();
     await this.page
       .getByRole("textbox", { name: "Departing from" })
+      .fill(airportShort);
+  }
+  public async selectDepartureAirport2LettersFlight1(airportShort: string) {
+    await this.page
+      .getByRole("textbox", { name: "Departing from" })
+      .first()
+      .click();
+    await this.page
+      .getByRole("textbox", { name: "Departing from" })
+      .first()
+      .fill(airportShort);
+  }
+  public async selectDepartureAirport2LettersFlight2(airportShort: string) {
+    await this.page
+      .getByRole("textbox", { name: "Departing from" })
+      .last()
+      .click();
+    await this.page
+      .getByRole("textbox", { name: "Departing from" })
+      .last()
       .fill(airportShort);
   }
   public async selectArrivalAirport2Letters(airportShort: string) {
@@ -426,6 +511,34 @@ export class AirRequest {
     await this.page.getByRole("textbox", { name: "Arriving at" }).clear();
     await this.page
       .getByRole("textbox", { name: "Arriving at" })
+      .fill(airportShort);
+  }
+  public async selectArrivalAirport2LettersFligh1(airportShort: string) {
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .first()
+      .click();
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .first()
+      .clear();
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .first()
+      .fill(airportShort);
+  }
+  public async selectArrivalAirport2LettersFligh2(airportShort: string) {
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .last()
+      .click();
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .last()
+      .clear();
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .last()
       .fill(airportShort);
   }
   public async selectArrivalAirport(airport: string, airportShort: string) {
@@ -440,8 +553,65 @@ export class AirRequest {
       .click();
   }
 
+  public async selectArrivalAirportFlight1(
+    airport: string,
+    airportShort: string
+  ) {
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .first()
+      .click();
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .first()
+      .clear();
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .first()
+      .fill(airportShort);
+    await this.page
+      .locator(`//div[contains(.,'${airport}')]/../label/span`)
+      .first()
+      .click();
+  }
+  public async selectArrivalAirportFlight2(
+    airport: string,
+    airportShort: string
+  ) {
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .last()
+      .click();
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .last()
+      .clear();
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .last()
+      .fill(airportShort);
+    await this.page
+      .locator(`//div[contains(.,'${airport}')]/../label/span`)
+      .last()
+      .click();
+  }
   public async selectTravelDate() {
     await this.page.getByRole("textbox", { name: "Departure date" }).click();
+  }
+  public async selectTravelDateFlight1() {
+    await this.page
+      .getByRole("textbox", { name: "Departure date" })
+      .first()
+      .click();
+  }
+  public async selectTravelDateFlight2() {
+    await this.page
+      .getByRole("textbox", { name: "Departure date" })
+      .last()
+      .click();
+  }
+  public async selectTravelDateRoundTrip() {
+    await this.page.getByRole("textbox", { name: "Travel dates" }).click();
   }
 
   public async confirmDates() {
@@ -453,9 +623,66 @@ export class AirRequest {
       .click();
     await this.page.getByRole("button", { name: "Confirm dates" }).click();
   }
+  public async confirmDatesRoundTrip() {
+    await this.page
+      .locator(
+        `//div[contains(@aria-label,'15th') and contains(@aria-disabled,"false")]`
+      )
+      .last()
+      .click();
+    await this.page
+      .locator(
+        `//div[contains(@aria-label,'25th') and contains(@aria-disabled,"false")]`
+      )
+      .last()
+      .click();
+    await this.page.getByRole("button", { name: "Confirm dates" }).click();
+  }
   public async selectDepartureTime(time: string) {
     await this.page
       .locator(`//input/..//div[contains(.,'Departure time')]`)
+      .click();
+    await this.page
+      .locator(`//div[contains(.,'${time}')]/../label/span`)
+      .first()
+      .click();
+    await this.clickGeneric();
+  }
+  public async selectDepartureTimeFlight1(time: string) {
+    await this.page
+      .locator(`//input/..//div[contains(.,'Departure time')]`)
+      .first()
+      .click();
+    await this.page
+      .locator(`//div[contains(.,'${time}')]/../label/span`)
+      .first()
+      .click();
+    await this.clickGeneric();
+  }
+  public async selectDepartureTimeFlight2(time: string) {
+    await this.page
+      .locator(`//input/..//div[contains(.,'Departure time')]`)
+      .last()
+      .click();
+    await this.page
+      .locator(`//div[contains(.,'${time}')]/../label/span`)
+      .first()
+      .click();
+    await this.clickGeneric();
+  }
+  public async selectOutboundTime(time: string) {
+    await this.page
+      .locator(`//input/..//div[contains(.,'Outbound flight')]`)
+      .click();
+    await this.page
+      .locator(`//div[contains(.,'${time}')]/../label/span`)
+      .first()
+      .click();
+    await this.clickGeneric();
+  }
+  public async selectReturnTime(time: string) {
+    await this.page
+      .locator(`//input/..//div[contains(.,'Return flight')]`)
       .click();
     await this.page
       .locator(`//div[contains(.,'${time}')]/../label/span`)
@@ -478,8 +705,51 @@ export class AirRequest {
     await this.clickGeneric();
   }
 
+  public async selectCabinClassMultiF1(cabin: string) {
+    await this.page
+      .locator(`//p[contains(.,'Preferred cabin class')]/../div/div/div/div[2]`)
+      .first()
+      .click();
+    await this.page
+      .locator(`//div[contains(.,'${cabin}')]/../label/span`)
+      .first()
+      .click();
+    await this.clickGeneric();
+  }
+  public async selectCabinClassMultiF2(cabin: string) {
+    await this.page
+      .locator(`//p[contains(.,'Preferred cabin class')]/../div/div/div/div[2]`)
+      .last()
+      .click();
+    await this.page
+      .locator(`//div[contains(.,'${cabin}')]/../label/span`)
+      .first()
+      .click();
+    await this.clickGeneric();
+  }
   public async addAdditionalTripNotes(notes: string) {
     await this.page.locator(this.TRIP_NOTES).fill(notes);
+  }
+  public async addAFlight() {
+    await this.page.getByRole("button", { name: "Add a Flight" }).click();
+  }
+  public async removeFlight3() {
+    await this.page.locator(this.FLIGHT_3_X).click();
+  }
+  public async uploadFiles(image: string) {
+    await this.page
+      .locator('//input[@id="specific-flights"]')
+      .setInputFiles(`./data/images/${image}`);
+    await this.page.waitForTimeout(1500);
+  }
+  public async uploadAddedFilesTripOverview() {
+    await this.page
+      .getByRole("button", { name: "Upload Files" })
+      .nth(1)
+      .click();
+  }
+  public async closeAddedFilesTripOverview() {
+    await this.page.getByRole("button", { name: "Close" }).click();
   }
 }
 export const airRequest = (page: Page) => new AirRequest({ page });
