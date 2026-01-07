@@ -2,16 +2,6 @@ import { test, expect } from "../../../fixtures/PlaywrightFixtures";
 const CLIENT_NAME = "Candice & Ben (Conway) Winikoff";
 const EMAIL = "fake_candiceconway84@gmail.com";
 const PHONE = "18333333333";
-const DEPARTURESHORT = "JFK";
-const DEPARTURESHORT_2LETTERS = "JF";
-const DEPARTURE = "John F Kennedy International";
-const ARRIVAL_SHORT = "LAX";
-const ARRIVAL_SHORT_2LETTERS = "LA";
-const ARRIVAL = "Los Angeles International Airport";
-const DEPARTURE_F2 = "Chicago Rockford Airport";
-const ARRIVAL_F2 = "San Francisco International Airport";
-const DEPARTURE_SHORT_F2 = "RFD";
-const ARRIVAL_SHORT_F2 = "SFO";
 test.describe("AR-004 - Air Request - Step 3", () => {
   test("Air Request - Step 3 -4# Scenario - Specific Flight", async ({
     loginPage,
