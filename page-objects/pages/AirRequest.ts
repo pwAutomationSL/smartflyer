@@ -485,16 +485,18 @@ export class AirRequest {
     await this.page
       .getByRole("textbox", { name: "Departing from" })
       .fill(airportShort);
+    await this.page.waitForTimeout(1000);
   }
   public async selectDepartureAirport2LettersFlight1(airportShort: string) {
     await this.page
       .getByRole("textbox", { name: "Departing from" })
       .first()
-      .click();
+      .click({ delay: 200 });
     await this.page
       .getByRole("textbox", { name: "Departing from" })
       .first()
       .fill(airportShort);
+    await this.page.waitForTimeout(1000);
   }
   public async selectDepartureAirport2LettersFlight2(airportShort: string) {
     await this.page
@@ -505,6 +507,7 @@ export class AirRequest {
       .getByRole("textbox", { name: "Departing from" })
       .last()
       .fill(airportShort);
+    await this.page.waitForTimeout(1000);
   }
   public async selectArrivalAirport2Letters(airportShort: string) {
     await this.page.getByRole("textbox", { name: "Arriving at" }).click();
@@ -512,6 +515,7 @@ export class AirRequest {
     await this.page
       .getByRole("textbox", { name: "Arriving at" })
       .fill(airportShort);
+    await this.page.waitForTimeout(1000);
   }
   public async selectArrivalAirport2LettersFligh1(airportShort: string) {
     await this.page
@@ -526,6 +530,7 @@ export class AirRequest {
       .getByRole("textbox", { name: "Arriving at" })
       .first()
       .fill(airportShort);
+    await this.page.waitForTimeout(1000);
   }
   public async selectArrivalAirport2LettersFligh2(airportShort: string) {
     await this.page
@@ -540,6 +545,7 @@ export class AirRequest {
       .getByRole("textbox", { name: "Arriving at" })
       .last()
       .fill(airportShort);
+    await this.page.waitForTimeout(1000);
   }
   public async selectArrivalAirport(airport: string, airportShort: string) {
     await this.page.getByRole("textbox", { name: "Arriving at" }).click();

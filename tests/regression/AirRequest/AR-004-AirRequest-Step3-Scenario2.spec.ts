@@ -69,7 +69,8 @@ test.describe("AR-004 - Air Request - Step 3", () => {
     await test.step("9 - Click on Continue", async () => {
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText(
-        "Trip overview"
+        "Trip overview",
+        { timeout: 15000 }
       );
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         "background-color",

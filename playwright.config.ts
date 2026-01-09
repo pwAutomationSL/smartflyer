@@ -45,6 +45,10 @@ export default defineConfig({
     {
       name: "chromium",
       use: {
+        video: "retain-on-failure",
+        launchOptions: {
+          slowMo: 100,
+        },
         ...devices["Desktop Chrome"],
         viewport: { width: 1980, height: 1080 },
       },

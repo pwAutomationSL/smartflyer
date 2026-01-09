@@ -28,6 +28,11 @@ test.describe("AR-002 - Air Request - Step 1", () => {
       await airRequest.selectAgent();
       await airRequest.selectFirstAgent();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
+      await airRequest.clickContinue();
+      await expect(page.locator(airRequest.HEADER)).toContainText(
+        "Passenger details"
+      );
+      await airRequest.goBack();
       await airRequest.clickCancel();
       await expect(page.locator(airRequest.HEADER).first()).toBeVisible();
       await airRequest.clickAirRequest();

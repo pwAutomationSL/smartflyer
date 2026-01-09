@@ -1,7 +1,7 @@
 import { test, expect } from "../../../fixtures/PlaywrightFixtures";
 
-const PASSENGER_FIRST_NAME = "firstNameNT";
-const PASSENGER_LAST_NAME = "LastNameNT";
+let allNamesBefore: string[];
+let allNames: string[];
 const CLIENT_NAME = "Candice & Ben (Conway) Winikoff";
 const USERNAME_NOT_SEARCHED = "Nico Le Breton";
 const LASTNAME_NOT_SEARCHED = "Le Breton";
@@ -68,6 +68,9 @@ test.describe("AR-003 - Air Request - Step #20 ", () => {
       const firstCount = await page
         .locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES)
         .count();
+      allNamesBefore = await page
+        .locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES)
+        .allTextContents();
       await airRequest.searchTraveler("Mahiax");
       const secondCount = await page
         .locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES)
@@ -83,16 +86,10 @@ test.describe("AR-003 - Air Request - Step #20 ", () => {
     });
     await test.step("20# Verify if clearing the search field shows the full traveler list again ", async () => {
       await airRequest.searchTraveler("");
-      const allNames = await page
+      allNames = await page
         .locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES)
         .allTextContents();
-      const found = allNames.some(
-        (name) =>
-          name.includes(USERNAME_NOT_SEARCHED) ||
-          name.includes(LASTNAME_NOT_SEARCHED)
-      );
-
-      expect(found).toBe(true);
+      expect(allNamesBefore).toEqual(allNames);
     });
   });
 });

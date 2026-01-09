@@ -7,10 +7,8 @@ const pad = (n) => n.toString().padStart(2, "0");
 
 const month = pad(now.getMonth() + 1);
 const day = pad(now.getDate());
-const hour = pad(now.getHours());
-const minute = pad(now.getMinutes());
 
-const fileName = `Regression_${month}_${day}_${hour}_${minute}.html`;
+const fileName = `Regression_${month}_${day}.html`;
 
 console.log(`Generating Allure report: ${fileName}`);
 
