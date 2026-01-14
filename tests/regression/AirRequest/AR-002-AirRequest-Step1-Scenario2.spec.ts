@@ -33,7 +33,6 @@ test.describe("AR-002 - Air Request - Step 1", () => {
       const parts = loggedAgent.trim().split(" ");
       const loggedEmail = parts.pop() ?? "";
       const loggedUser = parts.join(" ").trim();
-      await airRequest.goToCreditCard();
       await airRequest.clickAirRequest();
       const userData = await airRequest.startFromScrathAndGetUserData();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
@@ -78,7 +77,7 @@ test.describe("AR-002 - Air Request - Step 1", () => {
       const parts = loggedAgent.trim().split(" ");
       const loggedEmail = parts.pop() ?? "";
       const loggedUser = parts.join(" ").trim();
-      await airRequest.goToCreditCard();
+
       await airRequest.clickAirRequest();
       const userData = await airRequest.startFromScrathAndGetUserData();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();

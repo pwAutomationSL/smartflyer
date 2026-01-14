@@ -26,7 +26,6 @@ test.describe("AR-003 - Air Request - Step #18 ", () => {
     });
 
     await test.step("3 - 4 - Go to the New credit card tab and Click on Air request button", async () => {
-      await airRequest.goToCreditCard();
       await airRequest.clickAirRequest();
     });
 

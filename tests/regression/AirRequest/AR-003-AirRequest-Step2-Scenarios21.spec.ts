@@ -25,7 +25,8 @@ test.describe("AR-003 - Air Request - Step #21 ", () => {
 
     await test.step("add Frequent Flyer program", async () => {
       await page.waitForLoadState("networkidle");
-      await clients.clickDatesAndNumbers();
+      await page.waitForLoadState("load");
+      await clients.clickDatesAndNumbersAPP();
       await clients.loyaltyProgramsAdd();
       await expect(page.locator(clients.LOYALTY_PROGRAMS_POPUP)).toBeVisible();
       await clients.loyaltyProgramsFill(PROGAM, PHONE);
@@ -36,7 +37,6 @@ test.describe("AR-003 - Air Request - Step #21 ", () => {
       await toast.assertToastToGoAway();
     });
     await test.step("3 - 4 - Go to the New credit card tab and Click on Air request button", async () => {
-      await airRequest.goToCreditCard();
       await airRequest.clickAirRequest();
     });
 

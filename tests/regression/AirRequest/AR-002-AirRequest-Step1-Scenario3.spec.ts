@@ -27,7 +27,6 @@ test.describe("AR-002 - Air Request - Step 1", () => {
 
     await test.step("Search the client and go to the client page, create data to use from Draft", async () => {
       await clients.searchClient(CLIENT_NAME);
-      await airRequest.goToCreditCard();
       await airRequest.clickAirRequest();
       await airRequest.startFromScrath();
       await expect(page.locator(airRequest.CANCEL_BUTTON)).toBeEnabled();

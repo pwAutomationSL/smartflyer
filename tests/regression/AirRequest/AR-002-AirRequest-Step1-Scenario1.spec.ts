@@ -11,6 +11,9 @@ function getDate(): string {
   const presentTime = getPresentTime({ hour: "numeric", minute: "2-digit" });
   return `${presentDate} ${presentTime}`;
 }
+test.use({
+  launchOptions: { slowMo: 350 },
+});
 test.describe("AR-002 - Air Request - Step 1", () => {
   test("Scenario 1 - Admin → Start From Scratch and Continue", async ({
     loginPage,
@@ -27,7 +30,6 @@ test.describe("AR-002 - Air Request - Step 1", () => {
         await clients.searchClient(CLIENT_NAME);
       });
       await test.step("Go to the New credit card tab and Click on Air request button", async () => {
-        await airRequest.goToCreditCard();
         await airRequest.clickAirRequest();
       });
       await test.step("Click on Start from scratch", async () => {
@@ -75,7 +77,6 @@ test.describe("AR-002 - Air Request - Step 1", () => {
         await clients.searchClient(CLIENT_NAME);
       });
       await test.step("Go to the New credit card tab and Click on Air request button", async () => {
-        await airRequest.goToCreditCard();
         await airRequest.clickAirRequest();
       });
       await test.step("Click on Start from scratch", async () => {

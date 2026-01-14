@@ -13,6 +13,8 @@ export class AirRequest {
   public readonly CANCEL_BUTTON = `//button[contains(.,'Cancel')]`;
   public readonly AGENT_SUCCESS = `//span[contains(.,'Agent information')]//..//div`;
   public readonly PASSENGERS_SUCCESS = `//span[contains(.,'Passengers')]//..//div`;
+  public readonly TRAVEL_PREFERENCES = `//span[contains(.,'Travel preferences')]//..//div`;
+  public readonly TRIP_OVERVIEW_SUCCESS = `//span[contains(.,'Trip overview')]//..//div`;
   public readonly AGENTS_OPTIONS = `(//div[contains(@id,'listbox')]/div/p)`;
   public readonly DRAFTS_ELEMENTS = `//div[@id="modal-content"]/div/div/div[2]/div`;
   public readonly DRAFTS_ELEMENTS_TIME_ONLY = `//div[@id="modal-content"]/div/div/div[2]/div/div[2]/p[2]`;
@@ -120,6 +122,13 @@ export class AirRequest {
   public readonly PREVIOUS_MONTH = `(//button[@aria-label="Previous Month"])[1]`;
   public readonly ROUND_TRIP_RADIO = `//*[@id="radio-round-trip-0"]`;
   public readonly ADDED_IMAGE_TRIP_OVERVIEW = `//form//img`;
+  public readonly ARRIVAL_INPUT_PASSENGER_2 = `//input[@name="passengerTrips.1.flights.0.arrival"]`;
+  public readonly DEPARTURE_DATE_INPUT_PASSENGER_1 = `//input[@name="passengerTrips.0.flights.0.departure_date"]`;
+  public readonly DEPARTURE_DATE_INPUT_PASSENGER_2 = `//input[@name="passengerTrips.1.flights.0.departure_date"]`;
+  public readonly REFUNDABLE_NON_REFUNDABLE_RADIO = `(//input[@name="price_quote_type"])[1]`;
+  public readonly REFUNDABLE_RADIO = `(//input[@name="price_quote_type"])[2]`;
+  public readonly NON_REFUNDABLE_RADIO = `(//input[@name="price_quote_type"])[3]`;
+  public readonly SPECIAL_REQUEST_TEXTAREA = `//textarea[@name="special_request"]`;
   public readonly AIRLINE_PROGRAM_BY_NAME = (text: string) =>
     `//div[contains(@id,'listbox')]//div/p[contains(.,'${text}')]`;
 
@@ -167,6 +176,7 @@ export class AirRequest {
       .click();
   }
   public async startFromScrath() {
+    await this.page.waitForTimeout(400);
     await this.page.getByRole("button", { name: "Start from scratch" }).click();
   }
   public async startFromScrathAndGetUserData() {
@@ -205,7 +215,9 @@ export class AirRequest {
     await this.page.locator(this.DRAFTS_ELEMENTS_TIME_ONLY).first().click();
   }
   public async clickAirRequest() {
-    await this.page.getByRole("button", { name: "Air Request" }).click();
+    await this.page
+      .getByRole("button", { name: "Air Request" })
+      .click({ delay: 300 });
   }
   public async goToCreditCard() {
     await this.page.getByRole("tab", { name: "credit card" }).click();
@@ -252,6 +264,12 @@ export class AirRequest {
   public async checkCertify() {
     await this.page.locator(this.CERTIFY_CHECKBOX).first().click();
   }
+  public async checkCertifySecondPassenger() {
+    await this.page
+      .locator("(//span[contains(.,'I certify the information')]//..//span)[4]")
+      .first()
+      .click();
+  }
   public async fillDateOfBirth(index: number = 1) {
     await this.page.locator(this.DOB_DAY(index)).fill("15");
     await this.page.locator(this.DOB_YEAR(index)).fill("1990");
@@ -265,6 +283,7 @@ export class AirRequest {
     await this.page.locator(this.DOB_YEAR(index)).fill(year);
   }
   public async fillMonth(index: number = 1) {
+    await this.page.waitForTimeout(400);
     await this.page.locator(this.DOB_MONTH(index)).click();
     await this.page.locator(this.JANUARY_OPTION).click();
   }
@@ -403,7 +422,11 @@ export class AirRequest {
     await this.page.waitForTimeout(800);
   }
   public async selectOneWayTrip() {
-    await this.page.getByRole("radio", { name: "One-way" }).click();
+    await this.page.getByRole("radio", { name: "One-way" }).first().click();
+    await this.page.waitForTimeout(800);
+  }
+  public async selectOneWayTripPassenger2() {
+    await this.page.getByRole("radio", { name: "One-way" }).last().click();
     await this.page.waitForTimeout(800);
   }
   public async selectRoundTrip() {
@@ -418,12 +441,20 @@ export class AirRequest {
   public async selectSpecificFlight() {
     await this.page
       .getByRole("switch", { name: "Client requested a specific" })
+      .first()
+      .click();
+    await this.page.waitForTimeout(800);
+  }
+  public async selectSpecificFlightPassenger2() {
+    await this.page
+      .getByRole("switch", { name: "Client requested a specific" })
+      .last()
       .click();
     await this.page.waitForTimeout(800);
   }
   public async enterFlightDetails(flightDetails: string) {
     await this.page
-      .locator(`//textarea[@name="flight_details"]`)
+      .locator(`//textarea[contains(@name,"flight_details")]`)
       .fill(flightDetails);
   }
   public async selectDepartureAirport(airport: string, airportShort: string) {
@@ -454,6 +485,7 @@ export class AirRequest {
       .getByRole("textbox", { name: "Departing from" })
       .first()
       .fill(airportShort);
+    await this.page.waitForTimeout(400);
     await this.page
       .locator(`//div[contains(.,'${airport}')]/../label/span`)
       .first()
@@ -550,6 +582,7 @@ export class AirRequest {
   public async selectArrivalAirport(airport: string, airportShort: string) {
     await this.page.getByRole("textbox", { name: "Arriving at" }).click();
     await this.page.getByRole("textbox", { name: "Arriving at" }).clear();
+    await this.page.waitForTimeout(400);
     await this.page
       .getByRole("textbox", { name: "Arriving at" })
       .fill(airportShort);
@@ -559,6 +592,34 @@ export class AirRequest {
       .click();
   }
 
+  public async overWriteArrivalAirportFlight1(
+    airport: string,
+    airportShort: string
+  ) {
+    await this.page
+      .locator(`//input[@name="passengerTrips.0.flights.0.arrival"]`)
+      .first()
+      .click();
+    await this.page
+      .getByRole("button")
+      .filter({ hasText: /^$/ })
+      .nth(1)
+      .first()
+      .click();
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .first()
+      .click();
+    await this.page
+      .getByRole("textbox", { name: "Arriving at" })
+      .first()
+      .fill(airportShort);
+    await this.page
+      .locator(`//div[contains(.,'${airport}')]/../label/span`)
+      .first()
+      .click();
+    await this.page.waitForTimeout(400);
+  }
   public async selectArrivalAirportFlight1(
     airport: string,
     airportShort: string
@@ -620,10 +681,10 @@ export class AirRequest {
     await this.page.getByRole("textbox", { name: "Travel dates" }).click();
   }
 
-  public async confirmDates() {
+  public async confirmDates(date: string = "15th") {
     await this.page
       .locator(
-        `//div[contains(@aria-label,'15th') and contains(@aria-disabled,"false")]`
+        `//div[contains(@aria-label,'${date}') and contains(@aria-disabled,"false")]`
       )
       .last()
       .click();
@@ -697,7 +758,12 @@ export class AirRequest {
     await this.clickGeneric();
   }
   public async clickGeneric() {
-    await this.page.getByText("Trip type *").click();
+    await this.page.getByText("Trip type *").first().click();
+  }
+  public async sameItinerary() {
+    await this.page
+      .getByRole("switch", { name: "Are all travelers on the same" })
+      .click();
   }
 
   public async selectCabinClass(cabin: string) {
@@ -756,6 +822,106 @@ export class AirRequest {
   }
   public async closeAddedFilesTripOverview() {
     await this.page.getByRole("button", { name: "Close" }).click();
+  }
+  public async getArrivalAirport(index: number) {
+    const airport = await this.page
+      .locator(`//input[@name="passengerTrips.${index}.flights.0.arrival"]`)
+      .textContent();
+    return airport;
+  }
+  public async getDepartureDate(index: number) {
+    const airport = await this.page
+      .locator(
+        `//input[@name="passengerTrips.${index}.flights.0.departure_date"]`
+      )
+      .inputValue();
+    return airport;
+  }
+
+  public async checkRefundableRadio() {
+    await this.page.locator(this.REFUNDABLE_RADIO).check();
+  }
+  public async checkNonRefundableRadio() {
+    await this.page.locator(this.NON_REFUNDABLE_RADIO).check();
+  }
+  public async addPreferredAirlines() {
+    await this.page
+      .locator(
+        `(//div[contains(.,'No preference') and contains(@id,'select')]/../../div[2])[1]`
+      )
+      .first()
+      .click();
+    await this.page
+      .getByRole("option", { name: "American Airlines (AA)" })
+      .click();
+    await this.page.getByRole("option", { name: "Delta (DL)" }).click();
+    await this.page.getByRole("option", { name: "United (UA)" }).click();
+    await this.page.getByRole("option", { name: "Etihad (EY)" }).click();
+  }
+  public async addPreferredAircrafts() {
+    await this.page
+      .locator(
+        `(//div[contains(.,'No preference') and contains(@id,'select')]/../../div[2])`
+      )
+      .last()
+      .click();
+    await this.page.getByRole("option", { name: "Airbus 330-900" }).click();
+    await this.page.getByRole("option", { name: "Boeing Dreamliner" }).click();
+    await this.page.getByRole("option", { name: "Boeing 777" }).click();
+  }
+  public async selectPreferences() {
+    await this.page
+      .locator(`//span[contains(.,'Price sensitive')]//../span[1]`)
+      .first()
+      .click();
+    await this.page
+      .locator(`//span[contains(.,'Direct flights only')]//../span[1]`)
+      .first()
+      .click();
+    await this.page
+      .locator(
+        `//span[contains(.,'Traveling with infant / child')]//../span[1]`
+      )
+      .first()
+      .click();
+    await this.page
+      .locator(`//span[contains(.,'No red-eye flights')]//../span[1]`)
+      .first()
+      .click();
+    await this.page
+      .locator(`//span[contains(.,'Seats together')]//../span[1]`)
+      .first()
+      .click();
+    await this.page
+      .locator(`//span[contains(.,'Extra legroom')]//../span[1]`)
+      .first()
+      .click();
+    await this.page
+      .locator(`//span[contains(.,'Lie-flat seating')]//../span[1]`)
+      .first()
+      .click();
+    await this.page
+      .locator(
+        `//span[contains(.,'Flexible dates for better fare')]//../span[1]`
+      )
+      .first()
+      .click();
+  }
+  public async selectSeatsAndSpecialRequest() {
+    await this.page
+      .locator(`//span[contains(.,'Window')]//../span[1]`)
+      .first()
+      .click();
+    //this has more than 500 chars
+    await this.page
+      .locator(this.SPECIAL_REQUEST_TEXTAREA)
+      .fill("Lorem ipsum do");
+  }
+  public async getCharCountSpecialRequest() {
+    const charCount = await this.page
+      .locator(this.SPECIAL_REQUEST_TEXTAREA)
+      .textContent();
+    return charCount;
   }
 }
 export const airRequest = (page: Page) => new AirRequest({ page });
