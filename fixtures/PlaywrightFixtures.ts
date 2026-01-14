@@ -75,5 +75,11 @@ export const test = base.extend<PlaywrightFixtures>({
     await use(new Toast({ page }));
   },
 });
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+test.beforeEach(async ({}, testInfo) => {
+  if (testInfo.retry > 0) {
+    await sleep(5000);
+  }
+});
 
 export const expect = base.expect;

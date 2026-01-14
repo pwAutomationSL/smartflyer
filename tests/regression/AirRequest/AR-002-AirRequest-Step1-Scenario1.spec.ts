@@ -1,5 +1,4 @@
 import { test, expect } from "../../../fixtures/PlaywrightFixtures";
-
 import {
   getPresentDate,
   getPresentTime,
@@ -31,6 +30,7 @@ test.describe("AR-002 - Air Request - Step 1", () => {
       });
       await test.step("Go to the New credit card tab and Click on Air request button", async () => {
         await airRequest.clickAirRequest();
+        await expect(page.locator(airRequest.POP_UP_HEADER)).toBeVisible();
       });
       await test.step("Click on Start from scratch", async () => {
         await airRequest.startFromScrath();
@@ -75,6 +75,7 @@ test.describe("AR-002 - Air Request - Step 1", () => {
       await sidebar.goToModule("Clients");
       await test.step("Search the client and go to the client page", async () => {
         await clients.searchClient(CLIENT_NAME);
+        await page.waitForLoadState("networkidle");
       });
       await test.step("Go to the New credit card tab and Click on Air request button", async () => {
         await airRequest.clickAirRequest();

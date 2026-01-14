@@ -17,14 +17,13 @@ export default defineConfig({
     // How long expect() waits before failing
     timeout: 10_000,
   },
-  globalSetup: require.resolve("./global-setup"),
   testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 1 : 0,
+  retries: process.env.CI ? 1 : 1,
   /* Opt out of parallel tests on CI. */
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -33,10 +32,9 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     baseURL: "https://crm.test.smartflyer.com/",
-    storageState: "storageState.json",
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "off",
-    video: "off",
+    video: "retain-on-failure",
     timezoneId: "America/New_York",
     screenshot: "only-on-failure",
   },
@@ -47,9 +45,8 @@ export default defineConfig({
       name: "chromium",
       use: {
         actionTimeout: 10_000,
-        video: "retain-on-failure",
         launchOptions: {
-          slowMo: 150,
+          slowMo: 180,
         },
         ...devices["Desktop Chrome"],
       },

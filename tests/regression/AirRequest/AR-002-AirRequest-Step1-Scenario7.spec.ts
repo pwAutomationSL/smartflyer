@@ -17,7 +17,9 @@ test.describe("AR-002 - Air Request - Step 1", () => {
 
     await test.step("Search the client and go to the client page, create data to delete", async () => {
       await clients.searchClient(CLIENT_NAME);
+      await page.waitForLoadState("networkidle");
       await airRequest.clickAirRequest();
+      await expect(page.locator(airRequest.POP_UP_HEADER)).toBeVisible();
       await airRequest.startFromScrath();
       await expect(page.locator(airRequest.CANCEL_BUTTON)).toBeEnabled();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
@@ -36,6 +38,7 @@ test.describe("AR-002 - Air Request - Step 1", () => {
       await page.waitForLoadState("networkidle");
       await expect(page.locator(airRequest.HEADER).first()).toBeVisible();
       await airRequest.clickAirRequest();
+      await expect(page.locator(airRequest.POP_UP_HEADER)).toBeVisible();
       await expect(
         page.locator(airRequest.POP_UP_DIALOG).first()
       ).toBeVisible();

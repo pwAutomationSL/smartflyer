@@ -33,7 +33,9 @@ test.describe("AR-002 - Air Request - Step 1", () => {
       const parts = loggedAgent.trim().split(" ");
       const loggedEmail = parts.pop() ?? "";
       const loggedUser = parts.join(" ").trim();
+      await page.waitForLoadState("networkidle");
       await airRequest.clickAirRequest();
+      await expect(page.locator(airRequest.POP_UP_HEADER)).toBeVisible();
       const userData = await airRequest.startFromScrathAndGetUserData();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
       await expect(page.locator(airRequest.AGENT_SELECT)).toContainText(
@@ -77,7 +79,7 @@ test.describe("AR-002 - Air Request - Step 1", () => {
       const parts = loggedAgent.trim().split(" ");
       const loggedEmail = parts.pop() ?? "";
       const loggedUser = parts.join(" ").trim();
-
+      await page.waitForLoadState("networkidle");
       await airRequest.clickAirRequest();
       const userData = await airRequest.startFromScrathAndGetUserData();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();

@@ -7,7 +7,7 @@ const DEPARTURESHORT_2LETTERS = "JF";
 const DEPARTURE = "John F Kennedy International";
 const ARRIVAL_SHORT = "LAX";
 const ARRIVAL = "Los Angeles International Airport";
-test.describe("AR-005 - Air Request - Step 3", () => {
+test.describe("AR-005 - Air Request - Step 4", () => {
   test("Air Request - Step 4 - 2# Scenario - Refundable", async ({
     loginPage,
     page,
@@ -22,9 +22,11 @@ test.describe("AR-005 - Air Request - Step 3", () => {
     });
     await test.step("2 - Search the client and go to the client page", async () => {
       await clients.searchClient(CLIENT_NAME);
+      await page.waitForLoadState("networkidle");
     });
     await test.step("3 - 4 - Go to the New credit card tab and Click on Air request button", async () => {
       await airRequest.clickAirRequest();
+      await expect(page.locator(airRequest.POP_UP_HEADER)).toBeVisible();
     });
     await test.step("5 - Click on Start from scratch", async () => {
       await airRequest.startFromScrath();

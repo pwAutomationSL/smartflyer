@@ -21,6 +21,7 @@ test.describe("AR-003 - Air Request - Step #19 ", () => {
       await loginPage.login();
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
       await sidebar.goToModule("Clients");
+      await page.waitForLoadState("networkidle");
     });
 
     await test.step("2 - Search the client and go to the client page", async () => {
@@ -29,6 +30,7 @@ test.describe("AR-003 - Air Request - Step #19 ", () => {
 
     await test.step("3 - 4 - Go to the New credit card tab and Click on Air request button", async () => {
       await airRequest.clickAirRequest();
+      await expect(page.locator(airRequest.POP_UP_HEADER)).toBeVisible();
     });
 
     await test.step("5 - Click on Start from scratch", async () => {

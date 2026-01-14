@@ -177,7 +177,9 @@ export class AirRequest {
   }
   public async startFromScrath() {
     await this.page.waitForTimeout(400);
-    await this.page.getByRole("button", { name: "Start from scratch" }).click();
+    await this.page
+      .getByRole("button", { name: "Start from scratch" })
+      .click({ force: true });
   }
   public async startFromScrathAndGetUserData() {
     const waitForCreate = this.page.waitForResponse(
@@ -215,9 +217,7 @@ export class AirRequest {
     await this.page.locator(this.DRAFTS_ELEMENTS_TIME_ONLY).first().click();
   }
   public async clickAirRequest() {
-    await this.page
-      .getByRole("button", { name: "Air Request" })
-      .click({ delay: 300 });
+    await this.page.locator(`//button[contains(.,'Air Request')]`).click();
   }
   public async goToCreditCard() {
     await this.page.getByRole("tab", { name: "credit card" }).click();
@@ -514,40 +514,43 @@ export class AirRequest {
   }
   public async selectDepartureAirport2Letters(airportShort: string) {
     await this.page.getByRole("textbox", { name: "Departing from" }).click();
+    await this.page.waitForTimeout(500);
     await this.page
       .getByRole("textbox", { name: "Departing from" })
       .fill(airportShort);
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(500);
   }
   public async selectDepartureAirport2LettersFlight1(airportShort: string) {
     await this.page
       .getByRole("textbox", { name: "Departing from" })
       .first()
-      .click({ delay: 200 });
+      .click();
+    await this.page.waitForTimeout(500);
     await this.page
       .getByRole("textbox", { name: "Departing from" })
       .first()
       .fill(airportShort);
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(500);
   }
   public async selectDepartureAirport2LettersFlight2(airportShort: string) {
     await this.page
       .getByRole("textbox", { name: "Departing from" })
       .last()
       .click();
+    await this.page.waitForTimeout(500);
     await this.page
       .getByRole("textbox", { name: "Departing from" })
       .last()
       .fill(airportShort);
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(500);
   }
   public async selectArrivalAirport2Letters(airportShort: string) {
     await this.page.getByRole("textbox", { name: "Arriving at" }).click();
-    await this.page.getByRole("textbox", { name: "Arriving at" }).clear();
+    await this.page.waitForTimeout(500);
     await this.page
       .getByRole("textbox", { name: "Arriving at" })
       .fill(airportShort);
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(500);
   }
   public async selectArrivalAirport2LettersFligh1(airportShort: string) {
     await this.page
@@ -558,11 +561,12 @@ export class AirRequest {
       .getByRole("textbox", { name: "Arriving at" })
       .first()
       .clear();
+    await this.page.waitForTimeout(500);
     await this.page
       .getByRole("textbox", { name: "Arriving at" })
       .first()
       .fill(airportShort);
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(500);
   }
   public async selectArrivalAirport2LettersFligh2(airportShort: string) {
     await this.page
@@ -573,21 +577,24 @@ export class AirRequest {
       .getByRole("textbox", { name: "Arriving at" })
       .last()
       .clear();
+    await this.page.waitForTimeout(500);
     await this.page
       .getByRole("textbox", { name: "Arriving at" })
       .last()
       .fill(airportShort);
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(500);
   }
   public async selectArrivalAirport(airport: string, airportShort: string) {
     await this.page.getByRole("textbox", { name: "Arriving at" }).click();
     await this.page.getByRole("textbox", { name: "Arriving at" }).clear();
-    await this.page.waitForTimeout(400);
+    await this.page.waitForTimeout(500);
     await this.page
       .getByRole("textbox", { name: "Arriving at" })
       .fill(airportShort);
+    await this.page.waitForTimeout(500);
     await this.page
-      .locator(`//div[contains(.,'${airport}')]/../label/span`)
+      // .locator(`//div[contains(.,'${airport}')]/../label/span`)
+      .locator(`(//p[contains(.,'${airport}')]/../../../../div)`)
       .first()
       .click();
   }
@@ -614,6 +621,7 @@ export class AirRequest {
       .getByRole("textbox", { name: "Arriving at" })
       .first()
       .fill(airportShort);
+    await this.page.waitForTimeout(500);
     await this.page
       .locator(`//div[contains(.,'${airport}')]/../label/span`)
       .first()
@@ -632,10 +640,12 @@ export class AirRequest {
       .getByRole("textbox", { name: "Arriving at" })
       .first()
       .clear();
+    await this.page.waitForTimeout(500);
     await this.page
       .getByRole("textbox", { name: "Arriving at" })
       .first()
       .fill(airportShort);
+    await this.page.waitForTimeout(500);
     await this.page
       .locator(`//div[contains(.,'${airport}')]/../label/span`)
       .first()
@@ -653,10 +663,12 @@ export class AirRequest {
       .getByRole("textbox", { name: "Arriving at" })
       .last()
       .clear();
+    await this.page.waitForTimeout(500);
     await this.page
       .getByRole("textbox", { name: "Arriving at" })
       .last()
       .fill(airportShort);
+    await this.page.waitForTimeout(500);
     await this.page
       .locator(`//div[contains(.,'${airport}')]/../label/span`)
       .last()
@@ -735,6 +747,7 @@ export class AirRequest {
       .locator(`//div[contains(.,'${time}')]/../label/span`)
       .first()
       .click();
+    await this.page.waitForTimeout(500);
     await this.clickGeneric();
   }
   public async selectOutboundTime(time: string) {
