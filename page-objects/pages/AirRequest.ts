@@ -129,6 +129,26 @@ export class AirRequest {
   public readonly REFUNDABLE_RADIO = `(//input[@name="price_quote_type"])[2]`;
   public readonly NON_REFUNDABLE_RADIO = `(//input[@name="price_quote_type"])[3]`;
   public readonly SPECIAL_REQUEST_TEXTAREA = `//textarea[@name="special_request"]`;
+  public readonly EDIT_PASSENGER_INFORMATION = `//button[contains(.,'Edit Passengers Information')]`;
+  public readonly UPDATE_TRIP_INFORMATION = `//button[contains(.,'Update Trip Information')]`;
+  public readonly UPDATE_TRAVEL_PREFERENCES = `//button[contains(.,'Update Travel Preferences')]`;
+  public readonly FULL_NAME = `//p[contains(normalize-space(.), 'Full name')]/following-sibling::p[1]`;
+  public readonly GENDER = `//p[contains(normalize-space(.), 'Gender')]/following-sibling::p[1]`;
+  public readonly EMAIL = `//p[contains(normalize-space(.), 'Email')]/following-sibling::p[1]`;
+  public readonly DATE_OF_BIRTH = `//p[contains(normalize-space(.), 'Date of birth')]/following-sibling::p[1]`;
+  public readonly CLIENT_ID_5 = `//p[contains(normalize-space(.), "Client's ID")]/following-sibling::p[1]`;
+  public readonly PHONE_NUMBER = `//p[contains(normalize-space(.), 'Phone number')]/following-sibling::p[1]`;
+  public readonly DEPARTURE_FROM = `//p[contains(normalize-space(.), 'Departure from')]/following-sibling::div//span`;
+  public readonly ARRIVE_AT = `//p[contains(normalize-space(.), 'Arrive at')]/following-sibling::div//span`;
+  public readonly TRAVEL_DATES = `//p[contains(normalize-space(.), 'Travel dates')]/following-sibling::p`;
+  public readonly DEPARTURE_TIME = `//p[contains(normalize-space(.), 'Preferred departure time')]/following-sibling::div//p`;
+  public readonly CABIN_CLASS = `//p[contains(normalize-space(.), 'Preferred cabin class')]/following-sibling::div//p`;
+  public readonly AIRLINES = `//p[contains(normalize-space(.), 'Airlines')]/following-sibling::div//p`;
+  public readonly AIRCRAFT = `//p[contains(normalize-space(.), 'Aircraft')]/following-sibling::div//p`;
+  public readonly SEATS = `//p[contains(normalize-space(.), 'Seats')]/following-sibling::p`;
+  public readonly REQUESTS = `//p[contains(normalize-space(.), 'Requests')]/following-sibling::div//p`;
+  public readonly AGENT_NAME = `//p[contains(normalize-space(.), 'Agent name')]/following-sibling::p`;
+  public readonly AGENCY = `//p[contains(normalize-space(.), 'Agency')]/following-sibling::p`;
   public readonly AIRLINE_PROGRAM_BY_NAME = (text: string) =>
     `//div[contains(@id,'listbox')]//div/p[contains(.,'${text}')]`;
 
@@ -780,9 +800,10 @@ export class AirRequest {
   }
 
   public async selectCabinClass(cabin: string) {
+    await this.page.waitForTimeout(500);
     await this.page
       .locator(`//p[contains(.,'Preferred cabin class')]/../div/div/div/div[2]`)
-      .click();
+      .click({ force: true });
     await this.page
       .locator(`//div[contains(.,'${cabin}')]/../label/span`)
       .first()
@@ -791,10 +812,13 @@ export class AirRequest {
   }
 
   public async selectCabinClassMultiF1(cabin: string) {
+    await this.page.waitForTimeout(400);
     await this.page
-      .locator(`//p[contains(.,'Preferred cabin class')]/../div/div/div/div[2]`)
+      .locator(
+        `//div[contains(.,'Select cabin class') and contains(@id,'select')]/../../div/following-sibling::div`
+      )
       .first()
-      .click();
+      .click({ force: true });
     await this.page
       .locator(`//div[contains(.,'${cabin}')]/../label/span`)
       .first()
@@ -802,10 +826,13 @@ export class AirRequest {
     await this.clickGeneric();
   }
   public async selectCabinClassMultiF2(cabin: string) {
+    await this.page.waitForTimeout(400);
     await this.page
-      .locator(`//p[contains(.,'Preferred cabin class')]/../div/div/div/div[2]`)
+      .locator(
+        `//div[contains(.,'Select cabin class') and contains(@id,'select')]/../../div/following-sibling::div`
+      )
       .last()
-      .click();
+      .click({ force: true });
     await this.page
       .locator(`//div[contains(.,'${cabin}')]/../label/span`)
       .first()
@@ -920,21 +947,22 @@ export class AirRequest {
       .first()
       .click();
   }
-  public async selectSeatsAndSpecialRequest() {
+  public async selectSeatsAndSpecialRequest(text: string = "Test") {
     await this.page
       .locator(`//span[contains(.,'Window')]//../span[1]`)
       .first()
       .click();
-    //this has more than 500 chars
-    await this.page
-      .locator(this.SPECIAL_REQUEST_TEXTAREA)
-      .fill("Lorem ipsum do");
+    await this.page.locator(this.SPECIAL_REQUEST_TEXTAREA).fill(text);
   }
   public async getCharCountSpecialRequest() {
     const charCount = await this.page
       .locator(this.SPECIAL_REQUEST_TEXTAREA)
       .textContent();
     return charCount;
+  }
+  public async expandFlights() {
+    await this.page.getByRole("button", { name: "Flight 1" }).click();
+    await this.page.getByRole("button", { name: "Flight 2" }).click();
   }
 }
 export const airRequest = (page: Page) => new AirRequest({ page });

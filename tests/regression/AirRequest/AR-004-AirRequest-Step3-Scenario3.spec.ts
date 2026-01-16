@@ -177,7 +177,7 @@ test.describe("AR-004 - Air Request - Step 3", () => {
       await expect(page.locator(airRequest.FLIGHT_3_X).first()).toBeHidden();
     });
     await test.step("15 - Select Preferred Cabin Class (optional)", async () => {
-      await airRequest.selectCabinClassMultiF1("Premium Economy");
+      await airRequest.selectCabinClassMultiF1("Economy");
       await airRequest.selectCabinClassMultiF2("Economy");
     });
 

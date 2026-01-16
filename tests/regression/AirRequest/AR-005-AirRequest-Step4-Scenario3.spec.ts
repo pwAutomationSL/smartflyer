@@ -3,10 +3,10 @@ const CLIENT_NAME = "Candice & Ben (Conway) Winikoff";
 const EMAIL = "fake_candiceconway84@gmail.com";
 const PHONE = "18333333333";
 const DEPARTURESHORT = "JFK";
-const DEPARTURESHORT_2LETTERS = "JF";
 const DEPARTURE = "John F Kennedy International";
 const ARRIVAL_SHORT = "LAX";
 const ARRIVAL = "Los Angeles International Airport";
+const SPECIAL_REQUEST = `Lorem ipsum do`;
 test.use({
   launchOptions: { slowMo: 200 },
 });
@@ -80,7 +80,6 @@ test.describe("AR-005 - Air Request - Step 4", () => {
     });
     await test.step("10 - Complete step 3", async () => {
       await airRequest.selectOneWayTrip();
-      await airRequest.selectDepartureAirport2Letters(DEPARTURESHORT_2LETTERS);
       await airRequest.selectDepartureAirport(DEPARTURE, DEPARTURESHORT);
       await airRequest.selectArrivalAirport(ARRIVAL, ARRIVAL_SHORT);
       await airRequest.selectTravelDate();
@@ -117,7 +116,7 @@ test.describe("AR-005 - Air Request - Step 4", () => {
       await airRequest.selectPreferences();
     });
     await test.step("16 - Select Seat and Special requests", async () => {
-      await airRequest.selectSeatsAndSpecialRequest();
+      await airRequest.selectSeatsAndSpecialRequest(SPECIAL_REQUEST);
       await expect(
         page.locator(airRequest.SPECIAL_REQUEST_TEXTAREA)
       ).toHaveAttribute("maxlength", "500");

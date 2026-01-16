@@ -34,7 +34,6 @@ export default defineConfig({
     baseURL: "https://crm.test.smartflyer.com/",
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "off",
-    video: "retain-on-failure",
     timezoneId: "America/New_York",
     screenshot: "only-on-failure",
   },
@@ -46,9 +45,10 @@ export default defineConfig({
       use: {
         actionTimeout: 10_000,
         launchOptions: {
-          slowMo: 180,
+          slowMo: 120,
         },
         ...devices["Desktop Chrome"],
+        viewport: { width: 1920, height: 1080 },
       },
     },
 

@@ -1,14 +1,24 @@
 import { test, expect } from "../../../fixtures/PlaywrightFixtures";
 const CLIENT_NAME = "Candice & Ben (Conway) Winikoff";
+const AGENT_NAME = "Jillian Mason";
 const EMAIL = "fake_candiceconway84@gmail.com";
+const AGENCY = "Lauren Machowsky, LLC";
+const AGENT_EMAIL = "fake_jillian.mason@smartflyer.com";
 const PHONE = "18333333333";
 const DEPARTURESHORT = "JFK";
+const DEPARTURESHORT_2LETTERS = "JF";
 const DEPARTURE = "John F Kennedy International";
 const ARRIVAL_SHORT = "LAX";
+const CLIENT_ID = "SQ4715";
 const ARRIVAL = "Los Angeles International Airport";
 const SPECIAL_REQUEST = `Lorem ipsum do`;
-test.describe("AR-005 - Air Request - Step 4", () => {
-  test("Air Request - Step 4 - 2# Scenario - Refundable", async ({
+const DEPARTURE_TIME = "Morning";
+const CABIN_CLASS = "Business";
+test.use({
+  launchOptions: { slowMo: 200 },
+});
+test.describe("AR-005 - Air Request - Step 5", () => {
+  test("Air Request - Step 5 - Review", async ({
     loginPage,
     page,
     sidebar,
@@ -77,13 +87,14 @@ test.describe("AR-005 - Air Request - Step 4", () => {
     });
     await test.step("10 - Complete step 3", async () => {
       await airRequest.selectOneWayTrip();
+      await airRequest.selectDepartureAirport2Letters(DEPARTURESHORT_2LETTERS);
       await airRequest.selectDepartureAirport(DEPARTURE, DEPARTURESHORT);
       await airRequest.selectArrivalAirport(ARRIVAL, ARRIVAL_SHORT);
       await airRequest.selectTravelDate();
       await expect(page.locator(airRequest.PREVIOUS_MONTH)).toBeDisabled();
       await airRequest.confirmDates();
-      await airRequest.selectDepartureTime("Morning");
-      await airRequest.selectCabinClass("Business");
+      await airRequest.selectDepartureTime(DEPARTURE_TIME);
+      await airRequest.selectCabinClass(CABIN_CLASS);
       await airRequest.addAdditionalTripNotes("Window seat preferred");
     });
 
@@ -101,7 +112,7 @@ test.describe("AR-005 - Air Request - Step 4", () => {
       await expect(
         page.locator(airRequest.REFUNDABLE_NON_REFUNDABLE_RADIO)
       ).toBeChecked();
-      await airRequest.checkRefundableRadio();
+      await airRequest.checkNonRefundableRadio();
     });
     await test.step("13 - Add the preferred Airlines", async () => {
       await airRequest.addPreferredAirlines();
@@ -118,7 +129,7 @@ test.describe("AR-005 - Air Request - Step 4", () => {
         page.locator(airRequest.SPECIAL_REQUEST_TEXTAREA)
       ).toHaveAttribute("maxlength", "500");
     });
-    await test.step("17 - Select Seat and Special requests", async () => {
+    await test.step("17 - Continue", async () => {
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText(
         "Review air request"
@@ -126,6 +137,110 @@ test.describe("AR-005 - Air Request - Step 4", () => {
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         "background-color",
         "rgb(46, 139, 87)"
+      );
+    });
+    await test.step("18-Review Passenger Information", async () => {
+      await expect(
+        page.locator(airRequest.EDIT_PASSENGER_INFORMATION)
+      ).toBeEnabled();
+      await expect(page.locator(airRequest.FULL_NAME)).toContainText(
+        CLIENT_NAME
+      );
+      await expect(page.locator(airRequest.PHONE_NUMBER).first()).toContainText(
+        PHONE
+      );
+      await expect(page.locator(airRequest.GENDER)).toContainText("Male");
+      await expect(page.locator(airRequest.EMAIL).first()).toContainText(EMAIL);
+      await expect(page.locator(airRequest.DATE_OF_BIRTH)).toContainText(
+        "Jan 15, 1990"
+      );
+      await expect(page.locator(airRequest.CLIENT_ID_5)).toContainText(
+        CLIENT_ID
+      );
+    });
+    await test.step("19-Review Trip OverView", async () => {
+      await expect(
+        page.locator(airRequest.UPDATE_TRIP_INFORMATION)
+      ).toBeEnabled();
+      await expect(
+        page.locator(airRequest.DEPARTURE_FROM).first()
+      ).toContainText(DEPARTURE);
+      await expect(page.locator(airRequest.ARRIVE_AT).first()).toContainText(
+        ARRIVAL
+      );
+      await expect(page.locator(airRequest.TRAVEL_DATES).first()).toContainText(
+        "15, 2026"
+      );
+      await expect(
+        page.locator(airRequest.DEPARTURE_TIME).first()
+      ).toContainText(DEPARTURE_TIME);
+      await expect(page.locator(airRequest.CABIN_CLASS).first()).toContainText(
+        CABIN_CLASS
+      );
+    });
+    await test.step("20-Review Traveler Preferences", async () => {
+      await expect(
+        page.locator(airRequest.UPDATE_TRAVEL_PREFERENCES)
+      ).toBeEnabled();
+      const airlines = await page.locator(airRequest.AIRLINES);
+      await expect(airlines).toHaveCount(4);
+      await expect(
+        airlines.filter({ hasText: "American Airlines (AA)" })
+      ).toBeVisible();
+      await expect(airlines.filter({ hasText: "Delta (DL)" })).toBeVisible();
+      await expect(airlines.filter({ hasText: "United (UA)" })).toBeVisible();
+      await expect(airlines.filter({ hasText: "Etihad (EY)" })).toBeVisible();
+      const aircrafts = await page.locator(airRequest.AIRCRAFT);
+      await expect(aircrafts).toHaveCount(3);
+      await expect(
+        aircrafts.filter({ hasText: "Airbus 330-900 neo" })
+      ).toBeVisible();
+      await expect(
+        aircrafts.filter({ hasText: "Boeing Dreamliner" })
+      ).toBeVisible();
+      await expect(aircrafts.filter({ hasText: "Boeing 777" })).toBeVisible();
+      const requests = await page.locator(airRequest.REQUESTS);
+      await expect(requests).toHaveCount(9);
+
+      await expect(
+        requests.filter({ hasText: "Direct flights only" })
+      ).toBeVisible();
+      await expect(requests.filter({ hasText: "Extra legroom" })).toBeVisible();
+      await expect(
+        requests.filter({ hasText: "Flexible dates for better fare" })
+      ).toBeVisible();
+      await expect(
+        requests.filter({ hasText: "Lie-flat seating" })
+      ).toBeVisible();
+      await expect(
+        requests.filter({ hasText: "No red-eye flights" })
+      ).toBeVisible();
+      await expect(
+        requests.filter({ hasText: "Price sensitive" })
+      ).toBeVisible();
+      await expect(
+        requests.filter({ hasText: "Seating preference" })
+      ).toBeVisible();
+      await expect(
+        requests.filter({ hasText: "Seats together" })
+      ).toBeVisible();
+      await expect(
+        requests.filter({ hasText: "Traveling with infant / child" })
+      ).toBeVisible();
+    });
+    await test.step("21-Review Documents", async () => {});
+    await test.step("22-Review Agent Information", async () => {
+      await expect(page.locator(airRequest.AGENT_NAME)).toContainText(
+        AGENT_NAME
+      );
+      await expect(page.locator(airRequest.PHONE_NUMBER).last()).toContainText(
+        "N/A"
+      );
+      await expect(page.locator(airRequest.EMAIL).last()).toContainText(
+        AGENT_EMAIL
+      );
+      await expect(page.locator(airRequest.AGENCY).last()).toContainText(
+        AGENCY
       );
     });
   });

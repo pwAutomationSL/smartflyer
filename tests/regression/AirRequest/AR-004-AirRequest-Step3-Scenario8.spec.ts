@@ -5,8 +5,6 @@ const PHONE = "18333333333";
 const DEPARTURESHORT = "JFK";
 const DEPARTURE = "John F Kennedy International";
 const ARRIVAL_SHORT = "LAX";
-const ARRIVAL_F2 = "San Francisco International Airport";
-const ARRIVAL_SHORT_F2 = "SFO";
 const ARRIVAL = "Los Angeles International Airport";
 test.describe("AR-004 - Air Request - Step 3", () => {
   test("Air Request - Step 3 - 8# Scenario - Specific flight, multiple passengers, different itineraries", async ({
@@ -121,7 +119,7 @@ test.describe("AR-004 - Air Request - Step 3", () => {
       await expect(page.locator(airRequest.PREVIOUS_MONTH)).toBeDisabled();
       await airRequest.confirmDates();
       await airRequest.selectDepartureTimeFlight2("Morning");
-      await airRequest.selectCabinClassMultiF2("Premium Economy");
+      await airRequest.selectCabinClass("Economy");
     });
     await test.step("17 - Click Continue", async () => {
       await airRequest.clickContinue();
