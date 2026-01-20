@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-const env = process.env.ENVIRONMENT ?? "test";
+const env = process.env.ENVIRONMENT ?? "stage";
 
 export class Partners {
   public readonly page: Page;
