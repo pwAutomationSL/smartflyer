@@ -142,7 +142,9 @@ export class AirRequest {
   public readonly DEPARTURE_FROM = `//p[contains(normalize-space(.), 'Departure from')]/following-sibling::div//span`;
   public readonly ARRIVE_AT = `//p[contains(normalize-space(.), 'Arrive at')]/following-sibling::div//span`;
   public readonly TRAVEL_DATES = `//p[contains(normalize-space(.), 'Travel dates')]/following-sibling::p`;
+  public readonly TRAVEL_DATE = `//p[contains(normalize-space(.), 'Travel date')]/following-sibling::p`;
   public readonly DEPARTURE_TIME = `//p[contains(normalize-space(.), 'Preferred departure time')]/following-sibling::div//p`;
+  public readonly ARRIVAL_TIME = `//p[contains(normalize-space(.), 'Preferred arrival time')]/following-sibling::div//p`;
   public readonly CABIN_CLASS = `//p[contains(normalize-space(.), 'Preferred cabin class')]/following-sibling::div//p`;
   public readonly AIRLINES = `//p[contains(normalize-space(.), 'Airlines')]/following-sibling::div//p`;
   public readonly AIRCRAFT = `//p[contains(normalize-space(.), 'Aircraft')]/following-sibling::div//p`;
@@ -154,6 +156,8 @@ export class AirRequest {
   public readonly DEPARTURE_FLIGHT2 = `//p[contains(.,'Flight 2')]/following-sibling::div/div//input[@placeholder="Departing from"]`;
   public readonly DEPARTURE_FLIGHT1_PASSENGER2 = `//p[contains(.,'Flight 1')]/following-sibling::div/div//input[@placeholder="Departing from"]`;
   public readonly DEPARTURE_FLIGHT2_DIV = `//p[contains(.,'Flight 2')]/following-sibling::div/div//input[@placeholder="Departing from"]/following-sibling::div`;
+  public readonly CONFIRMATION_STEP_5 = `//input[contains(@id,'checkbox')]/following-sibling::span`;
+  public readonly SUBMIT_REQUEST = `//button[contains(.,'Submit Request')]`;
   public readonly AIRLINE_PROGRAM_BY_NAME = (text: string) =>
     `//div[contains(@id,'listbox')]//div/p[contains(.,'${text}')]`;
 
@@ -506,19 +510,16 @@ export class AirRequest {
     airport: string,
     airportShort: string
   ) {
+    await this.page.waitForTimeout(300);
     await this.page
       .getByRole("textbox", { name: "Departing from" })
       .first()
-      .click();
-    await this.page
-      .getByRole("textbox", { name: "Departing from" })
-      .first()
-      .clear();
+      .click({ force: true });
     await this.page
       .getByRole("textbox", { name: "Departing from" })
       .first()
       .fill(airportShort);
-    await this.page.waitForTimeout(200);
+    await this.page.waitForTimeout(300);
     await this.page
       .locator(`//div[contains(.,'${airport}')]/../label/span`)
       .first()
@@ -528,18 +529,16 @@ export class AirRequest {
     airport: string,
     airportShort: string
   ) {
+    await this.page.waitForTimeout(300);
     await this.page
       .getByRole("textbox", { name: "Departing from" })
       .last()
-      .click();
-    await this.page
-      .getByRole("textbox", { name: "Departing from" })
-      .last()
-      .clear();
+      .click({ force: true });
     await this.page
       .getByRole("textbox", { name: "Departing from" })
       .last()
       .fill(airportShort);
+    await this.page.waitForTimeout(300);
     await this.page
       .locator(`//div[contains(.,'${airport}')]/../label/span`)
       .first()
@@ -947,13 +946,14 @@ export class AirRequest {
   }
 
   public async selectCabinClassMultiF1(cabin: string) {
-    await this.page.waitForTimeout(400);
+    await this.page.waitForTimeout(200);
     await this.page
       .locator(
         `//div[contains(.,'Select cabin class') and contains(@id,'select')]/../../div/following-sibling::div`
       )
       .first()
       .click({ force: true });
+    await this.page.waitForTimeout(200);
     await this.page
       .locator(`//div[contains(.,'${cabin}')]/../label/span`)
       .first()
@@ -961,13 +961,14 @@ export class AirRequest {
     await this.clickGeneric();
   }
   public async selectCabinClassMultiF2(cabin: string) {
-    await this.page.waitForTimeout(400);
+    await this.page.waitForTimeout(200);
     await this.page
       .locator(
         `//div[contains(.,'Select cabin class') and contains(@id,'select')]/../../div/following-sibling::div`
       )
       .last()
       .click({ force: true });
+    await this.page.waitForTimeout(200);
     await this.page
       .locator(`//div[contains(.,'${cabin}')]/../label/span`)
       .first()
@@ -1100,6 +1101,10 @@ export class AirRequest {
       .locator(this.SPECIAL_REQUEST_TEXTAREA)
       .textContent();
     return charCount;
+  }
+  public async expandLegFlights() {
+    await this.page.getByRole("button", { name: "Leg 1" }).click();
+    await this.page.getByRole("button", { name: "Leg 2" }).click();
   }
   public async expandFlights() {
     await this.page.getByRole("button", { name: "Flight 1" }).click();

@@ -15,7 +15,21 @@ export class Clients {
   public readonly ALL_RELATED_TRAVELERS = `//tbody[@id="related_travellers_list"]/tr/td[2]/span`;
   public readonly CONFIRM_DELETE = `//button[contains(.,'Yes, release it')]`;
   public readonly CONFIRM_DELETE_FF = `//button[contains(.,'Yes, delete it!')]`;
+  public readonly CONFIRM_DELETE_PASSPORT = `//button[contains(.,'Confirm')]`;
   public readonly LOYALTY_PROGRAMS_POPUP = `//form[@id="add-important-number-single"]`;
+  public readonly PASSPORTS_ADDED = `//tbody/tr[contains(@id,'passport')]`;
+  public readonly PASSPORTS_ADDED_DROPDOWN = `//tbody/tr[contains(@id,'passport')]//button`;
+  public readonly ADD_NEW_PASSPORT = `//h4[contains(.,'Passport details')]/following-sibling::a`;
+  public readonly EDIT_PASSPORT = `//ul[contains(@class,'show')]//a[contains(.,'Edit')]`;
+  public readonly PASSPORT_MODAL = `//form[contains(@id,'passport')]`;
+  public readonly DELETE_PASSPORT_ICON = `//form[contains(@id,'passport')]//i`;
+  public readonly UPLOADED_DOCUMENTS = `//form//div[@id="uploadedFileList"]`;
+  public readonly UPLOAD_DOCUMENTS = `//form//a[contains(.,'Upload Documents')]`;
+  public readonly INPUT_PASSPORT = `//input[@id="imgupload"]`;
+  public readonly SAVE_MODAL = `//form//button[@id="save_passport"]`;
+  public readonly PASSPORT_NUMBER = `//form//input[@id="passport_number"]`;
+  public readonly PASSENGER_DOB = `//form//input[@id="passport_dob"]`;
+  public readonly SUCCESS_MODAL = `//h2[contains(.,'Success')]`;
   public readonly TRAVELER_ADDED = (traveler: string) =>
     `//tbody[@id="related_travellers_list"]/tr/td[2]/span[contains(.,'${traveler}')]//../../td//button[contains(@id,'dropdown')]`;
   public readonly REMOVE_TRAVELER_BY_NAME = (traveler: string) =>
@@ -225,6 +239,11 @@ export class Clients {
     await this.page.getByRole("textbox", { name: "Search" }).press("Enter");
     await this.page.getByText("Candice & Ben (Conway)").click();
   }
+  public async searchClientAndClick(client: string) {
+    await this.page.getByRole("textbox", { name: "Search" }).fill(client);
+    await this.page.getByRole("textbox", { name: "Search" }).press("Enter");
+    await this.page.getByText(client).click();
+  }
 
   public async deleteAddedTraveler(traveler: string) {
     await this.page.locator(this.TRAVELER_ADDED(traveler)).first().click();
@@ -241,6 +260,63 @@ export class Clients {
   }
   public async clickOkPopUp() {
     await this.page.getByRole("button", { name: "OK" }).click();
+  }
+  public async addPassportIfNotFull() {
+    const passportsAdded = await this.page
+      .locator(this.PASSPORTS_ADDED)
+      .count();
+    if (passportsAdded < 3) {
+      await this.addNewPassport();
+    } else {
+      await this.page.locator(this.PASSPORTS_ADDED_DROPDOWN).last().click();
+      await this.page.locator(this.EDIT_PASSPORT).click();
+      await this.page
+        .locator(this.PASSPORT_MODAL)
+        .waitFor({ state: "visible", timeout: 5000 });
+      if (await this.page.isVisible(this.DELETE_PASSPORT_ICON)) {
+        await this.page.locator(this.DELETE_PASSPORT_ICON).click();
+        await this.page.locator(this.CONFIRM_DELETE_PASSPORT).click();
+        await this.page.locator(this.PASSPORTS_ADDED_DROPDOWN).last().click();
+        await this.page.locator(this.EDIT_PASSPORT).click();
+        await this.page
+          .locator(this.INPUT_PASSPORT)
+          .setInputFiles("./data/images/testImage.jpg");
+        await this.fillRequiredData();
+      } else {
+        await this.page
+          .locator(this.INPUT_PASSPORT)
+          .setInputFiles("./data/images/testImage.jpg");
+        await this.fillRequiredData();
+      }
+    }
+  }
+  public async addNewPassport() {
+    await this.page.locator(this.ADD_NEW_PASSPORT).click();
+    await this.fillRequiredData();
+    await this.page
+      .locator(this.INPUT_PASSPORT)
+      .setInputFiles("./data/images/testImage.jpg");
+  }
+  public async fillRequiredData() {
+    await this.page.locator(this.PASSENGER_DOB).fill("1997-02-27");
+
+    await this.page.locator(this.PASSPORT_NUMBER).fill("123123123");
+  }
+  public async saveModal() {
+    const waitForCreate = this.page.waitForResponse(
+      (res) =>
+        res.ok() &&
+        res.request().method() === "POST" &&
+        res.url().includes("add-client-passport")
+    );
+    await this.page.locator(this.SAVE_MODAL).click();
+    const response = await waitForCreate;
+    const responseData = await response.json();
+    await this.page.waitForTimeout(3000);
+    return {
+      status: response.status(),
+      responseData,
+    };
   }
 }
 export const clients = (page: Page) => new Clients({ page });
