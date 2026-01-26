@@ -38,3 +38,7 @@ export function convertToUiDateFormat(dateStr: string) {
 
   return `${shortMonth} ${day}, ${year}`;
 }
+export function isoToUiDate(iso: string) {
+  const [yyyy, mm, dd] = iso.split("-");
+  return `${dd}/${mm}/${yyyy}`;
+}

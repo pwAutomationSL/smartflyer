@@ -14,6 +14,7 @@ import { Faqs } from "../page-objects/pages/Faqs";
 import { PartnersHotel } from "../page-objects/pages/PartnersHotel";
 import { PartnersOnsite } from "../page-objects/pages/PartnersOnsite";
 import { Toast } from "../page-objects/pages/Toast";
+import { TasksPage } from "../page-objects/pages/Tasks";
 export interface PlaywrightFixtures {
   commonActions: CommonActions;
   loginPage: LoginPage;
@@ -29,6 +30,7 @@ export interface PlaywrightFixtures {
   partnersHotel: PartnersHotel;
   partnersOnsite: PartnersOnsite;
   toast: Toast;
+  tasks: TasksPage;
 }
 
 export const test = base.extend<PlaywrightFixtures>({
@@ -64,6 +66,9 @@ export const test = base.extend<PlaywrightFixtures>({
   },
   galleryPage: async ({ page }, use) => {
     await use(new GalleryPage({ page }));
+  },
+  tasks: async ({ page }, use) => {
+    await use(new TasksPage({ page }));
   },
   partnersOnsite: async ({ page }, use) => {
     await use(new PartnersOnsite({ page }));

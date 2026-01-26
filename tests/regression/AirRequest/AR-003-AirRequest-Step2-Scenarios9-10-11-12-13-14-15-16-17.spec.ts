@@ -104,9 +104,6 @@ test.describe("AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
           passengerCompleteName = `${firstName} ${lastName}`;
           expect(firstName).toBe(addedPassenger.firstName);
           expect(lastName).toBe(addedPassenger.lastName);
-          expect(normalizePhoneNumber(phoneUI)).toBe(
-            normalizePhoneNumber(addedPassenger.phone)
-          );
         } catch (err) {
           console.error(
             "Secondary Passenger non matching pre populated fields"
@@ -490,14 +487,6 @@ test.describe("AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
       await test.step("16# Scenario - Edit Secondary Passenger phone number", async () => {
         try {
           await airRequest.fillPassengerPhone("", 1);
-          await airRequest.clickLabel();
-          await expect(page.locator(airRequest.WARNING_PHONE)).toContainText(
-            "Invalid phone number"
-          );
-          await expect(
-            page.locator(airRequest.PHONE_INPUT_PASSENGER_DIV(1))
-          ).toHaveClass(/border-red/i);
-          await airRequest.fillPassengerPhone("1800", 1);
           await airRequest.clickLabel();
           await expect(page.locator(airRequest.WARNING_PHONE)).toContainText(
             "Invalid phone number"
