@@ -487,7 +487,7 @@ test.describe("AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
       await test.step("16# Scenario - Edit Secondary Passenger phone number", async () => {
         try {
           await airRequest.fillPassengerPhone("", 1);
-          await airRequest.clickLabel();
+          await airRequest.clickGeneric();
           await expect(page.locator(airRequest.WARNING_PHONE)).toContainText(
             "Invalid phone number"
           );

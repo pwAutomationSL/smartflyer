@@ -5,8 +5,8 @@ const TASK_NAME = "New Task" + uniqueId();
 const TASK_DATE = "2026-11-11";
 const TASK_DATE_UPDATE = "2026-12-12";
 const STATUS = "Open";
-test.describe("TSK-001 -  Add a task,search and then remove it", () => {
-  test("As an admin,i want to be able to add a new task and delete it", async ({
+test.describe("TSK-001 - Task", () => {
+  test("As an admin,i want to be able to add a new task, search it, edit and finally delete it", async ({
     loginPage,
     page,
     sidebar,
@@ -59,6 +59,7 @@ test.describe("TSK-001 -  Add a task,search and then remove it", () => {
       await tasks.confirmDeleteTask();
       await expect(page.locator(tasks.SUCCESS_POPUP)).toContainText("Success");
       await tasks.clickOK();
+      await tasks.searchTask(TASK_NAME);
       await expect(page.locator(tasks.COLUMNS_BY_INDEX(1))).toContainText(
         "No data available in table"
       );

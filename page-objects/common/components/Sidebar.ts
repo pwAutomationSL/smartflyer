@@ -11,7 +11,7 @@ export class SideBar {
   public readonly CONTENT_SOCIETY_MENU = `//*//p[contains(.,'-society crm')]`;
   public readonly SEARCH_APP = `//a[@href="/search/"]`;
   public readonly CONTENT_SOCIETY_SUBMENU = (submenu: string) =>
-    `//*//a[contains(.,'${submenu}')]`;
+    `//*//a[contains(.,'${submenu}') and contains(@class,'dropdown')]`;
   public async goToModule(module: string) {
     await this.page.locator(this.MODULE_BY_TEXT(module)).first().click();
     await this.page.waitForTimeout(1000);
@@ -24,6 +24,9 @@ export class SideBar {
     await this.page
       .getByRole("link", { name: "Content" })
       .click({ force: true });
+    await this.page
+      .getByRole("link", { name: "- Society CRM" })
+      .waitFor({ state: "visible" });
     await this.page.getByRole("link", { name: "- Society CRM" }).click();
     await this.page
       .locator(this.CONTENT_SOCIETY_SUBMENU(submenu))
@@ -35,6 +38,9 @@ export class SideBar {
     await this.page
       .getByRole("button", { name: "Content" })
       .click({ force: true });
+    await this.page
+      .getByRole("button", { name: "Society CRM" })
+      .waitFor({ state: "visible" });
     await this.page.getByRole("button", { name: "Society CRM" }).click();
     await this.page
       .locator(this.CONTENT_SOCIETY_SUBMENU(submenu))

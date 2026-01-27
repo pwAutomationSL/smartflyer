@@ -1,5 +1,4 @@
 import { test, expect } from "../../../fixtures/PlaywrightFixtures";
-import { getPresentDate, getPresentTime } from "../../../utils/helpers";
 const CLIENT_NAME = "Dr Ragan";
 test.use({
   launchOptions: { slowMo: 350 },

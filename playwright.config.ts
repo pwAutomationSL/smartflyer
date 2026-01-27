@@ -45,27 +45,36 @@ export default defineConfig({
       use: {
         actionTimeout: 10_000,
         launchOptions: {
-          slowMo: 120,
+          slowMo: 180,
         },
         ...devices["Desktop Chrome"],
         viewport: { width: 1920, height: 1080 },
       },
     },
-
     // {
     //   name: "firefox",
-    //   use: { ...devices["Desktop Firefox"] },
+    //   use: {
+    //     ...devices["Desktop Firefox"],
+    //     launchOptions: {
+    //       slowMo: 180,
+    //     },
+    //   },
     // },
 
     // {
     //   name: "webkit",
-    //   use: { ...devices["Desktop Safari"] },
+    //   use: {
+    //     ...devices["Desktop Safari"],
+    //     launchOptions: {
+    //       slowMo: 180,
+    //     },
+    //   },
     // },
 
     /* Test against mobile viewports. */
     // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
+    //   name: "Mobile Chrome",
+    //   use: { ...devices["Pixel 5"] },
     // },
     // {
     //   name: "Mobile Safari",

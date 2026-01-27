@@ -23,6 +23,7 @@ test.describe("GS-007 - Search - FAQs filter", () => {
       await faqs.fillQuestion(FAQ);
       await faqs.fillAnswer(FAQ);
       await faqs.confirmAdd();
+      await faqs.clickOK();
       await expect(page.locator(faqs.MODAL)).toBeHidden();
     });
     await test.step("3 - Assert result is at least 1, title and details are correct", async () => {
