@@ -16,6 +16,7 @@ import { PartnersOnsite } from "../page-objects/pages/PartnersOnsite";
 import { Toast } from "../page-objects/pages/Toast";
 import { TasksPage } from "../page-objects/pages/Tasks";
 import { Toolkit } from "../page-objects/pages/Toolkit";
+import { Trainings } from "../page-objects/pages/Trainings";
 export interface PlaywrightFixtures {
   commonActions: CommonActions;
   loginPage: LoginPage;
@@ -33,6 +34,7 @@ export interface PlaywrightFixtures {
   toast: Toast;
   tasks: TasksPage;
   toolkit: Toolkit;
+  trainings: Trainings;
 }
 
 export const test = base.extend<PlaywrightFixtures>({
@@ -71,6 +73,9 @@ export const test = base.extend<PlaywrightFixtures>({
   },
   tasks: async ({ page }, use) => {
     await use(new TasksPage({ page }));
+  },
+  trainings: async ({ page }, use) => {
+    await use(new Trainings({ page }));
   },
   toolkit: async ({ page }, use) => {
     await use(new Toolkit({ page }));
