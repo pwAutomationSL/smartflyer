@@ -20,7 +20,7 @@ test.describe("SFC-370 -  upload a passport file", () => {
     await test.step("Click on Start from scratch", async () => {
       await page.waitForLoadState("networkidle");
       await page.waitForLoadState("load");
-      await clients.clickDatesAndNumbersAPP();
+      await clients.clickDatesAndNumbers();
       await page.waitForLoadState("networkidle");
       await page.waitForLoadState("load");
       await clients.addPassportIfNotFull();

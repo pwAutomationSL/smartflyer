@@ -1,5 +1,5 @@
 import { test, expect } from "../../../fixtures/PlaywrightFixtures";
-test.describe("SL-003 - Login - Incorrect Login", () => {
+test.describe("LOG-003 - Login - Incorrect Login", () => {
   test("Scenario 1 - Wrong username", async ({ loginPage, page }) => {
     await test.step("Go to the Client tab", async () => {
       await loginPage.login({ username: "rodrigo.santone@nonexistant.com" });

@@ -12,7 +12,7 @@ test.describe("TSK-001 - Task", () => {
     sidebar,
     tasks,
   }) => {
-    await test.step("Go to the Task tab", async () => {
+    await test.step("Login and Go to the Task tab", async () => {
       await loginPage.login();
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
       await sidebar.goToModule("Tasks");
