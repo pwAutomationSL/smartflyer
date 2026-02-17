@@ -1,13 +1,13 @@
 import { test, expect } from "../../../fixtures/PlaywrightFixtures";
 import { uniqueId } from "../../../page-objects";
-const TOOLKIT_NAME = "New Toolkit" + uniqueId();
-const UNEXISTING_TOOLKIT_NAME = "New Toolkit foo" + uniqueId();
 const shortDescription = `Lorem ipsum dolor sit amet consectetur adipiscing elit.`;
 const description = `Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.`;
 test.use({
   launchOptions: { slowMo: 350 },
 });
 test.describe("CRM-009 - Toolkit", () => {
+  const TOOLKIT_NAME = "New Toolkit" + uniqueId();
+  const UNEXISTING_TOOLKIT_NAME = "New Toolkit foo" + uniqueId();
   test("As an admin, i want to create a new toolkit", async ({
     loginPage,
     page,
@@ -49,18 +49,18 @@ test.describe("CRM-009 - Toolkit", () => {
       await page.waitForLoadState("networkidle");
       await toolkit.searchToolkit(TOOLKIT_NAME);
       await expect(page.locator(toolkit.COLUMNS_BY_INDEX(2))).toContainText(
-        TOOLKIT_NAME
+        TOOLKIT_NAME,
       );
       await expect(page.locator(toolkit.COLUMNS_BY_INDEX(3))).toContainText(
-        "internal"
+        "internal",
       );
       await expect(
-        page.locator(toolkit.COLUMNS_BY_INDEX(4)).locator(`a`)
+        page.locator(toolkit.COLUMNS_BY_INDEX(4)).locator(`a`),
       ).toHaveAttribute("target", "_blank");
       await expect(page.locator(toolkit.TOOLKIT_TABLE)).toBeVisible();
       await toolkit.searchToolkit(UNEXISTING_TOOLKIT_NAME);
       await expect(page.locator(toolkit.COLUMNS_BY_INDEX(1))).toContainText(
-        "No matching records found"
+        "No matching records found",
       );
     });
   });
@@ -79,6 +79,8 @@ test.describe("CRM-009 - Toolkit", () => {
       await page.waitForLoadState("load");
       await page.waitForLoadState("networkidle");
       await toolkit.searchToolkit(TOOLKIT_NAME);
+      await page.waitForLoadState("load");
+      await page.waitForLoadState("networkidle");
       await toolkit.editSearchedToolkit();
       await expect(page.locator(toolkit.SAVE)).toBeVisible();
       await toolkit.changeURLType();
@@ -86,13 +88,13 @@ test.describe("CRM-009 - Toolkit", () => {
       await toolkit.searchToolkit(TOOLKIT_NAME);
       await expect(page.locator(toolkit.TOOLKIT_TABLE)).toBeVisible();
       await expect(page.locator(toolkit.COLUMNS_BY_INDEX(2))).toContainText(
-        TOOLKIT_NAME
+        TOOLKIT_NAME,
       );
       await expect(page.locator(toolkit.COLUMNS_BY_INDEX(3))).toContainText(
-        "external"
+        "external",
       );
       await expect(
-        page.locator(toolkit.COLUMNS_BY_INDEX(4)).locator(`a`)
+        page.locator(toolkit.COLUMNS_BY_INDEX(4)).locator(`a`),
       ).toHaveAttribute("target", "_blank");
     });
   });
@@ -112,14 +114,16 @@ test.describe("CRM-009 - Toolkit", () => {
       await page.waitForLoadState("load");
       await page.waitForLoadState("networkidle");
       await toolkit.searchToolkit(TOOLKIT_NAME);
+      await page.waitForLoadState("load");
+      await page.waitForLoadState("networkidle");
       await toolkit.deleteSearchedToolkit();
       await expect(page.locator(toolkit.CONFIRM_DELETE)).toBeVisible();
       await toolkit.confirmDeleteToolkit();
       await expect(page.locator(toast.TOAST_MESSAGE)).toContainText(
-        `Data deleted`
+        `Data deleted`,
       );
       await expect(page.locator(toolkit.COLUMNS_BY_INDEX(1))).toContainText(
-        "No matching records found"
+        "No matching records found",
       );
     });
   });

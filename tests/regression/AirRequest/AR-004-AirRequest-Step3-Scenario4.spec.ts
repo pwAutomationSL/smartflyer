@@ -28,7 +28,7 @@ test.describe("AR-004 - Air Request - Step 3", () => {
       await airRequest.startFromScrath();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
       await expect(page.locator(airRequest.AGENT_SELECT)).toContainText(
-        "Select an agent"
+        "Select an agent",
       );
     });
     await test.step("6 - Select the Agent and Click on Continue button", async () => {
@@ -39,11 +39,11 @@ test.describe("AR-004 - Air Request - Step 3", () => {
     await test.step("7 - Click on Continue", async () => {
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText(
-        "Passenger details"
+        "Passenger details",
       );
       await expect(page.locator(airRequest.AGENT_SUCCESS)).toHaveCSS(
         "background-color",
-        "rgb(46, 139, 87)"
+        "rgb(46, 139, 87)",
       );
     });
     await test.step("8 - Add Passenger information on Step 2", async () => {
@@ -64,11 +64,11 @@ test.describe("AR-004 - Air Request - Step 3", () => {
     await test.step("9 - Click on Continue", async () => {
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText(
-        "Trip overview"
+        "Trip overview",
       );
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         "background-color",
-        "rgb(46, 139, 87)"
+        "rgb(46, 139, 87)",
       );
     });
     await test.step("10 -Enable the toggle Client request a specific flight", async () => {
@@ -77,14 +77,14 @@ test.describe("AR-004 - Air Request - Step 3", () => {
     });
     await test.step("11 -Enter flight details or paste itinerary information ", async () => {
       await airRequest.enterFlightDetails(
-        "American#456 on July 22, departing LAX at 9:10 AM"
+        "American#456 on July 22, departing LAX at 9:10 AM",
       );
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
       await airRequest.uploadFiles("testImage.jpg");
       await airRequest.uploadAddedFilesTripOverview();
       await airRequest.closeAddedFilesTripOverview();
       await expect(
-        page.locator(airRequest.ADDED_IMAGE_TRIP_OVERVIEW)
+        page.locator(airRequest.ADDED_IMAGE_TRIP_OVERVIEW),
       ).toBeVisible();
     });
 

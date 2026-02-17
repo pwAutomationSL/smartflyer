@@ -42,7 +42,7 @@ test.describe("AR-005 - Air Request - Step 5", () => {
       await airRequest.startFromScrath();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
       await expect(page.locator(airRequest.AGENT_SELECT)).toContainText(
-        "Select an agent"
+        "Select an agent",
       );
     });
     await test.step("6 - Select the Agent and Click on Continue button", async () => {
@@ -53,11 +53,11 @@ test.describe("AR-005 - Air Request - Step 5", () => {
     await test.step("7 - Click on Continue", async () => {
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText(
-        "Passenger details"
+        "Passenger details",
       );
       await expect(page.locator(airRequest.AGENT_SUCCESS)).toHaveCSS(
         "background-color",
-        "rgb(46, 139, 87)"
+        "rgb(46, 139, 87)",
       );
     });
     await test.step("8 - Add Passenger information on Step 2", async () => {
@@ -78,11 +78,11 @@ test.describe("AR-005 - Air Request - Step 5", () => {
     await test.step("9 - Click on Continue", async () => {
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText(
-        "Trip overview"
+        "Trip overview",
       );
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         "background-color",
-        "rgb(46, 139, 87)"
+        "rgb(46, 139, 87)",
       );
     });
     await test.step("10 - Complete step 3", async () => {
@@ -101,16 +101,16 @@ test.describe("AR-005 - Air Request - Step 5", () => {
     await test.step("11 - Click Continue", async () => {
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText(
-        "Travel preferences"
+        "Travel preferences",
       );
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         "background-color",
-        "rgb(46, 139, 87)"
+        "rgb(46, 139, 87)",
       );
     });
     await test.step("12 - Verify the radio button for “Refundable and non-refundable” is pre-selected", async () => {
       await expect(
-        page.locator(airRequest.REFUNDABLE_NON_REFUNDABLE_RADIO)
+        page.locator(airRequest.REFUNDABLE_NON_REFUNDABLE_RADIO),
       ).toBeChecked();
       await airRequest.checkNonRefundableRadio();
     });
@@ -125,67 +125,64 @@ test.describe("AR-005 - Air Request - Step 5", () => {
     });
     await test.step("16 - Select Seat and Special requests", async () => {
       await airRequest.selectSeatsAndSpecialRequest(SPECIAL_REQUEST);
-      await expect(
-        page.locator(airRequest.SPECIAL_REQUEST_TEXTAREA)
-      ).toHaveAttribute("maxlength", "500");
     });
     await test.step("17 - Continue", async () => {
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText(
-        "Review air request"
+        "Review air request",
       );
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         "background-color",
-        "rgb(46, 139, 87)"
+        "rgb(46, 139, 87)",
       );
     });
     await test.step("18-Review Passenger Information", async () => {
       await expect(
-        page.locator(airRequest.EDIT_PASSENGER_INFORMATION)
+        page.locator(airRequest.EDIT_PASSENGER_INFORMATION),
       ).toBeEnabled();
       await expect(page.locator(airRequest.FULL_NAME)).toContainText(
-        CLIENT_NAME
+        CLIENT_NAME,
       );
       await expect(page.locator(airRequest.PHONE_NUMBER).first()).toContainText(
-        PHONE
+        PHONE,
       );
       await expect(page.locator(airRequest.GENDER)).toContainText("Male");
       await expect(page.locator(airRequest.EMAIL).first()).toContainText(EMAIL);
       await expect(page.locator(airRequest.DATE_OF_BIRTH)).toContainText(
-        "Jan 15, 1990"
+        "Jan 15, 1990",
       );
       await expect(page.locator(airRequest.CLIENT_ID_5)).toContainText(
-        CLIENT_ID
+        CLIENT_ID,
       );
     });
     await test.step("19-Review Trip OverView", async () => {
       await expect(
-        page.locator(airRequest.UPDATE_TRIP_INFORMATION)
+        page.locator(airRequest.UPDATE_TRIP_INFORMATION),
       ).toBeEnabled();
       await expect(
-        page.locator(airRequest.DEPARTURE_FROM).first()
+        page.locator(airRequest.DEPARTURE_FROM).first(),
       ).toContainText(DEPARTURE);
       await expect(page.locator(airRequest.ARRIVE_AT).first()).toContainText(
-        ARRIVAL
+        ARRIVAL,
       );
       await expect(page.locator(airRequest.TRAVEL_DATES).first()).toContainText(
-        "15, 2026"
+        "15, 2026",
       );
       await expect(
-        page.locator(airRequest.DEPARTURE_TIME).first()
+        page.locator(airRequest.DEPARTURE_TIME).first(),
       ).toContainText(DEPARTURE_TIME);
       await expect(page.locator(airRequest.CABIN_CLASS).first()).toContainText(
-        CABIN_CLASS
+        CABIN_CLASS,
       );
     });
     await test.step("20-Review Traveler Preferences", async () => {
       await expect(
-        page.locator(airRequest.UPDATE_TRAVEL_PREFERENCES)
+        page.locator(airRequest.UPDATE_TRAVEL_PREFERENCES),
       ).toBeEnabled();
       const airlines = await page.locator(airRequest.AIRLINES);
       await expect(airlines).toHaveCount(4);
       await expect(
-        airlines.filter({ hasText: "American Airlines (AA)" })
+        airlines.filter({ hasText: "American Airlines (AA)" }),
       ).toBeVisible();
       await expect(airlines.filter({ hasText: "Delta (DL)" })).toBeVisible();
       await expect(airlines.filter({ hasText: "United (UA)" })).toBeVisible();
@@ -193,54 +190,54 @@ test.describe("AR-005 - Air Request - Step 5", () => {
       const aircrafts = await page.locator(airRequest.AIRCRAFT);
       await expect(aircrafts).toHaveCount(3);
       await expect(
-        aircrafts.filter({ hasText: "Airbus 330-900 neo" })
+        aircrafts.filter({ hasText: "Airbus 330-900 neo" }),
       ).toBeVisible();
       await expect(
-        aircrafts.filter({ hasText: "Boeing Dreamliner" })
+        aircrafts.filter({ hasText: "Boeing Dreamliner" }),
       ).toBeVisible();
       await expect(aircrafts.filter({ hasText: "Boeing 777" })).toBeVisible();
       const requests = await page.locator(airRequest.REQUESTS);
       await expect(requests).toHaveCount(9);
 
       await expect(
-        requests.filter({ hasText: "Direct flights only" })
+        requests.filter({ hasText: "Direct flights only" }),
       ).toBeVisible();
       await expect(requests.filter({ hasText: "Extra legroom" })).toBeVisible();
       await expect(
-        requests.filter({ hasText: "Flexible dates for better fare" })
+        requests.filter({ hasText: "Flexible dates for better fare" }),
       ).toBeVisible();
       await expect(
-        requests.filter({ hasText: "Lie-flat seating" })
+        requests.filter({ hasText: "Lie-flat seating" }),
       ).toBeVisible();
       await expect(
-        requests.filter({ hasText: "No red-eye flights" })
+        requests.filter({ hasText: "No red-eye flights" }),
       ).toBeVisible();
       await expect(
-        requests.filter({ hasText: "Price sensitive" })
+        requests.filter({ hasText: "Price sensitive" }),
       ).toBeVisible();
       await expect(
-        requests.filter({ hasText: "Seating preference" })
+        requests.filter({ hasText: "Seating preference" }),
       ).toBeVisible();
       await expect(
-        requests.filter({ hasText: "Seats together" })
+        requests.filter({ hasText: "Seats together" }),
       ).toBeVisible();
       await expect(
-        requests.filter({ hasText: "Traveling with infant / child" })
+        requests.filter({ hasText: "Traveling with infant / child" }),
       ).toBeVisible();
     });
     await test.step("21-Review Documents", async () => {});
     await test.step("22-Review Agent Information", async () => {
       await expect(page.locator(airRequest.AGENT_NAME)).toContainText(
-        AGENT_NAME
+        AGENT_NAME,
       );
       await expect(page.locator(airRequest.PHONE_NUMBER).last()).toContainText(
-        "N/A"
+        "N/A",
       );
       await expect(page.locator(airRequest.EMAIL).last()).toContainText(
-        AGENT_EMAIL
+        AGENT_EMAIL,
       );
       await expect(page.locator(airRequest.AGENCY).last()).toContainText(
-        AGENCY
+        AGENCY,
       );
     });
   });

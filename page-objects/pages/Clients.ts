@@ -201,25 +201,25 @@ export class Clients {
   public async deleteLoyaltyProgram() {
     await this.page
       .locator(
-        `//a[contains(@class,'delete-item') and contains(@message_title,'Loyalty')]`
+        `//a[contains(@class,'delete-item') and contains(@message_title,'Loyalty')]`,
       )
       .click();
   }
   public async loyaltyProgramsFill(program: string, number: string) {
     await this.page
       .locator(
-        `(//div[@id="loyalty_programs_list"]//span[contains(@id,'select')]/../span)[2]`
+        `(//div[@id="loyalty_programs_list"]//span[contains(@id,'select')]/../span)[2]`,
       )
       .click();
     await this.page
       .locator(
-        `//ul//li[contains(@class,'option') and contains(.,'${program}')]`
+        `//ul//li[contains(@class,'option') and contains(.,'${program}')]`,
       )
       .click({ delay: 500 });
     await this.page.waitForTimeout(200);
     await this.page
       .locator(
-        `(//div[@id="loyalty_programs_list"]//input[@placeholder="Enter Number"])`
+        `(//div[@id="loyalty_programs_list"]//input[@placeholder="Enter Number"])`,
       )
       .fill(number);
   }
@@ -237,7 +237,7 @@ export class Clients {
   public async searchClient(client: string) {
     await this.page.getByRole("textbox", { name: "Search" }).fill(client);
     await this.page.getByRole("textbox", { name: "Search" }).press("Enter");
-    await this.page.getByText("Candice & Ben (Conway)").click();
+    await this.page.getByText("Candice & Ben (Conway)").first().click();
   }
   public async searchClientAndClick(client: string) {
     await this.page.getByRole("textbox", { name: "Search" }).fill(client);
@@ -307,7 +307,7 @@ export class Clients {
       (res) =>
         res.ok() &&
         res.request().method() === "POST" &&
-        res.url().includes("add-client-passport")
+        res.url().includes("add-client-passport"),
     );
     await this.page.locator(this.SAVE_MODAL).click();
     const response = await waitForCreate;

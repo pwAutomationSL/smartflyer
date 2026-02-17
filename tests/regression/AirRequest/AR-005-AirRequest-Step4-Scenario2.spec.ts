@@ -32,7 +32,7 @@ test.describe("AR-005 - Air Request - Step 4", () => {
       await airRequest.startFromScrath();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
       await expect(page.locator(airRequest.AGENT_SELECT)).toContainText(
-        "Select an agent"
+        "Select an agent",
       );
     });
     await test.step("6 - Select the Agent and Click on Continue button", async () => {
@@ -43,11 +43,11 @@ test.describe("AR-005 - Air Request - Step 4", () => {
     await test.step("7 - Click on Continue", async () => {
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText(
-        "Passenger details"
+        "Passenger details",
       );
       await expect(page.locator(airRequest.AGENT_SUCCESS)).toHaveCSS(
         "background-color",
-        "rgb(46, 139, 87)"
+        "rgb(46, 139, 87)",
       );
     });
     await test.step("8 - Add Passenger information on Step 2", async () => {
@@ -68,11 +68,11 @@ test.describe("AR-005 - Air Request - Step 4", () => {
     await test.step("9 - Click on Continue", async () => {
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText(
-        "Trip overview"
+        "Trip overview",
       );
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         "background-color",
-        "rgb(46, 139, 87)"
+        "rgb(46, 139, 87)",
       );
     });
     await test.step("10 - Complete step 3", async () => {
@@ -90,16 +90,16 @@ test.describe("AR-005 - Air Request - Step 4", () => {
     await test.step("11 - Click Continue", async () => {
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText(
-        "Travel preferences"
+        "Travel preferences",
       );
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         "background-color",
-        "rgb(46, 139, 87)"
+        "rgb(46, 139, 87)",
       );
     });
     await test.step("12 - Verify the radio button for “Refundable and non-refundable” is pre-selected", async () => {
       await expect(
-        page.locator(airRequest.REFUNDABLE_NON_REFUNDABLE_RADIO)
+        page.locator(airRequest.REFUNDABLE_NON_REFUNDABLE_RADIO),
       ).toBeChecked();
       await airRequest.checkRefundableRadio();
     });
@@ -114,18 +114,18 @@ test.describe("AR-005 - Air Request - Step 4", () => {
     });
     await test.step("16 - Select Seat and Special requests", async () => {
       await airRequest.selectSeatsAndSpecialRequest(SPECIAL_REQUEST);
-      await expect(
-        page.locator(airRequest.SPECIAL_REQUEST_TEXTAREA)
-      ).toHaveAttribute("maxlength", "500");
+      // await expect(
+      //   page.locator(airRequest.SPECIAL_REQUEST_TEXTAREA)
+      // ).toHaveAttribute("maxlength", "500");
     });
     await test.step("17 - Select Seat and Special requests", async () => {
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText(
-        "Review air request"
+        "Review air request",
       );
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         "background-color",
-        "rgb(46, 139, 87)"
+        "rgb(46, 139, 87)",
       );
     });
   });

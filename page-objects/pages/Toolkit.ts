@@ -46,7 +46,7 @@ export class Toolkit {
   public async selectCategory() {
     await this.page
       .locator(
-        `//span[text()='Please select category']/following-sibling::span/b`
+        `//span[text()='Please select category']/following-sibling::span/b`,
       )
       .click();
     await this.page
@@ -84,6 +84,7 @@ export class Toolkit {
     await this.page
       .locator(`//label[text()='Search:']/input`)
       .fill(toolkitName);
+    await this.page.waitForTimeout(500);
   }
   public async editSearchedToolkit() {
     await this.page.locator(this.EDIT_TOOLKIT).click();

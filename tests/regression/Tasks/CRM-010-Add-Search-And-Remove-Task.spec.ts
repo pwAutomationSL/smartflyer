@@ -34,13 +34,13 @@ test.describe("TSK-001 - Task", () => {
     await test.step("Search Added Task", async () => {
       await tasks.searchTask(TASK_NAME);
       await expect(page.locator(tasks.COLUMNS_BY_INDEX(1))).toContainText(
-        TASK_NAME
+        TASK_NAME,
       );
       await expect(page.locator(tasks.COLUMNS_BY_INDEX(2))).toContainText(
-        isoToUiDate(TASK_DATE)
+        isoToUiDate(TASK_DATE),
       );
       await expect(page.locator(tasks.COLUMNS_BY_INDEX(3))).toContainText(
-        " To Do "
+        " To Do ",
       );
     });
     await test.step("Edit Added Task", async () => {
@@ -51,7 +51,7 @@ test.describe("TSK-001 - Task", () => {
       await tasks.clickOK();
       await tasks.searchTask(TASK_NAME);
       await expect(page.locator(tasks.COLUMNS_BY_INDEX(2))).toContainText(
-        isoToUiDate(TASK_DATE_UPDATE)
+        isoToUiDate(TASK_DATE_UPDATE),
       );
     });
     await test.step("Delete Added Task", async () => {
@@ -61,7 +61,7 @@ test.describe("TSK-001 - Task", () => {
       await tasks.clickOK();
       await tasks.searchTask(TASK_NAME);
       await expect(page.locator(tasks.COLUMNS_BY_INDEX(1))).toContainText(
-        "No data available in table"
+        "No data available in table",
       );
     });
   });
