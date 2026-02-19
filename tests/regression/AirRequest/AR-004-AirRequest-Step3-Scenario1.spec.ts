@@ -58,7 +58,7 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await airRequest.clickLabel();
       await airRequest.fillPassengerEmail(EMAIL);
       await airRequest.fillPassengerPhone(PHONE);
-      await airRequest.fillMonth(2);
+      await airRequest.fillMonth(1);
       await airRequest.clickLabel();
       await airRequest.clickGenderDropdown();
       await expect(page.locator(airRequest.MALE_DROPDOWN)).toBeVisible();
