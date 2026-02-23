@@ -781,8 +781,6 @@ export class AirRequest {
       .click();
     await this.page.getByRole('option', { name: 'American Airlines (AA)' }).click();
     await this.page.getByRole('option', { name: 'Delta (DL)' }).click();
-    await this.page.getByRole('option', { name: 'United (UA)' }).click();
-    await this.page.getByRole('option', { name: 'Etihad (EY)' }).click();
   }
   public async addPreferredAircrafts() {
     await this.page
@@ -791,7 +789,6 @@ export class AirRequest {
       .click();
     await this.page.getByRole('option', { name: 'Airbus 330-900' }).click();
     await this.page.getByRole('option', { name: 'Boeing Dreamliner' }).click();
-    await this.page.getByRole('option', { name: 'Boeing 777' }).click();
   }
   public async selectPreferences() {
     await this.page.locator(`//span[contains(.,'Price sensitive')]//../span[1]`).first().click();
@@ -804,9 +801,6 @@ export class AirRequest {
       .first()
       .click();
     await this.page.locator(`//span[contains(.,'No red-eye flights')]//../span[1]`).first().click();
-    await this.page.locator(`//span[contains(.,'Seats together')]//../span[1]`).first().click();
-    await this.page.locator(`//span[contains(.,'Extra legroom')]//../span[1]`).first().click();
-    await this.page.locator(`//span[contains(.,'Lie-flat seating')]//../span[1]`).first().click();
     await this.page
       .locator(`//span[contains(.,'Flexible dates for better fare')]//../span[1]`)
       .first()
