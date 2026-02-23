@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { Page } from '@playwright/test';
 
 export class SideBar {
   public readonly page: Page;
@@ -20,32 +20,18 @@ export class SideBar {
     await this.page.locator(this.SEARCH_APP).click();
   }
   public async openContentCRM(submenu: string) {
-    await this.page.waitForTimeout(1000);
-    await this.page
-      .getByRole("link", { name: "Content" })
-      .click({ force: true });
-    await this.page
-      .getByRole("link", { name: "- Society CRM" })
-      .waitFor({ state: "visible" });
-    await this.page.getByRole("link", { name: "- Society CRM" }).click();
-    await this.page
-      .locator(this.CONTENT_SOCIETY_SUBMENU(submenu))
-      .first()
-      .click();
+    await this.page.waitForTimeout(1500);
+    await this.page.getByRole('link', { name: 'Content' }).click({ force: true });
+    await this.page.getByRole('link', { name: '- Society CRM' }).waitFor({ state: 'visible' });
+    await this.page.getByRole('link', { name: '- Society CRM' }).click();
+    await this.page.locator(this.CONTENT_SOCIETY_SUBMENU(submenu)).first().click();
   }
   public async openContentCRMFromApp(submenu: string) {
     await this.page.waitForTimeout(1000);
-    await this.page
-      .getByRole("button", { name: "Content" })
-      .click({ force: true });
-    await this.page
-      .getByRole("button", { name: "Society CRM" })
-      .waitFor({ state: "visible" });
-    await this.page.getByRole("button", { name: "Society CRM" }).click();
-    await this.page
-      .locator(this.CONTENT_SOCIETY_SUBMENU(submenu))
-      .first()
-      .click();
+    await this.page.getByRole('button', { name: 'Content' }).click({ force: true });
+    await this.page.getByRole('button', { name: 'Society CRM' }).waitFor({ state: 'visible' });
+    await this.page.getByRole('button', { name: 'Society CRM' }).click();
+    await this.page.locator(this.CONTENT_SOCIETY_SUBMENU(submenu)).first().click();
   }
 }
 export const sidebar = (page: Page) => new SideBar({ page });
