@@ -341,5 +341,21 @@ export class Clients {
   public async checkCertify() {
     await this.page.locator(`//span[contains(.,'I certify the information')]`).click();
   }
+  public async uploadProfilePicture() {
+    await this.page
+      .locator(`//h5[text()='Profile Photo (Optional)']/../following-sibling::div//input`)
+      .setInputFiles('./data/images/agent_profile.jpg');
+    const crop = this.page.locator('.ReactCrop__crop-selection');
+
+    const box = await crop.boundingBox();
+
+    if (box) {
+      await this.page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await this.page.mouse.down();
+      await this.page.mouse.move(box.x + box.width / 2 + 55, box.y + box.height / 2);
+      await this.page.mouse.up();
+    }
+    await this.page.getByRole('button', { name: 'Save' }).click();
+  }
 }
 export const clients = (page: Page) => new Clients({ page });

@@ -10,7 +10,13 @@ const ZIP_CODE = '12312';
 const COUNTRY = 'United States';
 const CITY = 'New York';
 test.describe('CLI-001 - Client - Add Client', () => {
-  test('Login at Society (env) as an Admin', async ({ loginPage, page, sidebar, clients }) => {
+  test('Login at Society (env) as an Admin', async ({
+    loginPage,
+    page,
+    sidebar,
+    clients,
+    toast,
+  }) => {
     await test.step('1 - Login at Society as an Admin', async () => {
       await loginPage.login();
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
@@ -21,6 +27,8 @@ test.describe('CLI-001 - Client - Add Client', () => {
       await clients.startFromScratch();
       await expect(page.locator(clients.PRIMARY_PASSENGER)).toBeVisible();
       await expect(page.locator(clients.RELATED_PASSENGERS)).toBeVisible();
+    });
+    await test.step('3 - Fill Mandatory information for Main Passenger and check if green icon is visible', async () => {
       await clients.expandMainPassenger();
       await clients.fillFirstName(MAIN_PASSENGER_NAME);
       await clients.fillLastName(MAIN_PASSENGER_LAST_NAME);
@@ -37,6 +45,12 @@ test.describe('CLI-001 - Client - Add Client', () => {
       await expect(page.locator(clients.PRIMARY_PASSENGER_GREEN_CHECK)).toHaveCSS(
         'fill',
         'rgb(7, 188, 12)',
+      );
+    });
+    await test.step('4 - Add Profile picture and Confirm Submission', async () => {
+      await clients.uploadProfilePicture();
+      await expect(page.locator(toast.TOAST_MESSAGE_APP)).toContainText(
+        'Image cropped successfully',
       );
     });
   });
