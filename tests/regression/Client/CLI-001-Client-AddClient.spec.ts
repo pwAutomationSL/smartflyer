@@ -52,6 +52,7 @@ test.describe('CLI-001 - Client - Add Client', () => {
       await expect(page.locator(toast.TOAST_MESSAGE_APP)).toContainText(
         'Image cropped successfully',
       );
+      await clients.confirmSubmission();
     });
   });
 });

@@ -42,27 +42,18 @@ export class Clients {
   public readonly PASSPORT_ISSUE_COUNTRY = `//p[text()='Passport issue country']/following-sibling::div/div/div[2]`;
   public readonly DATES_NUMNBERS_PASSPORT_NAME = `(//h5[text()="Passport Details"]/following-sibling::div/div[2]/div/div)[1]`;
   public readonly PRIMARY_PASSENGER_FIRST_NAME = `//input[@name="primary_passenger.client.first_name"]`;
-
   public readonly PRIMARY_PASSENGER_LAST_NAME = `//input[@name="primary_passenger.client.last_name"]`;
-
   public readonly PRIMARY_PASSENGER_DATE_OF_BIRTH = `//input[@name="primary_passenger.client.date_of_birth"]`;
-
   public readonly PRIMARY_PASSENGER_GENDER = `//div[contains(text(),'Select gender')]/../following-sibling::div`;
-
   public readonly PRIMARY_PASSENGER_EMAIL = `//input[@name="primary_passenger.client.email"]`;
-
   public readonly PRIMARY_PASSENGER_PHONE_NUMBER = `//input[@name="primary_passenger.client.phone"]`;
-
   public readonly PRIMARY_PASSENGER_ADDRESS_LINE_1 = `//input[@name="primary_passenger.client.address_line_1"]`;
-
   public readonly PRIMARY_PASSENGER_COUNTRY = `//select[@name="primary_passenger.client.country"]`;
-
   public readonly PRIMARY_PASSENGER_CITY = `//input[@name="primary_passenger.client.city"]`;
-
   public readonly PRIMARY_PASSENGER_ZIP_CODE = `//input[@name="primary_passenger.client.zip_code"]`;
-
   public readonly PRIMARY_PASSENGER_PASSPORT = `//input[@name="primary_passenger.client.passport_number"]`;
   public readonly PRIMARY_PASSENGER_GREEN_CHECK = `(//h4[text()='1']/../following-sibling::div/*/*[@width="24"])[1]`;
+  public readonly CONFIRM_SUBMISSION = `//button[text()="Confirm Submission"]`;
 
   public readonly PASSPORT_ISSUE_COUNTRY_OPTION = (country: string) =>
     `//div[@role="listbox"]//p[text()='${country}']`;
@@ -340,6 +331,9 @@ export class Clients {
   }
   public async checkCertify() {
     await this.page.locator(`//span[contains(.,'I certify the information')]`).click();
+  }
+  public async confirmSubmission() {
+    await this.page.locator(this.CONFIRM_SUBMISSION).click();
   }
   public async uploadProfilePicture() {
     await this.page
