@@ -54,7 +54,19 @@ export class Clients {
   public readonly PRIMARY_PASSENGER_PASSPORT = `//input[@name="primary_passenger.client.passport_number"]`;
   public readonly PRIMARY_PASSENGER_GREEN_CHECK = `(//h4[text()='1']/../following-sibling::div/*/*[@width="24"])[1]`;
   public readonly CONFIRM_SUBMISSION = `//button[text()="Confirm Submission"]`;
-
+  public readonly CREATE_CLIENT = `//button[text()="Create Client"]`;
+  public readonly CLIENT_PROFILE_DOB = `(//h1/../following-sibling::div//span)[1]`;
+  public readonly CLIENT_PROFILE_PHONE = `(//h1/../following-sibling::div//span)[2]`;
+  public readonly CLIENT_PROFILE_EMAIL = `(//h1/../following-sibling::div//span)[3]`;
+  public readonly CLIENT_PROFILE_NAME_BI = `(//h5[text()="Basic Information"]/following-sibling::div//p)[1]`;
+  public readonly CLIENT_PROFILE_DOB_BI = `(//h5[text()="Basic Information"]/following-sibling::div//p)[3]`;
+  public readonly CLIENT_PROFILE_GENDER_BI = `(//h5[text()="Basic Information"]/following-sibling::div//p)[4]`;
+  public readonly CLIENT_PROFILE_EMAIL_BI = `(//h5[text()="Basic Information"]/following-sibling::div//p)[5]`;
+  public readonly CLIENT_PROFILE_PHONE_BI = `(//h5[text()="Basic Information"]/following-sibling::div//p)[6]`;
+  public readonly CLIENT_NAME_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[1]`;
+  public readonly CLIENT_EMAIL_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[2]`;
+  public readonly CLIENT_PHONE_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[3]`;
+  public readonly CLIENT_STATUS_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[6]`;
   public readonly PASSPORT_ISSUE_COUNTRY_OPTION = (country: string) =>
     `//div[@role="listbox"]//p[text()='${country}']`;
   public readonly MAIN_PASSENGER_TAB = `(//div[contains(@class,"Layout_content")]//button[@aria-expanded="false"])[1]`;
@@ -208,6 +220,10 @@ export class Clients {
     await this.page.getByRole('textbox', { name: 'Search' }).press('Enter');
     await this.page.getByText(client).click();
   }
+  public async searchClientByName(client: string) {
+    await this.page.getByRole('textbox', { name: 'Search' }).fill(client);
+    await this.page.getByRole('textbox', { name: 'Search' }).press('Enter');
+  }
 
   public async deleteAddedTraveler(traveler: string) {
     await this.page.locator(this.TRAVELER_ADDED(traveler)).first().click();
@@ -334,6 +350,7 @@ export class Clients {
   }
   public async confirmSubmission() {
     await this.page.locator(this.CONFIRM_SUBMISSION).click();
+    await this.page.locator(this.CREATE_CLIENT).click();
   }
   public async uploadProfilePicture() {
     await this.page

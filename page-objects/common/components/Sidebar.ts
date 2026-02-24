@@ -7,6 +7,7 @@ export class SideBar {
   }
   public readonly MODULE_BY_TEXT = (module: string) =>
     `//div[@class="body-sidebar"]//a[contains(.,'${module}')]`;
+  public readonly MODULE_BY_TEXT_APP = (module: string) => `//ul//p[text()="${module}"]`;
   public readonly CONTENT_MENU = `//*//p[contains(.,'Content')]`;
   public readonly CONTENT_SOCIETY_MENU = `//*//p[contains(.,'-society crm')]`;
   public readonly SEARCH_APP = `//a[@href="/search/"]`;
@@ -14,6 +15,10 @@ export class SideBar {
     `//*//a[contains(.,'${submenu}') and contains(@class,'dropdown')]`;
   public async goToModule(module: string) {
     await this.page.locator(this.MODULE_BY_TEXT(module)).first().click();
+    await this.page.waitForTimeout(1000);
+  }
+  public async goToModuleAPP(module: string) {
+    await this.page.locator(this.MODULE_BY_TEXT_APP(module)).first().click();
     await this.page.waitForTimeout(1000);
   }
   public async goToSearchApp() {

@@ -1,11 +1,11 @@
-import { test, expect } from "../../../fixtures/PlaywrightFixtures";
+import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 
-const PROGAM = "American Airlines: AAdvantage";
-const PHONE = "23442343242332";
-const CLIENT_NAME = "Candice & Ben (Conway) Winikoff";
-test.describe("AR-003 - Air Request - Step #21 ", () => {
+const PROGAM = 'American Airlines: AAdvantage';
+const PHONE = '23442343242332';
+const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
+test.describe('AR-003 - Air Request - Step #21 ', () => {
   test.setTimeout(200_000);
-  test("Air Request - Step 2 - 21# Scenario - Verify Frequent Flyer programs", async ({
+  test('Air Request - Step 2 - 21# Scenario - Verify Frequent Flyer programs', async ({
     loginPage,
     page,
     sidebar,
@@ -13,20 +13,20 @@ test.describe("AR-003 - Air Request - Step #21 ", () => {
     toast,
     airRequest,
   }) => {
-    await test.step("1 - Go to the Client tab", async () => {
+    await test.step('1 - Go to the Client tab', async () => {
       await loginPage.login();
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
-      await sidebar.goToModule("Clients");
+      await sidebar.goToModule('Clients');
     });
 
-    await test.step("2 - Search the client and go to the client page", async () => {
+    await test.step('2 - Search the client and go to the client page', async () => {
       await clients.searchClient(CLIENT_NAME);
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState('networkidle');
     });
 
-    await test.step("add Frequent Flyer program", async () => {
-      await page.waitForLoadState("networkidle");
-      await page.waitForLoadState("load");
+    await test.step('add Frequent Flyer program', async () => {
+      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('load');
       // await clients.clickDatesAndNumbersAPP();
       // await clients.loyaltyProgramsAdd();
       // await expect(page.locator(clients.LOYALTY_PROGRAMS_POPUP)).toBeVisible();
@@ -37,45 +37,39 @@ test.describe("AR-003 - Air Request - Step #21 ", () => {
       // );
       // await toast.assertToastToGoAway();
     });
-    await test.step("3 - 4 - Go to the New credit card tab and Click on Air request button", async () => {
+    await test.step('3 - 4 - Go to the New credit card tab and Click on Air request button', async () => {
       await airRequest.clickAirRequest();
       await expect(page.locator(airRequest.POP_UP_HEADER)).toBeVisible();
     });
 
-    await test.step("5 - Click on Start from scratch", async () => {
+    await test.step('5 - Click on Start from scratch', async () => {
       await airRequest.startFromScrath();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
-      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText(
-        "Select an agent",
-      );
+      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
     });
-    await test.step("6 - Select the Agent and Click on Continue button", async () => {
+    await test.step('6 - Select the Agent and Click on Continue button', async () => {
       await airRequest.selectAgent();
       await airRequest.selectFirstAgent();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
     });
 
-    await test.step("7 - Click on Continue", async () => {
+    await test.step('7 - Click on Continue', async () => {
       await airRequest.clickContinue();
-      await expect(page.locator(airRequest.HEADER)).toContainText(
-        "Passenger details",
-      );
+      await expect(page.locator(airRequest.HEADER)).toContainText('Passenger details');
       await expect(page.locator(airRequest.AGENT_SUCCESS)).toHaveCSS(
-        "background-color",
-        "rgb(46, 139, 87)",
+        'background-color',
+        'rgb(46, 139, 87)',
       );
     });
 
-    await test.step("21# Scenario - Add Frequent Flyer", async () => {
-      await expect(
-        page.locator(airRequest.PROGRAM_NUMBER(1)).last(),
-      ).toHaveValue(PHONE);
+    await test.step('21# Scenario - Add Frequent Flyer', async () => {
+      await expect(page.locator(airRequest.PROGRAM_NUMBER(1)).last()).toHaveValue(PHONE);
       const programUI = await page
         .locator(airRequest.FREQUENT_FLYER_PROGRAM_SELECTED)
         .textContent();
       expect(programUI).toBe(PROGAM);
     });
-    await test.step("Delete FF Program added", async () => {
+    await test.step('Delete FF Program added', async () => {
       // await airRequest.goBack();
       // await airRequest.clickCancel();
       // await page.waitForLoadState("networkidle");

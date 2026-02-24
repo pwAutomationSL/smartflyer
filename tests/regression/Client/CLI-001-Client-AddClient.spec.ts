@@ -9,6 +9,11 @@ const ADDRESS_LINE_1 = '5th Avenue';
 const ZIP_CODE = '12312';
 const COUNTRY = 'United States';
 const CITY = 'New York';
+const normalizePhoneNumber = (str: string | null | undefined): string => {
+  if (!str) return '';
+  return str.replace(/\D/g, '');
+};
+
 test.describe('CLI-001 - Client - Add Client', () => {
   test('Login at Society (env) as an Admin', async ({
     loginPage,
@@ -52,7 +57,36 @@ test.describe('CLI-001 - Client - Add Client', () => {
       await expect(page.locator(toast.TOAST_MESSAGE_APP)).toContainText(
         'Image cropped successfully',
       );
+      await expect(page.locator(clients.CONFIRM_SUBMISSION)).toBeEnabled();
       await clients.confirmSubmission();
+    });
+    await test.step('5 -Verify app redirects to the client profile page', async () => {
+      await expect(page.locator(clients.HEADER)).toContainText(MAIN_PASSENGER_NAME);
+      await expect(page.locator(clients.HEADER)).toContainText(MAIN_PASSENGER_LAST_NAME);
+      const phoneUI = await page.locator(clients.CLIENT_PROFILE_PHONE).textContent();
+      expect(normalizePhoneNumber(phoneUI)).toEqual(PHONE);
+      await expect(page.locator(clients.CLIENT_PROFILE_DOB)).toContainText('1990');
+      await expect(page.locator(clients.CLIENT_PROFILE_EMAIL)).toContainText(MAIN_PASSENGER_EMAIL);
+      await expect(page.locator(clients.CLIENT_PROFILE_EMAIL_BI)).toContainText(
+        MAIN_PASSENGER_EMAIL,
+      );
+      const phoneUIBI = await page.locator(clients.CLIENT_PROFILE_PHONE_BI).textContent();
+      expect(normalizePhoneNumber(phoneUIBI)).toEqual(PHONE);
+      await expect(page.locator(clients.CLIENT_PROFILE_DOB_BI)).toContainText('1990');
+      await expect(page.locator(clients.CLIENT_PROFILE_GENDER_BI)).toContainText('Male');
+    });
+    await test.step('6 -Go to clients tab and search for new client and verify is was added', async () => {
+      await sidebar.goToModuleAPP('Clients');
+      await clients.searchClientByName(MAIN_PASSENGER_LAST_NAME);
+      await expect(page.locator(clients.CLIENT_NAME_SEARCH_RESULT)).toContainText(
+        MAIN_PASSENGER_LAST_NAME,
+      );
+      await expect(page.locator(clients.CLIENT_EMAIL_SEARCH_RESULT)).toContainText(
+        MAIN_PASSENGER_EMAIL,
+      );
+      const phoneUISearch = await page.locator(clients.CLIENT_PHONE_SEARCH_RESULT).textContent();
+      expect(normalizePhoneNumber(phoneUISearch)).toEqual(PHONE);
+      await expect(page.locator(clients.CLIENT_STATUS_SEARCH_RESULT)).toContainText('Active');
     });
   });
 });
