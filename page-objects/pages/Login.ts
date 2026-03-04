@@ -1,6 +1,6 @@
-import { Page } from "@playwright/test";
+import { Page } from '@playwright/test';
 
-import { getEnvConfig } from "../../utils/envConfig";
+import { getEnvConfig } from '../../utils/envConfig';
 export class LoginPage {
   public readonly page: Page;
   constructor({ page }: { page: Page }) {
@@ -14,8 +14,8 @@ export class LoginPage {
   public readonly USER_DROPDOWN_BUTTON = `//button[@id="dropdownMenuButton1"]`;
   public readonly LOGOUT = `//a[@href="/logout"]`;
   async login({
-    username = "rodrigo.santone@scrumlaunch.com",
-    password = "12345678",
+    username = 'rodrigo.santone@scrumlaunch.com',
+    password = 'Testing33!',
     host = getEnvConfig().BASE_URL,
   }: {
     username?: string;

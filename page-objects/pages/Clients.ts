@@ -22,6 +22,7 @@ export class Clients {
   public readonly DELETE_PASSPORT_BUTTONS = `//div[contains(.,'Passport and Travel Document Uploads')]//td/button[2]`;
   public readonly PASSPORTS_ADDED_DROPDOWN = `//tbody/tr[contains(@id,'passport')]//button`;
   public readonly ADD_NEW_PASSPORT = `//p[contains(.,'Passport and Travel Document Uploads')]/following-sibling::button`;
+  public readonly ADDED_RELATED_PASSENGER_NAME = `//div[@role="button" and @aria-label="Expand"]/div[1]`;
   public readonly EDIT_PASSPORT = `//ul[contains(@class,'show')]//a[contains(.,'Edit')]`;
   public readonly PASSPORT_MODAL = `//div[@id="modal-content"]`;
   public readonly PASSPORT_NAME = `//input[contains(@name,"document_name")]`;
@@ -37,6 +38,20 @@ export class Clients {
   public readonly SUCCESS_MODAL = `//h2[contains(.,'Success')]`;
   public readonly PRIMARY_PASSENGER = `//button[contains(.,'Primary Passenger')]`;
   public readonly RELATED_PASSENGERS = `//button[contains(.,'Related Passengers')]`;
+  public readonly RELATED_PASSENGERS_TAB = `//button[text()="RELATED TRAVELERS"]`;
+  public readonly SHARE_BUTTON = `//button[text()="Share"]`;
+  public readonly PROFILE_FORM_CARD = `//button/h5[text()="Profile Form"]`;
+  public readonly PROFILE_FORM_CARD_RADIO = `//button/h5[text()="Profile Form"]/preceding-sibling::span`;
+  public readonly CREDIT_CARD_FORM = `//button/h5[text()="Credit Card Form"]`;
+  public readonly CREDIT_CARD_FORM_RADIO = `//button/h5[text()="Credit Card Form"]/preceding-sibling::span`;
+  public readonly SHARE_EMAIL = `//label[@for="email"]`;
+  public readonly SHARE_EMAIL_CC = `//label[@for="cc_email"]`;
+  public readonly SHARE_EMAIL_BCC = `//label[@for="bcc_email"]`;
+  public readonly SHARE_EMAIL_MESSAGE = `//textarea[@id="clientMessage"]`;
+  public readonly SHARE_EMAIL_MESSAGE_LIMIT = `//label[@for="message"]/following-sibling::span`;
+  public readonly SHARE_CANCEL = `//button[text()="Cancel"]`;
+  public readonly SHARE_SEND_FORM = `//button[text()="Send form"]`;
+  public readonly RELATED_PASSENGER_ADDED_NAME = `(//button[contains(.,'Related Passengers')]/following-sibling::div//button)[1]//h4`;
   public readonly EDIT_CLIENT_DETAILS = `//button[text()='Edit']`;
   public readonly CONFIRM_UPLOAD = `//button[contains(.,'Upload Files')]`;
   public readonly PASSPORT_ISSUE_COUNTRY = `//p[text()='Passport issue country']/following-sibling::div/div/div[2]`;
@@ -53,6 +68,8 @@ export class Clients {
   public readonly PRIMARY_PASSENGER_ZIP_CODE = `//input[@name="primary_passenger.client.zip_code"]`;
   public readonly PRIMARY_PASSENGER_PASSPORT = `//input[@name="primary_passenger.client.passport_number"]`;
   public readonly PRIMARY_PASSENGER_GREEN_CHECK = `(//h4[text()='1']/../following-sibling::div/*/*[@width="24"])[1]`;
+  public readonly RELATED_PASSENGER_GREEN_CHECK = (index: number) =>
+    `(//h4[text()='${index}']/../following-sibling::div/*/*[@width="24"])[1]`;
   public readonly CONFIRM_SUBMISSION = `//button[text()="Confirm Submission"]`;
   public readonly CREATE_CLIENT = `//button[text()="Create Client"]`;
   public readonly CLIENT_PROFILE_DOB = `(//h1/../following-sibling::div//span)[1]`;
@@ -63,10 +80,19 @@ export class Clients {
   public readonly CLIENT_PROFILE_GENDER_BI = `(//h5[text()="Basic Information"]/following-sibling::div//p)[4]`;
   public readonly CLIENT_PROFILE_EMAIL_BI = `(//h5[text()="Basic Information"]/following-sibling::div//p)[5]`;
   public readonly CLIENT_PROFILE_PHONE_BI = `(//h5[text()="Basic Information"]/following-sibling::div//p)[6]`;
+  public readonly RELATED_PASSENGER_NAME_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[1]`;
+  public readonly RELATED_PASSENGER_DOB_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[2]`;
+  public readonly RELATED_PASSENGER_GENDER_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[3]`;
+  public readonly RELATED_PASSENGER_EMAIL_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[4]`;
+  public readonly RELATED_PASSENGER_PHONE_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[7]`;
   public readonly CLIENT_NAME_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[1]`;
   public readonly CLIENT_EMAIL_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[2]`;
   public readonly CLIENT_PHONE_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[3]`;
   public readonly CLIENT_STATUS_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[6]`;
+  public readonly ADD_PASSENGER = `//button[text()="Add Passenger"]`;
+  public readonly RELATED_PASSENGER_EXPAND = `(//button[contains(.,'Related Passengers')]/following-sibling::div//button)[1]`;
+  public readonly RELATED_PASSENGER_EXPAND_FROM_TAB = `//div[@role="button" and @aria-label="Expand"]`;
+  public readonly RELATED_PASSENGERS_EXPAND = `(//button[contains(.,'Related Passengers')])[1]`;
   public readonly PASSPORT_ISSUE_COUNTRY_OPTION = (country: string) =>
     `//div[@role="listbox"]//p[text()='${country}']`;
   public readonly MAIN_PASSENGER_TAB = `(//div[contains(@class,"Layout_content")]//button[@aria-expanded="false"])[1]`;
@@ -74,7 +100,38 @@ export class Clients {
     `//tbody[@id="related_travellers_list"]/tr/td[2]/span[contains(.,'${traveler}')]//../../td//button[contains(@id,'dropdown')]`;
   public readonly REMOVE_TRAVELER_BY_NAME = (traveler: string) =>
     `//tbody[@id="related_travellers_list"]/tr/td[2]/span[contains(.,'${traveler}')]//../../td//a[contains(.,'Remove')]`;
+  public readonly RELATED_PASSENGER_FIRST_NAME = (index: number) =>
+    `//input[@name="related_passengers.${index}.client.first_name"]`;
 
+  public readonly RELATED_PASSENGER_LAST_NAME = (index: number) =>
+    `//input[@name="related_passengers.${index}.client.last_name"]`;
+
+  public readonly RELATED_PASSENGER_DATE_OF_BIRTH = (index: number) =>
+    `//input[@name="related_passengers.${index}.client.date_of_birth"]`;
+
+  public readonly RELATED_PASSENGER_GENDER = (index: number) =>
+    `//input[@name="related_passengers.${index}.client.gender"]`;
+
+  public readonly RELATED_PASSENGER_EMAIL = (index: number) =>
+    `//input[@name="related_passengers.${index}.client.email"]`;
+
+  public readonly RELATED_PASSENGER_PHONE_NUMBER = (index: number) =>
+    `//input[@name="related_passengers.${index}.client.phone"]`;
+
+  public readonly RELATED_PASSENGER_ADDRESS_LINE_1 = (index: number) =>
+    `//input[@name="related_passengers.${index}.client.client_mailing_address"]`;
+  public readonly RELATED_PASSENGER_COUNTRY = (index: number) =>
+    `//select[@name="related_passengers.${index}.client.country"]`;
+
+  public readonly RELATED_PASSENGER_CITY = (index: number) =>
+    `//input[@name="related_passengers.${index}.client.client_mailing_city"]`;
+
+  public readonly RELATED_PASSENGER_ZIP_CODE = (index: number) =>
+    `//input[@name="related_passengers.${index}.client.zip_code"]`;
+
+  public readonly RELATED_PASSENGER_PASSPORT = (index: number) =>
+    `//input[@name="related_passengers.${index}.client.passport_number"]`;
+  public readonly SAME_AS_PRIMARY_ADDRESS_TOGGLE = `//label[text()="Same as primary passenger"]/preceding-sibling::button`;
   public async clickCreate() {
     await this.page.locator(this.HEADER).click();
   }
@@ -346,11 +403,23 @@ export class Clients {
     await this.page.getByRole('textbox', { name: 'Passport' }).fill(value);
   }
   public async checkCertify() {
-    await this.page.locator(`//span[contains(.,'I certify the information')]`).click();
+    await this.page.locator(`//span[contains(.,'I certify the information')]`).last().click();
   }
   public async confirmSubmission() {
     await this.page.locator(this.CONFIRM_SUBMISSION).click();
     await this.page.locator(this.CREATE_CLIENT).click();
+  }
+  public async addPassenger() {
+    await this.page.locator(this.ADD_PASSENGER).click();
+  }
+  public async expandRelatedPassengers() {
+    await this.page.locator(this.RELATED_PASSENGERS_EXPAND).click();
+  }
+  public async expandRelatedPassenger() {
+    await this.page.locator(this.RELATED_PASSENGER_EXPAND).click();
+  }
+  public async expandRelatedPassengerFromTab() {
+    await this.page.locator(this.RELATED_PASSENGER_EXPAND_FROM_TAB).click();
   }
   public async uploadProfilePicture() {
     await this.page
@@ -367,6 +436,61 @@ export class Clients {
       await this.page.mouse.up();
     }
     await this.page.getByRole('button', { name: 'Save' }).click();
+  }
+  public async fillRelatedFirstName(value: string, index: number = 0) {
+    await this.page.locator(this.RELATED_PASSENGER_FIRST_NAME(index)).fill(value);
+  }
+
+  public async fillRelatedLastName(value: string, index: number = 0) {
+    await this.page.locator(this.RELATED_PASSENGER_LAST_NAME(index)).fill(value);
+  }
+
+  public async fillRelatedDateOfBirth(index: number = 0) {
+    await this.page.locator(this.RELATED_PASSENGER_DATE_OF_BIRTH(index)).click();
+    await this.page.locator(`//select[@aria-label="Select year"]`).selectOption('1990');
+    await this.page.locator(`//select[@aria-label="Select year"]`).selectOption('1990');
+    await this.page.waitForTimeout(300);
+    await this.page.locator(`(//div[contains(@class,"datepicker__week")]/div[1])[3]`).click();
+  }
+
+  public async selectRelatedGender() {
+    await this.page.locator(this.PRIMARY_PASSENGER_GENDER).click();
+    await this.page.locator(`//p[text()='Male']`).click();
+  }
+
+  public async fillRelatedEmail(value: string, index: number = 0) {
+    await this.page.locator(this.RELATED_PASSENGER_EMAIL(index)).fill(value);
+  }
+
+  public async fillRelatedPhoneNumber(value: string, index: number = 0) {
+    await this.page.locator(this.RELATED_PASSENGER_PHONE_NUMBER(index)).fill(value);
+  }
+
+  public async fillRelatedAddressLine1(value: string, index: number = 0) {
+    await this.page.locator(this.RELATED_PASSENGER_ADDRESS_LINE_1(index)).fill(value);
+  }
+
+  public async selectRelatedCountry(value: string) {
+    await this.page.locator(`//div[text()='Select country']/../following-sibling::div`).click();
+    await this.page.locator(`//div[@role="listbox"]/div/p[text()='${value}']`).click();
+  }
+
+  public async fillRelatedCity(value: string, index: number = 0) {
+    await this.page.locator(this.RELATED_PASSENGER_CITY(index)).fill(value);
+  }
+
+  public async fillRelatedZipCode(value: string, index: number = 0) {
+    await this.page.locator(this.RELATED_PASSENGER_ZIP_CODE(index)).fill(value);
+  }
+
+  public async fillRelatedPassport(value: string, index: number = 0) {
+    await this.page.locator(this.RELATED_PASSENGER_PASSPORT(index)).fill(value);
+  }
+  public async goToRelatedTravelersTab() {
+    await this.page.locator(this.RELATED_PASSENGERS_TAB).click();
+  }
+  public async clickShare() {
+    await this.page.locator(this.SHARE_BUTTON).click();
   }
 }
 export const clients = (page: Page) => new Clients({ page });

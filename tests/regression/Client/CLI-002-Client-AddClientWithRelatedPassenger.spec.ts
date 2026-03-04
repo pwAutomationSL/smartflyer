@@ -9,13 +9,16 @@ const ADDRESS_LINE_1 = '5th Avenue';
 const ZIP_CODE = '12312';
 const COUNTRY = 'United States';
 const CITY = 'New York';
+const RELATED_PASSENGER_NAME = 'Related';
+const RELATED_PASSENGER_LAST_NAME = 'LastName' + uniqueId();
+const RELATED_PASSENGER_EMAIL = 'Related' + uniqueId() + '@gmail.com';
 const normalizePhoneNumber = (str: string | null | undefined): string => {
   if (!str) return '';
   return str.replace(/\D/g, '');
 };
 
-test.describe('CLI-001 - Client - Add Client', () => {
-  test('Login at Society (env) as an Admin and add a client ', async ({
+test.describe('CLI-002 - Client - Add Client with related passenger', () => {
+  test('Login at Society (env) as an Admin and add a client with related passenger', async ({
     loginPage,
     page,
     sidebar,
@@ -58,9 +61,38 @@ test.describe('CLI-001 - Client - Add Client', () => {
         'Image cropped successfully',
       );
       await expect(page.locator(clients.CONFIRM_SUBMISSION)).toBeEnabled();
+    });
+    await test.step('5 - Add related passenger and confirm submission should be disabled', async () => {
+      await clients.expandRelatedPassengers();
+      await clients.addPassenger();
+      await expect(page.locator(clients.RELATED_PASSENGER_ADDED_NAME)).toContainText(
+        'Passenger name',
+      );
+      await clients.expandRelatedPassenger();
+      // await expect(page.locator(clients.CONFIRM_SUBMISSION)).toBeDisabled();
+      await clients.fillRelatedFirstName(RELATED_PASSENGER_NAME);
+      await clients.fillRelatedLastName(RELATED_PASSENGER_LAST_NAME);
+      await clients.fillRelatedDateOfBirth();
+      await clients.selectRelatedGender();
+      await clients.fillRelatedEmail(RELATED_PASSENGER_EMAIL);
+      await clients.fillRelatedPhoneNumber(PHONE);
+      await expect(page.locator(clients.SAME_AS_PRIMARY_ADDRESS_TOGGLE)).toHaveAttribute(
+        'aria-checked',
+        'true',
+      );
+      // await expect(page.locator(clients.RELATED_PASSENGER_ADDRESS_LINE_1(0))).toBeDisabled();
+      // await expect(page.locator(clients.RELATED_PASSENGER_CITY(0))).toBeDisabled();
+      // await expect(page.locator(clients.RELATED_PASSENGER_ZIP_CODE(0))).toBeDisabled();
+      await clients.checkCertify();
+      await expect(page.locator(clients.RELATED_PASSENGER_GREEN_CHECK(2))).toBeVisible();
+      await expect(page.locator(clients.RELATED_PASSENGER_GREEN_CHECK(2))).toHaveCSS(
+        'fill',
+        'rgb(7, 188, 12)',
+      );
+      await expect(page.locator(clients.CONFIRM_SUBMISSION)).toBeEnabled();
       await clients.confirmSubmission();
     });
-    await test.step('5 -Verify app redirects to the client profile page', async () => {
+    await test.step('6 -Verify app redirects to the client profile page', async () => {
       await expect(page.locator(clients.HEADER)).toContainText(MAIN_PASSENGER_NAME);
       await expect(page.locator(clients.HEADER)).toContainText(MAIN_PASSENGER_LAST_NAME);
       const phoneUI = await page.locator(clients.CLIENT_PROFILE_PHONE).textContent();
@@ -75,7 +107,7 @@ test.describe('CLI-001 - Client - Add Client', () => {
       await expect(page.locator(clients.CLIENT_PROFILE_DOB_BI)).toContainText('1990');
       await expect(page.locator(clients.CLIENT_PROFILE_GENDER_BI)).toContainText('Male');
     });
-    await test.step('6 -Go to clients tab and search for new client and verify is was added', async () => {
+    await test.step('7 -Go to clients tab and search for new client and verify is was added', async () => {
       await sidebar.goToModuleAPP('Clients');
       await clients.searchClientByName(MAIN_PASSENGER_LAST_NAME);
       await expect(page.locator(clients.CLIENT_NAME_SEARCH_RESULT)).toContainText(
@@ -87,6 +119,22 @@ test.describe('CLI-001 - Client - Add Client', () => {
       const phoneUISearch = await page.locator(clients.CLIENT_PHONE_SEARCH_RESULT).textContent();
       expect(normalizePhoneNumber(phoneUISearch)).toEqual(PHONE);
       await expect(page.locator(clients.CLIENT_STATUS_SEARCH_RESULT)).toContainText('Active');
+    });
+    await test.step('8 -Select the client and assert added passenger is added with basic information', async () => {
+      await clients.clickFirstResult();
+      await clients.goToRelatedTravelersTab();
+      await expect(page.locator(clients.ADDED_RELATED_PASSENGER_NAME)).toContainText(
+        RELATED_PASSENGER_NAME + ' ' + RELATED_PASSENGER_LAST_NAME,
+      );
+      await clients.expandRelatedPassengerFromTab();
+      const phoneUI = await page.locator(clients.RELATED_PASSENGER_PHONE_BI).textContent();
+      expect(normalizePhoneNumber(phoneUI)).toEqual(PHONE);
+      await expect(page.locator(clients.RELATED_PASSENGER_DOB_BI)).toContainText('1990');
+      await expect(page.locator(clients.RELATED_PASSENGER_EMAIL_BI)).toContainText(
+        RELATED_PASSENGER_EMAIL,
+      );
+      const phoneUIBI = await page.locator(clients.RELATED_PASSENGER_PHONE_BI).textContent();
+      expect(normalizePhoneNumber(phoneUIBI)).toEqual(PHONE);
     });
   });
 });
