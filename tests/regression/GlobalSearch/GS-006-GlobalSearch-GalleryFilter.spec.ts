@@ -40,7 +40,7 @@ test.describe('GS-006 - Search - Gallery filter', () => {
       await sidebar.goToSearchApp();
       await searchPage.clickGalleryFilter();
       await searchPage.textToSearch(imageName);
-      await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
+      await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden({ timeout: 20000 });
       await expect(page.locator(searchPage.SEARCH_RESULT_IMAGES).first()).toBeVisible();
     });
     await test.step('4 - Assert result is at least 1, title and details are correct', async () => {

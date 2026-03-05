@@ -62,7 +62,10 @@ test.describe('AR-002 - Air Request - Step 1', () => {
     airRequest,
   }) => {
     await test.step('Scenario 2 - Agent → Start From Scratch and Cancel', async () => {
-      await loginPage.login({ username: 'oksana.gorodiska+2@scrumlaunch.com' });
+      await loginPage.login({
+        username: 'oksana.gorodiska+2@scrumlaunch.com',
+        password: 'sf_agents_01@',
+      });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
       await sidebar.goToModule('Clients');
       await clients.clickFirstResult();

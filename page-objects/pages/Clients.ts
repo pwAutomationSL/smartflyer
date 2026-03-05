@@ -83,8 +83,8 @@ export class Clients {
   public readonly RELATED_PASSENGER_NAME_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[1]`;
   public readonly RELATED_PASSENGER_DOB_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[2]`;
   public readonly RELATED_PASSENGER_GENDER_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[3]`;
-  public readonly RELATED_PASSENGER_EMAIL_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[4]`;
-  public readonly RELATED_PASSENGER_PHONE_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[7]`;
+  public readonly RELATED_PASSENGER_EMAIL_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[5]`;
+  public readonly RELATED_PASSENGER_PHONE_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[8]`;
   public readonly CLIENT_NAME_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[1]`;
   public readonly CLIENT_EMAIL_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[2]`;
   public readonly CLIENT_PHONE_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[3]`;

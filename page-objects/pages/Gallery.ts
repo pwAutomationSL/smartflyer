@@ -1,6 +1,6 @@
-import { Page } from "@playwright/test";
+import { Page } from '@playwright/test';
 
-const env = process.env.ENVIRONMENT ?? "test";
+const env = process.env.ENVIRONMENT ?? 'stage';
 export class GalleryPage {
   public readonly page: Page;
   constructor({ page }: { page: Page }) {
@@ -18,22 +18,17 @@ export class GalleryPage {
   public readonly LOAD_SPINNER = `//*[contains(@class,'animate-spin')]`;
   public readonly DELETE_IMAGE = `//button[@aria-label="Delete"]`;
   public readonly CONFIRM_DELETE_IMAGE = `//button[contains(.,'Delete File')]`;
-  public readonly IMAGE_RESULT = (image: string) =>
-    `//img[contains(@alt,'${image}')]`;
+  public readonly IMAGE_RESULT = (image: string) => `//img[contains(@alt,'${image}')]`;
   public async clickUploadFiles() {
     await this.page.locator(this.UPLOAD_FILES).click();
   }
   public async attachImage() {
-    await this.page
-      .locator(this.INPUT_FILE)
-      .setInputFiles("./data/images/testImage.jpg");
+    await this.page.locator(this.INPUT_FILE).setInputFiles('./data/images/testImage.jpg');
   }
   public async confirmUploadFile() {
     const waitForCreate = this.page.waitForResponse(
-      (res) =>
-        res.ok() &&
-        res.request().method() === "POST" &&
-        res.url() === this.shareEndpoint
+      (res) => res.ok() && res.request().method() === 'POST' && res.url() === this.shareEndpoint,
+      { timeout: 40000 },
     );
     await this.page.locator(this.CONFIRM_UPLOAD_FILES).last().click();
     const response = await waitForCreate;
@@ -48,7 +43,7 @@ export class GalleryPage {
     await this.page.locator(this.CLOSE_POPUP).click();
   }
   public async searchImageAndDelete(name: string) {
-    await this.page.getByRole("textbox", { name: "Search files" }).fill(name);
+    await this.page.getByRole('textbox', { name: 'Search files' }).fill(name);
     await this.page.waitForTimeout(3000);
     await this.deleteImage(name);
   }

@@ -32,79 +32,79 @@ test.describe('AR-003 - Air Request - Step 2', () => {
       await airRequest.startFromScrath();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
       await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
-      await test.step('6 - Select the Agent and Click on Continue button', async () => {
-        await airRequest.selectAgent();
-        await airRequest.selectFirstAgent();
-        await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
-      });
-      await test.step('7 - Click on Continue', async () => {
-        await airRequest.clickContinue();
-        await expect(page.locator(airRequest.HEADER)).toContainText('Passenger details');
-        await expect(page.locator(airRequest.AGENT_SUCCESS)).toHaveCSS(
-          'background-color',
-          'rgb(46, 139, 87)',
+    });
+    await test.step('6 - Select the Agent and Click on Continue button', async () => {
+      await airRequest.selectAgent();
+      await airRequest.selectFirstAgent();
+      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
+    });
+    await test.step('7 - Click on Continue', async () => {
+      await airRequest.clickContinue();
+      await expect(page.locator(airRequest.HEADER)).toContainText('Passenger details');
+      await expect(page.locator(airRequest.AGENT_SUCCESS)).toHaveCSS(
+        'background-color',
+        'rgb(46, 139, 87)',
+      );
+    });
+    await test.step('Fill Date of Birth', async () => {
+      await airRequest.fillDateOfBirth();
+    });
+    await test.step('ER 1 - Domestic checked by default, first name and last name pre filled', async () => {
+      await expect(page.locator(airRequest.DOMESTIC_RADIO)).toBeChecked();
+      await expect(page.locator(airRequest.FIRST_NAME_PASSENGER(0))).toHaveValue(
+        PASSENGER_FIRST_NAME,
+      );
+      await expect(page.locator(airRequest.LAST_NAME_PASSENGER(0))).toHaveValue(
+        PASSENGER_LAST_NAME,
+      );
+      await expect(page.locator(airRequest.PASSENGER_EMAIL(0))).toHaveValue(EMAIL);
+    });
+    await test.step('ER 1 - Client ID pre filled and disabled/grey', async () => {
+      await expect(page.locator(airRequest.CLIENT_ID)).toHaveValue(CLIENT_ID);
+      await expect(page.locator(airRequest.CLIENT_ID)).toBeDisabled();
+    });
+    await test.step('ER 2 - Gender has red asterisk and its mandatory', async () => {
+      await expect(page.locator(airRequest.GENDER_RED_ASTERISK)).toBeVisible();
+    });
+    await test.step('ER 2 - Gender has Male and Female options', async () => {
+      await airRequest.clickGenderDropdown();
+      await expect(page.locator(airRequest.MALE_DROPDOWN)).toBeVisible();
+      await expect(page.locator(airRequest.FEMALE_DROPDOWN)).toBeVisible();
+      await airRequest.selectMale();
+    });
+    await test.step('ER 3 - Insert incorrect email and warning message is visible', async () => {
+      await airRequest.fillPassengerEmail(WRONG_EMAIL);
+      await airRequest.clickLabel();
+      await expect(page.locator(airRequest.PASSENGER_EMAIL(0))).toHaveClass(/border-red/i);
+      await expect(page.locator(airRequest.WARNING_EMAIL)).toContainText(
+        'Email must be a valid email address.',
+      );
+      await airRequest.fillPassengerEmail(EMAIL);
+    });
+    await test.step('ER 3 - 6 Insert incorrect Phone number and warning message is visible', async () => {
+      await airRequest.fillPassengerPhone(WRONG_PHONE);
+      await airRequest.clickLabel();
+      await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER_DIV(0))).toHaveClass(
+        /border-red/i,
+      );
+      await expect(page.locator(airRequest.WARNING_PHONE)).toContainText('Invalid phone number');
+      await airRequest.fillPassengerPhone(PHONE);
+    });
+    await test.step('ER 4 - 6 Insert incorrect Phone number and warning message is visible', async () => {
+      await expect(page.locator(airRequest.PHONE_FLAG)).toBeVisible();
+      await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER(0))).toHaveValue(
+        '+1 (833) 333-3333',
+      );
+    });
+    await test.step('ER 5 - Add passport information toggle OFF by default', async () => {
+      try {
+        await expect(page.locator(airRequest.ADD_PASSPORT_INFORMATION(1))).toHaveAttribute(
+          'aria-checked',
+          'false',
         );
-      });
-      await test.step('Fill Date of Birth', async () => {
-        await airRequest.fillDateOfBirth();
-      });
-      await test.step('ER 1 - Domestic checked by default, first name and last name pre filled', async () => {
-        await expect(page.locator(airRequest.DOMESTIC_RADIO)).toBeChecked();
-        await expect(page.locator(airRequest.FIRST_NAME_PASSENGER(0))).toHaveValue(
-          PASSENGER_FIRST_NAME,
-        );
-        await expect(page.locator(airRequest.LAST_NAME_PASSENGER(0))).toHaveValue(
-          PASSENGER_LAST_NAME,
-        );
-        await expect(page.locator(airRequest.PASSENGER_EMAIL(0))).toHaveValue(EMAIL);
-      });
-      await test.step('ER 1 - Client ID pre filled and disabled/grey', async () => {
-        await expect(page.locator(airRequest.CLIENT_ID)).toHaveValue(CLIENT_ID);
-        await expect(page.locator(airRequest.CLIENT_ID)).toBeDisabled();
-      });
-      await test.step('ER 2 - Gender has red asterisk and its mandatory', async () => {
-        await expect(page.locator(airRequest.GENDER_RED_ASTERISK)).toBeVisible();
-      });
-      await test.step('ER 2 - Gender has Male and Female options', async () => {
-        await airRequest.clickGenderDropdown();
-        await expect(page.locator(airRequest.MALE_DROPDOWN)).toBeVisible();
-        await expect(page.locator(airRequest.FEMALE_DROPDOWN)).toBeVisible();
-        await airRequest.selectMale();
-      });
-      await test.step('ER 3 - Insert incorrect email and warning message is visible', async () => {
-        await airRequest.fillPassengerEmail(WRONG_EMAIL);
-        await airRequest.clickLabel();
-        await expect(page.locator(airRequest.PASSENGER_EMAIL(0))).toHaveClass(/border-red/i);
-        await expect(page.locator(airRequest.WARNING_EMAIL)).toContainText(
-          'Email must be a valid email address.',
-        );
-        await airRequest.fillPassengerEmail(EMAIL);
-      });
-      await test.step('ER 3 - 6 Insert incorrect Phone number and warning message is visible', async () => {
-        await airRequest.fillPassengerPhone(WRONG_PHONE);
-        await airRequest.clickLabel();
-        await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER_DIV(0))).toHaveClass(
-          /border-red/i,
-        );
-        await expect(page.locator(airRequest.WARNING_PHONE)).toContainText('Invalid phone number');
-        await airRequest.fillPassengerPhone(PHONE);
-      });
-      await test.step('ER 4 - 6 Insert incorrect Phone number and warning message is visible', async () => {
-        await expect(page.locator(airRequest.PHONE_FLAG)).toBeVisible();
-        await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER(0))).toHaveValue(
-          '+1 (833) 333-3333',
-        );
-      });
-      await test.step('ER 5 - Add passport information toggle OFF by default', async () => {
-        try {
-          await expect(page.locator(airRequest.ADD_PASSPORT_INFORMATION(1))).toHaveAttribute(
-            'aria-checked',
-            'false',
-          );
-        } catch (err) {
-          console.error('Passport already added');
-        }
-      });
+      } catch (err) {
+        console.error('Passport already added');
+      }
     });
     await test.step('ER 7 - I certify the information ... chechbox not checked by default', async () => {
       await expect(page.locator(airRequest.CERTIFY_CHECKBOX).first()).not.toBeChecked();
