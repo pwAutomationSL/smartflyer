@@ -1,0 +1,106 @@
+import { test, expect } from '../../../fixtures/PlaywrightFixtures';
+const PROPERTY_NAME_BRAND_DRAFT = 'Olympus';
+const PROPERTY_NAME_BRAND_APPROVED = 'Disney Cruise Line';
+const PROPERTY_NAME_HOTEL_DRAFT = 'Mountain View Lodge';
+const PROPERTY_NAME_HOTEL_APPROVED = 'The Kensington';
+const PROPERTY_NAME_ONSITE_DRAFT = 'Azure Horizon Resort Test';
+const PROPERTY_NAME_ONSITE_APPROVED = 'Abercrombie & Kent Japan';
+test.setTimeout(200000);
+test.describe('SFC-387 Admin', () => {
+  test('As an Admin user i can see draft and published partners- Brand', async ({
+    loginPage,
+    page,
+    sidebar,
+    partners,
+  }) => {
+    await test.step('1 - Log in to Society with an Admin account.', async () => {
+      await loginPage.login();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+    });
+    await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
+      await sidebar.goToModule('Partners');
+      await expect(page.locator(partners.HEADER)).toBeVisible();
+      await expect(page.locator(partners.SHARE_TOPBAR)).toBeEnabled();
+    });
+    await test.step('3 - Search Draft Partner Brand.', async () => {
+      await partners.fillSearch(PROPERTY_NAME_BRAND_DRAFT);
+      await partners.clickSearch();
+      await page.waitForLoadState('networkidle');
+      const BrandResult = await page.locator(partners.SEARCH_RESULTS_A).count();
+      expect(BrandResult).toEqual(1);
+      await expect(page.locator(partners.SEARCH_RESULTS_SOCIETY_STATUS)).toContainText(['Draft']);
+    });
+    await test.step('4 - Search Approved Partner Brand.', async () => {
+      await partners.fillSearch(PROPERTY_NAME_BRAND_APPROVED);
+      await partners.clickSearch();
+      await page.waitForLoadState('networkidle');
+      const BrandResult = await page.locator(partners.SEARCH_RESULTS_A).count();
+      expect(BrandResult).toEqual(1);
+      await expect(page.locator(partners.SEARCH_RESULTS_SOCIETY_STATUS)).toContainText('Approved');
+    });
+  });
+  test('As an Admin user i can see draft and published partners- Hotel', async ({
+    loginPage,
+    page,
+    sidebar,
+    partners,
+  }) => {
+    await test.step('1 - Log in to Society with an Admin account.', async () => {
+      await loginPage.login();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+    });
+    await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
+      await sidebar.goToModule('Partners');
+      await expect(page.locator(partners.HEADER)).toBeVisible();
+      await expect(page.locator(partners.SHARE_TOPBAR)).toBeEnabled();
+    });
+    await test.step('3 - Search Draft Partner Hotel.', async () => {
+      await partners.fillSearch(PROPERTY_NAME_HOTEL_DRAFT);
+      await partners.clickSearch();
+      await page.waitForLoadState('networkidle');
+      const HotelResult = await page.locator(partners.SEARCH_RESULTS_A).count();
+      expect(HotelResult).toEqual(1);
+      await expect(page.locator(partners.SEARCH_RESULTS_SOCIETY_STATUS)).toContainText(['Draft']);
+    });
+    await test.step('4 - Search Approved Partner Hotel.', async () => {
+      await partners.fillSearch(PROPERTY_NAME_HOTEL_APPROVED);
+      await partners.clickSearch();
+      await page.waitForLoadState('networkidle');
+      const BrandResult = await page.locator(partners.SEARCH_RESULTS_A).count();
+      expect(BrandResult).toEqual(1);
+      await expect(page.locator(partners.SEARCH_RESULTS_SOCIETY_STATUS)).toContainText('Approved');
+    });
+  });
+  test('As an Admin user i can see draft and published partners- Onsite', async ({
+    loginPage,
+    page,
+    sidebar,
+    partners,
+  }) => {
+    await test.step('1 - Log in to Society with an Admin account.', async () => {
+      await loginPage.login();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+    });
+    await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
+      await sidebar.goToModule('Partners');
+      await expect(page.locator(partners.HEADER)).toBeVisible();
+      await expect(page.locator(partners.SHARE_TOPBAR)).toBeEnabled();
+    });
+    await test.step('3 - Search Draft Partner Onsite.', async () => {
+      await partners.fillSearch(PROPERTY_NAME_ONSITE_DRAFT);
+      await partners.clickSearch();
+      await page.waitForLoadState('networkidle');
+      const HotelResult = await page.locator(partners.SEARCH_RESULTS_A).count();
+      expect(HotelResult).toEqual(1);
+      await expect(page.locator(partners.SEARCH_RESULTS_SOCIETY_STATUS)).toContainText(['Draft']);
+    });
+    await test.step('4 - Search Approved Partner Onsite.', async () => {
+      await partners.fillSearch(PROPERTY_NAME_ONSITE_APPROVED);
+      await partners.clickSearch();
+      await page.waitForLoadState('networkidle');
+      const BrandResult = await page.locator(partners.SEARCH_RESULTS_A).count();
+      expect(BrandResult).toEqual(1);
+      await expect(page.locator(partners.SEARCH_RESULTS_SOCIETY_STATUS)).toContainText('Approved');
+    });
+  });
+});
