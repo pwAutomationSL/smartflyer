@@ -39,6 +39,40 @@ test.describe('SFC-387 Admin', () => {
       await expect(page.locator(partners.SEARCH_RESULTS_SOCIETY_STATUS)).toContainText('Approved');
     });
   });
+  test('As an Admin user i can see draft and published partners in global search- Brand', async ({
+    loginPage,
+    page,
+    sidebar,
+    searchPage,
+  }) => {
+    await test.step('1 - Log in to Society with an Admin account.', async () => {
+      await loginPage.login();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+    });
+    await test.step('2 - Go to Search - Search Approved Partner Brand. Assert result is 1, title and details are correct', async () => {
+      await sidebar.goToModule('Search');
+      await searchPage.clickPartnerFilter();
+      await searchPage.checkPartnerBrandFilter();
+      await searchPage.textToSearch(PROPERTY_NAME_BRAND_APPROVED);
+      await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      expect(count).toBe(1);
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(
+        PROPERTY_NAME_BRAND_APPROVED,
+      );
+    });
+    await test.step('3 - Go to Search - Search Drafted Partner Brand. Assert result is 1', async () => {
+      await searchPage.textToSearch(PROPERTY_NAME_BRAND_DRAFT);
+      await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      expect(count).toBe(1);
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(
+        PROPERTY_NAME_BRAND_DRAFT,
+      );
+    });
+  });
   test('As an Admin user i can see draft and published partners- Hotel', async ({
     loginPage,
     page,
@@ -71,6 +105,40 @@ test.describe('SFC-387 Admin', () => {
       await expect(page.locator(partners.SEARCH_RESULTS_SOCIETY_STATUS)).toContainText('Approved');
     });
   });
+  test('As an Admin user i can see draft and published partners in global search- Hotel', async ({
+    loginPage,
+    page,
+    sidebar,
+    searchPage,
+  }) => {
+    await test.step('1 - Log in to Society with an Admin account.', async () => {
+      await loginPage.login();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+    });
+    await test.step('2 - Go to Search - Search Approved Partner Hotel. Assert result is 1, title and details are correct', async () => {
+      await sidebar.goToModule('Search');
+      await searchPage.clickPartnerFilter();
+      await searchPage.checkPartnerHotelFilter();
+      await searchPage.textToSearch(PROPERTY_NAME_HOTEL_APPROVED);
+      await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      expect(count).toBe(1);
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(
+        PROPERTY_NAME_HOTEL_APPROVED,
+      );
+    });
+    await test.step('3 - Go to Search - Search Drafted Partner Hotel. Assert result is 1', async () => {
+      await searchPage.textToSearch(PROPERTY_NAME_HOTEL_DRAFT);
+      await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      expect(count).toBe(1);
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(
+        PROPERTY_NAME_HOTEL_DRAFT,
+      );
+    });
+  });
   test('As an Admin user i can see draft and published partners- Onsite', async ({
     loginPage,
     page,
@@ -101,6 +169,40 @@ test.describe('SFC-387 Admin', () => {
       const BrandResult = await page.locator(partners.SEARCH_RESULTS_A).count();
       expect(BrandResult).toEqual(1);
       await expect(page.locator(partners.SEARCH_RESULTS_SOCIETY_STATUS)).toContainText('Approved');
+    });
+  });
+  test('As an Admin user i can see draft and published partners in global search- Onsite', async ({
+    loginPage,
+    page,
+    sidebar,
+    searchPage,
+  }) => {
+    await test.step('1 - Log in to Society with an Admin account.', async () => {
+      await loginPage.login();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+    });
+    await test.step('2 - Go to Search - Search Approved Partner Hotel. Assert result is 1, title and details are correct', async () => {
+      await sidebar.goToModule('Search');
+      await searchPage.clickPartnerFilter();
+      await searchPage.checkPartnerOnsiteFilter();
+      await searchPage.textToSearch(PROPERTY_NAME_ONSITE_APPROVED);
+      await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      expect(count).toBe(1);
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(
+        PROPERTY_NAME_ONSITE_APPROVED,
+      );
+    });
+    await test.step('3 - Go to Search - Search Drafted Partner Hotel. Assert result is 1', async () => {
+      await searchPage.textToSearch(PROPERTY_NAME_ONSITE_DRAFT);
+      await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      expect(count).toBe(1);
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(
+        PROPERTY_NAME_ONSITE_DRAFT,
+      );
     });
   });
 });

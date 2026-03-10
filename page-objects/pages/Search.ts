@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { Page } from '@playwright/test';
 
 export class SearchPage {
   public readonly page: Page;
@@ -22,6 +22,7 @@ export class SearchPage {
   public readonly SEARCH_RESULT_MATCHES_A_FIRSTONLY = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//span)[1]`;
   public readonly SEARCH_RESULT_MATCHES_DIRECTORY_FIRSTONLY = `(//div[contains(@class,'Layout_content')]//div//div/p/span)[1]`;
   public readonly HEADER = `//h1`;
+  public readonly NO_RESULTS = `//h3`;
   public readonly SUBHEADER = `//div[contains(@class,'toolkit')]//h4`;
   public readonly SEARCH_RESULT_MATCHES_DETAIL = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//p`;
   public readonly SPINNER_LOADER = `//div[contains(@class,'Spinner_load')]`;
@@ -46,13 +47,13 @@ export class SearchPage {
     await this.page.locator(this.PARTNERS_FILTER_BUTTON).click();
   }
   public async checkPartnerBrandFilter() {
-    await this.page.locator("label").filter({ hasText: "Brand" }).check();
+    await this.page.locator('label').filter({ hasText: 'Brand' }).check();
   }
   public async checkPartnerHotelFilter() {
-    await this.page.locator("label").filter({ hasText: "Hotel" }).check();
+    await this.page.locator('label').filter({ hasText: 'Hotel' }).check();
   }
   public async checkPartnerOnsiteFilter() {
-    await this.page.locator("label").filter({ hasText: "Onsite" }).check();
+    await this.page.locator('label').filter({ hasText: 'Onsite' }).check();
   }
   public async clickAnnouncementsFilter() {
     await this.page.locator(this.ANNOUNCEMENTS_FILTER_BUTTON).click();
@@ -62,10 +63,8 @@ export class SearchPage {
   }
   public async clickDirectoriesFilter(subMenu: string) {
     await this.page.waitForTimeout(1000);
-    await this.page
-      .getByRole("button", { name: "Directory" })
-      .click({ force: true });
-    await this.page.locator("label").filter({ hasText: subMenu }).check();
+    await this.page.getByRole('button', { name: 'Directory' }).click({ force: true });
+    await this.page.locator('label').filter({ hasText: subMenu }).check();
   }
   public async clickToolkitFilter() {
     await this.page.locator(this.TOOLKIT_FILTER_BUTTON).click();
@@ -77,10 +76,8 @@ export class SearchPage {
     await this.page.locator(this.SEARCH_RESULT_MATCHES_A).first().click();
   }
   public async getFirstName() {
-    const name = await this.page
-      .locator(this.SEARCH_RESULT_MATCHES_A_FIRSTONLY)
-      .textContent();
-    return name ? name : "not found";
+    const name = await this.page.locator(this.SEARCH_RESULT_MATCHES_A_FIRSTONLY).textContent();
+    return name ? name : 'not found';
   }
   public async clickClientsFilter() {
     await this.page.locator(this.CLIENTS_FILTER_BUTTON).click();

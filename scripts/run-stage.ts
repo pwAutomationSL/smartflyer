@@ -1,12 +1,12 @@
-const { execSync } = require("child_process");
+const { execSync } = require('child_process');
 
-process.env.ENVIRONMENT = "stage";
+process.env.ENVIRONMENT = 'stage';
 
 try {
-  execSync("npx playwright test  --project=chromium", {
-    stdio: "inherit",
+  execSync('npx playwright test  --project=chromium', {
+    stdio: 'inherit',
   });
 } catch (err) {
   // Do NOT print giant stack trace
-  console.error("\n❌ Playwright reported a failure.");
+  console.error('\n❌ Playwright reported a failure.');
 }

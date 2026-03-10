@@ -8,6 +8,7 @@ export class Clients {
   }
   public readonly HEADER = `//h1`;
   public readonly HEADER_H2 = `//h2`;
+  public readonly POPUP_HEADER_H2 = `//dialog//h2`;
   public readonly QUICK_ADD = `//button[contains(.,'Quick Add')]`;
   public readonly SPINNER_LOADER = `//div[@id="ClientTable_processing"]`;
   public readonly USERNAME_HEADER = `//div[contains(@class,'user-data')]//h4`;
@@ -491,6 +492,27 @@ export class Clients {
   }
   public async clickShare() {
     await this.page.locator(this.SHARE_BUTTON).click();
+  }
+  public async checkCCForm() {
+    await this.page.locator(this.CREDIT_CARD_FORM_RADIO).click();
+  }
+  public async checkProfileForm() {
+    await this.page.locator(this.PROFILE_FORM_CARD_RADIO).click();
+  }
+  public async fillShareEmail(email: string) {
+    await this.page.locator(`//input[@id="clientEmail"]`).fill(email);
+  }
+  public async fillShareEmailCC(email: string) {
+    await this.page.locator(`//input[@id="cc"]`).fill(email);
+  }
+  public async fillShareEmailBCC(email: string) {
+    await this.page.locator(`//input[@id="bcc"]`).fill(email);
+  }
+  public async fillShareEMessage(message: string) {
+    await this.page.locator(`//textarea[@id="clientMessage"]`).fill(message);
+  }
+  public async sendForm() {
+    await this.page.locator(this.SHARE_SEND_FORM).click();
   }
 }
 export const clients = (page: Page) => new Clients({ page });
