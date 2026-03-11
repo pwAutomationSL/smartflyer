@@ -9,7 +9,7 @@ function getDate(): string {
 test.use({
   launchOptions: { slowMo: 350 },
 });
-test.describe('AR-002 - Air Request- Step 1', () => {
+test.describe('AR-002 - Air Request - Step 1', () => {
   test('Scenario 1 - Admin - Start From Scratch and Continue', async ({
     loginPage,
     page,
