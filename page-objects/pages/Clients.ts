@@ -133,6 +133,10 @@ export class Clients {
   public readonly RELATED_PASSENGER_PASSPORT = (index: number) =>
     `//input[@name="related_passengers.${index}.client.passport_number"]`;
   public readonly SAME_AS_PRIMARY_ADDRESS_TOGGLE = `//label[text()="Same as primary passenger"]/preceding-sibling::button`;
+  public readonly EMERGENCY_CONTACT_FIELD = (variable: string) =>
+    `//input[@name="primary_passenger.client.emergency_contact_${variable}"]`;
+  public readonly TRAVEL_DATA_GLOBAL_ENTRY = `//input[@name="primary_passenger.tsa.global_entry"]`;
+  public readonly TRAVEL_DATA_KTN = `//input[@name="primary_passenger.tsa.tsa_pre_check_number"]`;
   public async clickCreate() {
     await this.page.locator(this.HEADER).click();
   }
@@ -513,6 +517,85 @@ export class Clients {
   }
   public async sendForm() {
     await this.page.locator(this.SHARE_SEND_FORM).click();
+  }
+
+  public async expandTravelProfileAndPreferences() {
+    await this.page.locator(`//h4[text()="Travel Profile & Preferences"]/../..`).click();
+  }
+  public async fillEmergencyContact(data: {
+    name: string;
+    email: string;
+    phone: string;
+    relationship: string;
+  }) {
+    await this.page.locator(`//h5[text()="Emergency Contact"]/../..`).click();
+    await this.page.locator(this.EMERGENCY_CONTACT_FIELD('name')).fill(data.name);
+    await this.page.locator(this.EMERGENCY_CONTACT_FIELD('email')).fill(data.email);
+    await this.page.locator(this.EMERGENCY_CONTACT_FIELD('phone')).fill(data.phone);
+    await this.page
+      .locator(`//div[text()='Select relationship']/../following-sibling::div`)
+      .click();
+    await this.page.locator(`//div[@role="option"]/p[text()='${data.relationship}']`).click();
+  }
+
+  public async fillBillingAdress() {
+    await this.page.locator(`//h5[text()="Billing Address"]/../..`).click();
+    await this.page
+      .locator(`//label[text()='Same as Mailing Address']/preceding-sibling::button`)
+      .click();
+  }
+
+  public async fillTravelData(global_entry: string, ktn: string) {
+    await this.page.locator(`//h5[text()="Travel Data"]/../..`).click();
+    await this.page.locator(this.TRAVEL_DATA_GLOBAL_ENTRY).fill(global_entry);
+    await this.page.locator(`//input[@name="primary_passenger.tsa.global_expiry_date"]`).click();
+    await this.page.locator(`//select[@aria-label="Select year"]`).selectOption('2030');
+    await this.page.waitForTimeout(200);
+    await this.page
+      .locator(
+        `//div[@class="react-datepicker__week"][3]//div[@role="option" and @aria-disabled="false"]`,
+      )
+      .last()
+      .click();
+    await this.page.locator(this.TRAVEL_DATA_KTN).fill(ktn);
+    await this.page.locator(`//input[@name="primary_passenger.tsa.expiry_date"]`).click();
+    await this.page.locator(`//select[@aria-label="Select year"]`).selectOption('2030');
+    await this.page.waitForTimeout(200);
+    await this.page
+      .locator(
+        `//div[@class="react-datepicker__week"][3]//div[@role="option" and @aria-disabled="false"]`,
+      )
+      .last()
+      .click();
+  }
+
+  public async fillLoyaltyProgram() {
+    await this.page.locator(`//h5[text()="Loyalty Program"]/../..`).click();
+  }
+
+  public async fillAllergiesAndDietaryRestrictions() {
+    await this.page.locator(`//h5[text()="Allergies & Dietary Restrictions"]/../..`).click();
+  }
+
+  public async fillFlightPreferences() {
+    await this.page.locator(`//h5[text()="Flight Preferences"]/../..`).click();
+  }
+
+  public async fillTravelPreferencesByCategory() {
+    await this.page.locator(`//h5[text()="Travel Preferences by Category"]/../..`).click();
+  }
+  public async selectAirports(airports: string[]) {
+    await this.page
+      .locator(
+        `//div[contains(.,'Select airports') and contains(@id,'select')]/../following-sibling::div`,
+      )
+      .click();
+    for (const airport of airports) {
+      await this.page
+        .locator(`//div[contains(@id,'listbox')]/div[contains(.,'${airport}')]`)
+        .click();
+    }
+    await this.page.locator(`//h5[text()='Preferred Home Airport(s)']`).click();
   }
 }
 export const clients = (page: Page) => new Clients({ page });
