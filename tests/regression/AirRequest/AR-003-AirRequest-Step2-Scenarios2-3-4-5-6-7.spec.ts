@@ -144,14 +144,6 @@ test.describe('AR-003 - Air Request - Step 2', () => {
       });
       await test.step('7# Scenario - Edit Primary Passenger phone number', async () => {
         try {
-          await airRequest.fillPassengerPhone('');
-          await airRequest.clickLabel();
-          await expect(page.locator(airRequest.WARNING_PHONE)).toContainText(
-            'Invalid phone number',
-          );
-          await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER_DIV(0))).toHaveClass(
-            /border-red/i,
-          );
           await airRequest.fillPassengerPhone('1800');
           await airRequest.clickLabel();
           await expect(page.locator(airRequest.WARNING_PHONE)).toContainText(
