@@ -76,34 +76,56 @@ async function main() {
   const statusText = hasFailures ? 'FAILED' : 'PASSED';
 
   const payload = {
-    text: `${statusEmoji} Playwright Stage Results - ${statusText}`,
+    text: `${statusEmoji} Playwright Stage Results — ${statusText}`,
     blocks: [
       {
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: `${statusEmoji} *Playwright Stage Results — ${statusText}*`,
+          text:
+            `✅ *${stats.passed} passed*   •   ` +
+            `❌ *${stats.failed} failed*   •   ` +
+            `🐞 *${stats.broken} bugs*   •   ` +
+            `⏭️ *${stats.skipped} skipped*`,
         },
       },
       {
-        type: 'section',
-        fields: [
-          { type: 'mrkdwn', text: `*Repository:*\n${repo}` },
-          { type: 'mrkdwn', text: `*Branch:*\n${branch}` },
-          { type: 'mrkdwn', text: `*Total:*\n${stats.total}` },
-          { type: 'mrkdwn', text: `*Passed:*\n${stats.passed}` },
-          { type: 'mrkdwn', text: `*Failed:*\n${stats.failed}` },
-          { type: 'mrkdwn', text: `*Broken:*\n${stats.broken}` },
-          { type: 'mrkdwn', text: `*Skipped:*\n${stats.skipped}` },
-          { type: 'mrkdwn', text: `*Unknown:*\n${stats.unknown}` },
-        ],
+        type: 'divider',
       },
       {
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: `*Links:*\n• <${runUrl}|Open GitHub Actions run>\n• <${reportUrl}|Open Allure report>`,
+          text:
+            `The latest testing suite run is now completed. ` +
+            `The run included *${stats.total} tests*.\n\n` +
+            `Repository: *${repo}*\n` +
+            `Branch: *${branch}*`,
         },
+      },
+      {
+        type: 'actions',
+        elements: [
+          {
+            type: 'button',
+            text: {
+              type: 'plain_text',
+              text: 'View Full Report',
+              emoji: true,
+            },
+            style: 'primary',
+            url: reportUrl,
+          },
+          {
+            type: 'button',
+            text: {
+              type: 'plain_text',
+              text: 'Open GitHub Run',
+              emoji: true,
+            },
+            url: runUrl,
+          },
+        ],
       },
     ],
   };
