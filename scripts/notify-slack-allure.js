@@ -110,7 +110,7 @@ async function main() {
             type: 'button',
             text: {
               type: 'plain_text',
-              text: 'View Full Report',
+              text: 'View Detailed Report',
               emoji: true,
             },
             style: 'primary',
