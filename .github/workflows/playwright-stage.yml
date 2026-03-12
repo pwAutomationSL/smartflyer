@@ -43,3 +43,9 @@ jobs:
             allure-report
             allure-results
           retention-days: 7
+      - name: Notify Slack
+        if: always()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"Playwright Stage Tests Finished. View results in GitHub Actions."}' \
+          ${{ secrets.SLACK_WEBHOOK_URL }}
