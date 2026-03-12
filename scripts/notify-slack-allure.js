@@ -112,7 +112,9 @@ async function main() {
             text: {
               type: 'plain_text',
               text: 'View Detailed Report',
+              emoji: true,
             },
+            style: 'primary',
             url: reportUrl,
           },
         ],
