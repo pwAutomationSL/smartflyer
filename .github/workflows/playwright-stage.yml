@@ -1,10 +1,6 @@
 name: Playwright Stage Tests
 
 on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -37,11 +33,11 @@ jobs:
         if: always()
         run: npm run report
 
-      - name: Upload playwright report
+      - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-stage-report
           path: |
             playwright-report
             allure-report
