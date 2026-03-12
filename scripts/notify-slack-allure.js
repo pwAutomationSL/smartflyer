@@ -111,10 +111,8 @@ async function main() {
             type: 'button',
             text: {
               type: 'plain_text',
-              text: 'View Full Report',
-              emoji: true,
+              text: 'View Detailed Report',
             },
-            style: 'primary',
             url: reportUrl,
           },
         ],
