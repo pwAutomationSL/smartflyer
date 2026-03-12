@@ -117,15 +117,6 @@ async function main() {
             style: 'primary',
             url: reportUrl,
           },
-          {
-            type: 'button',
-            text: {
-              type: 'plain_text',
-              text: 'Open GitHub Run',
-              emoji: true,
-            },
-            url: runUrl,
-          },
         ],
       },
     ],
