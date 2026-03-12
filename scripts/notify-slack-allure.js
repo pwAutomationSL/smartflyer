@@ -1,12 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const allureReportUrl = process.env.ALLURE_REPORT_URL || runUrl;
-function getAllureStats(resultsDir) {
-  if (!fs.existsSync(resultsDir)) {
-    throw new Error(`allure-results folder not found: ${resultsDir}`);
-  }
 
+function getAllureStats(resultsDir) {
   const files = fs.readdirSync(resultsDir).filter((file) => file.endsWith('-result.json'));
 
   const stats = {
@@ -19,12 +15,10 @@ function getAllureStats(resultsDir) {
   };
 
   for (const file of files) {
-    const filePath = path.join(resultsDir, file);
-    const json = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const json = JSON.parse(fs.readFileSync(path.join(resultsDir, file), 'utf8'));
     const status = json.status || 'unknown';
 
     stats.total += 1;
-
     if (status === 'passed') stats.passed += 1;
     else if (status === 'failed') stats.failed += 1;
     else if (status === 'broken') stats.broken += 1;
@@ -44,23 +38,14 @@ function postToSlack(webhookUrl, payload) {
         hostname: url.hostname,
         path: url.pathname + url.search,
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
       },
       (res) => {
         let body = '';
-
-        res.on('data', (chunk) => {
-          body += chunk;
-        });
-
+        res.on('data', (chunk) => (body += chunk));
         res.on('end', () => {
-          if (res.statusCode >= 200 && res.statusCode < 300) {
-            resolve(body);
-          } else {
-            reject(new Error(`Slack request failed: ${res.statusCode} ${body}`));
-          }
+          if (res.statusCode >= 200 && res.statusCode < 300) resolve(body);
+          else reject(new Error(`Slack request failed: ${res.statusCode} ${body}`));
         });
       },
     );
@@ -73,19 +58,18 @@ function postToSlack(webhookUrl, payload) {
 
 async function main() {
   const webhookUrl = process.env.SLACK_WEBHOOK_URL;
-  if (!webhookUrl) {
-    throw new Error('Missing SLACK_WEBHOOK_URL');
-  }
+  if (!webhookUrl) throw new Error('Missing SLACK_WEBHOOK_URL');
 
   const repo = process.env.GITHUB_REPOSITORY || 'unknown-repo';
   const branch = process.env.GITHUB_REF_NAME || 'unknown-branch';
-  const runId = process.env.GITHUB_RUN_ID;
-  const serverUrl = process.env.GITHUB_SERVER_URL || 'https://github.com';
+  const runUrl = `${process.env.GITHUB_SERVER_URL}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
 
-  const runUrl = `${serverUrl}/${repo}/actions/runs/${runId}`;
+  const stats = getAllureStats(path.join(process.cwd(), 'allure-results'));
 
-  const resultsDir = path.join(process.cwd(), 'allure-results');
-  const stats = getAllureStats(resultsDir);
+  const meta = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'report-meta.json'), 'utf8'));
+
+  const baseUrl = process.env.ALLURE_REPORT_BASE_URL;
+  const reportUrl = `${baseUrl}${meta.reportUrlPath}`;
 
   const hasFailures = stats.failed > 0 || stats.broken > 0;
   const statusEmoji = hasFailures ? '❌' : '✅';
@@ -98,51 +82,27 @@ async function main() {
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: `*Links:*\n• <${runUrl}|Open GitHub Actions run>\n• <${allureReportUrl}|Open Allure report>`,
+          text: `${statusEmoji} *Playwright Stage Results — ${statusText}*`,
         },
       },
       {
         type: 'section',
         fields: [
-          {
-            type: 'mrkdwn',
-            text: `*Repository:*\n${repo}`,
-          },
-          {
-            type: 'mrkdwn',
-            text: `*Branch:*\n${branch}`,
-          },
-          {
-            type: 'mrkdwn',
-            text: `*Total:*\n${stats.total}`,
-          },
-          {
-            type: 'mrkdwn',
-            text: `*Passed:*\n${stats.passed}`,
-          },
-          {
-            type: 'mrkdwn',
-            text: `*Failed:*\n${stats.failed}`,
-          },
-          {
-            type: 'mrkdwn',
-            text: `*Broken:*\n${stats.broken}`,
-          },
-          {
-            type: 'mrkdwn',
-            text: `*Skipped:*\n${stats.skipped}`,
-          },
-          {
-            type: 'mrkdwn',
-            text: `*Unknown:*\n${stats.unknown}`,
-          },
+          { type: 'mrkdwn', text: `*Repository:*\n${repo}` },
+          { type: 'mrkdwn', text: `*Branch:*\n${branch}` },
+          { type: 'mrkdwn', text: `*Total:*\n${stats.total}` },
+          { type: 'mrkdwn', text: `*Passed:*\n${stats.passed}` },
+          { type: 'mrkdwn', text: `*Failed:*\n${stats.failed}` },
+          { type: 'mrkdwn', text: `*Broken:*\n${stats.broken}` },
+          { type: 'mrkdwn', text: `*Skipped:*\n${stats.skipped}` },
+          { type: 'mrkdwn', text: `*Unknown:*\n${stats.unknown}` },
         ],
       },
       {
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: `*Report / Run:*\n<${runUrl}|Open GitHub Actions run>`,
+          text: `*Links:*\n• <${runUrl}|Open GitHub Actions run>\n• <${reportUrl}|Open Allure report>`,
         },
       },
     ],
@@ -152,7 +112,7 @@ async function main() {
   console.log('Slack notification sent successfully');
 }
 
-main().catch((error) => {
-  console.error(error);
+main().catch((err) => {
+  console.error(err);
   process.exit(1);
 });

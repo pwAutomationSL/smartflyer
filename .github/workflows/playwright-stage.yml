@@ -3,17 +3,20 @@ name: Playwright Stage Tests
 on:
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
 concurrency:
   group: github-pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  build-and-notify:
+  build:
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -38,23 +41,9 @@ jobs:
         env:
           CI: true
 
-      - name: Generate Allure report
+      - name: Generate Allure report and pages site
         if: always()
         run: npm run report
-
-      - name: Upload regular artifact
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: allure-report
-          path: allure-report
-          retention-days: 7
-
-      - name: Upload Pages artifact
-        if: always()
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: allure-report
 
       - name: Notify Slack
         if: always()
@@ -66,11 +55,17 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_REF_NAME: ${{ github.ref_name }}
-          ALLURE_REPORT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+          ALLURE_REPORT_BASE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+
+      - name: Upload Pages artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
 
   deploy:
+    needs: build
     if: always()
-    needs: build-and-notify
     runs-on: ubuntu-latest
     environment:
       name: github-pages
