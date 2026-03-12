@@ -3,7 +3,7 @@ const { execSync } = require('child_process');
 process.env.ENVIRONMENT = 'stage';
 
 try {
-  execSync('npx playwright test  --project=chromium', {
+  execSync('npx playwright test client  --project=chromium', {
     stdio: 'inherit',
   });
 } catch (err) {
