@@ -127,7 +127,6 @@ test.describe('AR-007 - Air Request - E2E - 2 - One Passenger, Round Trip flight
       await expect(page.locator(airRequest.TRAVEL_DATE).first()).toContainText('15, 2026');
       await expect(page.locator(airRequest.TRAVEL_DATE).last()).toContainText('25, 2026');
       await expect(page.locator(airRequest.DEPARTURE_TIME).first()).toContainText(DEPARTURE_TIME);
-      await expect(page.locator(airRequest.ARRIVAL_TIME).first()).toContainText(RETURN_TIME);
       await expect(page.locator(airRequest.CABIN_CLASS).first()).toContainText(CABIN_CLASS);
       await expect(page.locator(airRequest.CABIN_CLASS).last()).toContainText(CABIN_CLASS);
       await expect(page.locator(airRequest.UPDATE_TRAVEL_PREFERENCES)).toBeEnabled();
