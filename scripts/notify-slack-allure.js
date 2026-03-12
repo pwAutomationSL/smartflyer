@@ -43,87 +43,6 @@ function postToSlack(webhookUrl, payload) {
   });
 }
 
-function getMergedStatsFromAllureResults(resultsDir) {
-  const fallback = {
-    total: 0,
-    passed: 0,
-    failed: 0,
-    broken: 0,
-    skipped: 0,
-    unknown: 0,
-    flaky: 0,
-  };
-
-  if (!fs.existsSync(resultsDir)) return fallback;
-
-  const files = fs.readdirSync(resultsDir).filter((file) => file.endsWith('-result.json'));
-
-  const grouped = new Map();
-
-  for (const file of files) {
-    const filePath = path.join(resultsDir, file);
-    const json = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-
-    const key = json.historyId || json.testCaseId || json.fullName || json.name || file;
-
-    if (!grouped.has(key)) {
-      grouped.set(key, []);
-    }
-
-    grouped.get(key).push(json);
-  }
-
-  const stats = {
-    total: 0,
-    passed: 0,
-    failed: 0,
-    broken: 0,
-    skipped: 0,
-    unknown: 0,
-    flaky: 0,
-  };
-
-  for (const [, attempts] of grouped.entries()) {
-    stats.total += 1;
-
-    const statuses = attempts.map((a) => a.status || 'unknown');
-    const hasPassed = statuses.includes('passed');
-    const hasFailed = statuses.includes('failed');
-    const hasBroken = statuses.includes('broken');
-    const hasSkipped = statuses.includes('skipped');
-
-    // If it passed in any retry, treat final outcome as passed.
-    if (hasPassed) {
-      stats.passed += 1;
-
-      // Mark as flaky when it had a failed/broken attempt before passing.
-      if (hasFailed || hasBroken) {
-        stats.flaky += 1;
-      }
-      continue;
-    }
-
-    if (hasFailed) {
-      stats.failed += 1;
-      continue;
-    }
-
-    if (hasBroken) {
-      stats.broken += 1;
-      continue;
-    }
-
-    if (hasSkipped) {
-      stats.skipped += 1;
-      continue;
-    }
-
-    stats.unknown += 1;
-  }
-
-  return stats;
-}
-
 async function main() {
   const webhookUrl = process.env.SLACK_WEBHOOK_URL;
   if (!webhookUrl) {
@@ -134,7 +53,15 @@ async function main() {
   const branch = process.env.GITHUB_REF_NAME || 'unknown-branch';
   const runUrl = `${process.env.GITHUB_SERVER_URL}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
 
-  const stats = getMergedStatsFromAllureResults(path.join(process.cwd(), 'allure-results'));
+  const stats = readJsonIfExists(path.join(process.cwd(), 'slack-data.json'), {
+    total: 0,
+    passed: 0,
+    failed: 0,
+    broken: 0,
+    skipped: 0,
+    unknown: 0,
+    flaky: 0,
+  });
 
   const meta = readJsonIfExists(path.join(process.cwd(), 'report-meta.json'), {
     reportUrlPath: '/',
@@ -161,7 +88,7 @@ async function main() {
             `✅ *${stats.passed} passed*  •  ` +
             `❌ *${stats.failed} failed*  •  ` +
             `🐞 *${stats.broken} bugs*  •  ` +
-            `🔁 *${stats.flaky} flaky*  •  ` +
+            `🔁 *${stats.flaky || 0} flaky*  •  ` +
             `⏭️ *${stats.skipped} skipped*`,
         },
       },
