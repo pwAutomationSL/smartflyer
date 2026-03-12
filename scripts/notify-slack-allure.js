@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-
+const allureReportUrl = process.env.ALLURE_REPORT_URL || runUrl;
 function getAllureStats(resultsDir) {
   if (!fs.existsSync(resultsDir)) {
     throw new Error(`allure-results folder not found: ${resultsDir}`);
@@ -98,7 +98,7 @@ async function main() {
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: `${statusEmoji} *Playwright Stage Results — ${statusText}*`,
+          text: `*Links:*\n• <${runUrl}|Open GitHub Actions run>\n• <${allureReportUrl}|Open Allure report>`,
         },
       },
       {
