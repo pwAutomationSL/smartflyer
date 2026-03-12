@@ -13,3 +13,9 @@ test-results/
 allure-results/
 allure-report/
 clean_report/
+# Generated reports
+allure-report/
+site/
+report-meta.json
+slack-data.json
+allure-results/

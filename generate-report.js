@@ -14,6 +14,7 @@ const ss = pad(now.getSeconds());
 
 const runId = `${yyyy}-${mm}-${dd}-${hh}${mi}${ss}`;
 const reportTitle = `Regression ${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
+const reportFileName = `Regression_${dd}_${mm}_${yyyy}.html`;
 
 console.log(`Generating Allure report for run: ${runId}`);
 
@@ -22,25 +23,48 @@ execSync('npx allure generate allure-results --clean --single-file', {
 });
 
 const root = process.cwd();
+const allureReportRoot = path.join(root, 'allure-report');
+const generatedIndex = path.join(allureReportRoot, 'index.html');
+const namedReportPath = path.join(allureReportRoot, reportFileName);
+
+if (!fs.existsSync(generatedIndex)) {
+  throw new Error(`Allure report was not generated: ${generatedIndex} not found`);
+}
+
+// Rename Allure's default index.html to your desired filename
+if (fs.existsSync(namedReportPath)) {
+  fs.unlinkSync(namedReportPath);
+}
+fs.renameSync(generatedIndex, namedReportPath);
+console.log(`✔ Report saved as: ${namedReportPath}`);
+
+// Prepare Pages site
 const pagesRoot = path.join(root, 'site');
 const reportsRoot = path.join(pagesRoot, 'reports');
 const runFolder = path.join(reportsRoot, runId);
 
 fs.mkdirSync(runFolder, { recursive: true });
 
-const sourceIndex = path.join(root, 'allure-report', 'index.html');
+// Keep the same named file in the run folder
+const targetNamedReport = path.join(runFolder, reportFileName);
+fs.copyFileSync(namedReportPath, targetNamedReport);
+
+// Also create index.html inside the Pages run folder only,
+// so GitHub Pages can open /reports/<runId>/ directly
 const targetIndex = path.join(runFolder, 'index.html');
+fs.copyFileSync(namedReportPath, targetIndex);
 
-fs.copyFileSync(sourceIndex, targetIndex);
-console.log(`✔ Report saved to: ${targetIndex}`);
+console.log(`✔ Pages report saved to: ${targetNamedReport}`);
 
-// Create/update a simple homepage with links to all reports
-const reportDirs = fs
-  .readdirSync(reportsRoot, { withFileTypes: true })
-  .filter((d) => d.isDirectory())
-  .map((d) => d.name)
-  .sort()
-  .reverse();
+// Build history page
+const reportDirs = fs.existsSync(reportsRoot)
+  ? fs
+      .readdirSync(reportsRoot, { withFileTypes: true })
+      .filter((d) => d.isDirectory())
+      .map((d) => d.name)
+      .sort()
+      .reverse()
+  : [];
 
 const links = reportDirs
   .map(
@@ -82,6 +106,7 @@ fs.writeFileSync(
   JSON.stringify(
     {
       runId,
+      reportFileName,
       reportUrlPath: `/reports/${runId}/`,
       reportTitle,
     },
