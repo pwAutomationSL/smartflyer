@@ -83,9 +83,9 @@ async function main() {
         text: {
           type: 'mrkdwn',
           text:
-            `✅ *${stats.passed} passed*   •   ` +
-            `❌ *${stats.failed} failed*   •   ` +
-            `🐞 *${stats.broken} bugs*   •   ` +
+            `✅ *${stats.passed} passed*  •  ` +
+            `❌ *${stats.failed} failed*  •  ` +
+            `🐞 *${stats.broken} bugs*  •  ` +
             `⏭️ *${stats.skipped} skipped*`,
         },
       },
@@ -99,8 +99,8 @@ async function main() {
           text:
             `The latest testing suite run is now completed. ` +
             `The run included *${stats.total} tests*.\n\n` +
-            `Repository: *${repo}*\n` +
-            `Branch: *${branch}*`,
+            `*Repository:* ${repo}\n` +
+            `*Branch:* ${branch}`,
         },
       },
       {
@@ -115,15 +115,6 @@ async function main() {
             },
             style: 'primary',
             url: reportUrl,
-          },
-          {
-            type: 'button',
-            text: {
-              type: 'plain_text',
-              text: 'Open GitHub Run',
-              emoji: true,
-            },
-            url: runUrl,
           },
         ],
       },
