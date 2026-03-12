@@ -40,6 +40,7 @@ export class Clients {
   public readonly PRIMARY_PASSENGER = `//button[contains(.,'Primary Passenger')]`;
   public readonly RELATED_PASSENGERS = `//button[contains(.,'Related Passengers')]`;
   public readonly RELATED_PASSENGERS_TAB = `//button[text()="RELATED TRAVELERS"]`;
+  public readonly PREFERENCES_TAB = `//button[text()="PREFERENCES"]`;
   public readonly SHARE_BUTTON = `//button[text()="Share"]`;
   public readonly PROFILE_FORM_CARD = `//button/h5[text()="Profile Form"]`;
   public readonly PROFILE_FORM_CARD_RADIO = `//button/h5[text()="Profile Form"]/preceding-sibling::span`;
@@ -94,6 +95,19 @@ export class Clients {
   public readonly RELATED_PASSENGER_EXPAND = `(//button[contains(.,'Related Passengers')]/following-sibling::div//button)[1]`;
   public readonly RELATED_PASSENGER_EXPAND_FROM_TAB = `//div[@role="button" and @aria-label="Expand"]`;
   public readonly RELATED_PASSENGERS_EXPAND = `(//button[contains(.,'Related Passengers')])[1]`;
+  public readonly TRASH_ICON_LOYALTY = `//h5[text()='Loyalty Program']/../../following-sibling::div//button[contains(@class,'text-red-500')]`;
+  public readonly GENERAL_INTEREST_SECTION = `//h5[text()='General Interests']/following-sibling::div/div`;
+  public readonly FLIGHT_PREFERENCES = `//h5[text()='Flight Preferences']/../../following-sibling::div`;
+  public readonly ALLERGIES_RESTRICTIONS = `//h5[text()='Allergies & Dietary Restrictions']/../../following-sibling::div`;
+  public readonly BEVERAGE_PREFERENCES_SECTION = `//h5[text()='Beverage Preferences']/following-sibling::div/div`;
+  public readonly PILLOW_PREFERENCES_SECTION = `//h5[text()='Pillow Preferences']/following-sibling::div/div`;
+  public readonly ROOM_CONFIGURATION_SECTION = `//h5[text()='Room Configuration']/following-sibling::div/div`;
+  public readonly SPA_PREFERENCES_SECTION = `//h5[text()='Spa Preferences']/following-sibling::div/div`;
+  public readonly GENERAL_LIKES_DISLIKES_SECTION = `//h5[text()='General Likes & Dislikes']/following-sibling::div/div`;
+  public readonly COMFORT_RELATED_DETAILS_HEIGHT_SECTION = `//h5[text()='Comfort-related Details']/../../following-sibling::div/div/div[1]/div[2]`;
+  public readonly COMFORT_RELATED_DETAILS_WHEIGHT_SECTION = `//h5[text()='Comfort-related Details']/../../following-sibling::div/div/div[2]/div[2]`;
+  public readonly COMFORT_RELATED_DETAILS_SECTION = `//h5[text()='Comfort-related Details']/../../following-sibling::div/div[2]`;
+
   public readonly PASSPORT_ISSUE_COUNTRY_OPTION = (country: string) =>
     `//div[@role="listbox"]//p[text()='${country}']`;
   public readonly MAIN_PASSENGER_TAB = `(//div[contains(@class,"Layout_content")]//button[@aria-expanded="false"])[1]`;
@@ -494,6 +508,9 @@ export class Clients {
   public async goToRelatedTravelersTab() {
     await this.page.locator(this.RELATED_PASSENGERS_TAB).click();
   }
+  public async goToPreferencesTab() {
+    await this.page.locator(this.PREFERENCES_TAB).click();
+  }
   public async clickShare() {
     await this.page.locator(this.SHARE_BUTTON).click();
   }
@@ -571,18 +588,79 @@ export class Clients {
 
   public async fillLoyaltyProgram() {
     await this.page.locator(`//h5[text()="Loyalty Program"]/../..`).click();
+    await this.page.locator(`//button[text()='Add New Loyalty Program']`).click();
+    await this.page
+      .locator(`//div[text()='Select loyalty program']/../following-sibling::div`)
+      .click();
+    await this.page
+      .locator(`//div[@role="option"]/p[text()='American Airlines: AAdvantage']`)
+      .click();
+    await this.page.waitForTimeout(300);
+    await this.page
+      .locator(`//input[@name="primary_passenger.loyalty_numbers.0.number"]`)
+      .fill('23423412');
   }
 
   public async fillAllergiesAndDietaryRestrictions() {
     await this.page.locator(`//h5[text()="Allergies & Dietary Restrictions"]/../..`).click();
+    await this.page
+      .locator(`//textarea[@name="primary_passenger.preference_data.allergies"]`)
+      .fill(
+        'Peanut allergy, tree nut allergy, lactose intolerance, gluten intolerance, shellfish allergy, sesame allergy, soy allergy, egg allergy, dairy-free, gluten-free, vegetarian, vegan.',
+      );
   }
 
   public async fillFlightPreferences() {
     await this.page.locator(`//h5[text()="Flight Preferences"]/../..`).click();
+    await this.page.getByRole('radio', { name: 'Commercial' }).check();
+    await this.page.getByRole('radio', { name: 'Aisle' }).check();
+    await this.page.getByRole('button', { name: 'First Class' }).click();
   }
 
   public async fillTravelPreferencesByCategory() {
-    await this.page.locator(`//h5[text()="Travel Preferences by Category"]/../..`).click();
+    await this.page.getByRole('button', { name: 'Travel Preferences by Category' }).click();
+    await this.page
+      .getByRole('textbox', { name: 'Please let us know any flight' })
+      .fill(
+        'Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.',
+      );
+    await this.page.getByRole('button', { name: 'Stay' }).click();
+    await this.page.getByRole('button', { name: 'Boutique Hotels' }).click();
+    await this.page.getByRole('button', { name: 'Design-Focused Hotels' }).click();
+    await this.page
+      .getByRole('textbox', { name: 'What else should we know?' })
+      .fill(
+        'Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.',
+      );
+    await this.page.getByRole('button', { name: 'Lifestyle' }).click();
+    await this.page.getByRole('button', { name: 'Adventure' }).click();
+    await this.page.getByRole('button', { name: 'Red Wine' }).click();
+    await this.page.getByRole('button', { name: 'Foam Pillows' }).click();
+    await this.page.getByRole('button', { name: 'King Beds' }).click();
+    await this.page.getByRole('button', { name: 'Female Therapist' }).click();
+    await this.page
+      .getByRole('textbox', { name: "If you're an spa enthusiast," })
+      .fill('Ad litora torquent per conubia nostra inceptos himenaeos.');
+    await this.page
+      .getByRole('textbox', { name: 'As we craft your trip, any' })
+      .fill('Ad litora torquent per conubia nostra inceptos himenaeos.');
+    await this.page.getByRole('button', { name: 'Personal' }).click();
+    await this.page.getByRole('button', { name: 'Metric' }).click();
+    await this.page
+      .locator(
+        'input[name="primary_passenger.preference_data.personal.comfort_related.metric.height"]',
+      )
+      .fill('180');
+    await this.page
+      .locator(
+        'input[name="primary_passenger.preference_data.personal.comfort_related.metric.weight"]',
+      )
+      .fill('80');
+    await this.page
+      .getByRole('textbox', { name: 'Please provide any personal' })
+      .fill(
+        'Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. ',
+      );
   }
   public async selectAirports(airports: string[]) {
     await this.page
