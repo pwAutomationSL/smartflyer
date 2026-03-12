@@ -63,14 +63,72 @@ jobs:
             ? fs.readdirSync(dir).filter(f => f.endsWith('-result.json'))
             : [];
 
-          const stats = { total: 0, passed: 0, failed: 0, broken: 0, skipped: 0, unknown: 0 };
+          const grouped = new Map();
 
           for (const file of files) {
-            const json = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
-            const status = json.status || 'unknown';
-            stats.total++;
-            if (Object.prototype.hasOwnProperty.call(stats, status)) stats[status]++;
-            else stats.unknown++;
+            const filePath = path.join(dir, file);
+            const json = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+            const key =
+              json.historyId ||
+              json.testCaseId ||
+              json.fullName ||
+              json.name ||
+              file;
+
+            if (!grouped.has(key)) {
+              grouped.set(key, []);
+            }
+
+            grouped.get(key).push(json);
+          }
+
+          const stats = {
+            total: 0,
+            passed: 0,
+            failed: 0,
+            broken: 0,
+            skipped: 0,
+            unknown: 0,
+            flaky: 0
+          };
+
+          for (const attempts of grouped.values()) {
+            stats.total += 1;
+
+            const statuses = attempts.map(a => a.status || 'unknown');
+            const hasPassed = statuses.includes('passed');
+            const hasFailed = statuses.includes('failed');
+            const hasBroken = statuses.includes('broken');
+            const hasSkipped = statuses.includes('skipped');
+
+            // If any retry passed, final result should be treated as passed
+            if (hasPassed) {
+              stats.passed += 1;
+
+              // Mark as flaky if there was a failed/broken attempt before passing
+              if (hasFailed || hasBroken) {
+                stats.flaky += 1;
+              }
+              continue;
+            }
+
+            if (hasFailed) {
+              stats.failed += 1;
+              continue;
+            }
+
+            if (hasBroken) {
+              stats.broken += 1;
+              continue;
+            }
+
+            if (hasSkipped) {
+              stats.skipped += 1;
+              continue;
+            }
+
+            stats.unknown += 1;
           }
 
           fs.writeFileSync('slack-data.json', JSON.stringify(stats, null, 2));
