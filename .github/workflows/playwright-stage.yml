@@ -89,8 +89,7 @@ jobs:
             failed: 0,
             broken: 0,
             skipped: 0,
-            unknown: 0,
-            flaky: 0
+            unknown: 0
           };
 
           for (const attempts of grouped.values()) {
@@ -102,14 +101,8 @@ jobs:
             const hasBroken = statuses.includes('broken');
             const hasSkipped = statuses.includes('skipped');
 
-            // If any retry passed, final result should be treated as passed
             if (hasPassed) {
               stats.passed += 1;
-
-              // Mark as flaky if there was a failed/broken attempt before passing
-              if (hasFailed || hasBroken) {
-                stats.flaky += 1;
-              }
               continue;
             }
 
@@ -140,7 +133,6 @@ jobs:
             );
           }
           "
-
       - name: Upload Slack data artifact
         if: always()
         uses: actions/upload-artifact@v6

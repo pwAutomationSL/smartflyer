@@ -60,7 +60,6 @@ async function main() {
     broken: 0,
     skipped: 0,
     unknown: 0,
-    flaky: 0,
   });
 
   const meta = readJsonIfExists(path.join(process.cwd(), 'report-meta.json'), {
@@ -88,7 +87,6 @@ async function main() {
             `✅ *${stats.passed} passed*  •  ` +
             `❌ *${stats.failed} failed*  •  ` +
             `🐞 *${stats.broken} bugs*  •  ` +
-            `🔁 *${stats.flaky || 0} flaky*  •  ` +
             `⏭️ *${stats.skipped} skipped*`,
         },
       },
@@ -110,10 +108,7 @@ async function main() {
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text:
-            `*Links:*\n` +
-            `• <${reportUrl}|View Detailed Report>\n` +
-            `• <${runUrl}|Open GitHub Run>`,
+          text: `*Links:*\n` + `• <${reportUrl}|View Detailed Report>\n`,
         },
       },
     ],
