@@ -2,31 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
-function getAllureStats(resultsDir) {
-  const files = fs.readdirSync(resultsDir).filter((file) => file.endsWith('-result.json'));
-
-  const stats = {
-    total: 0,
-    passed: 0,
-    failed: 0,
-    broken: 0,
-    skipped: 0,
-    unknown: 0,
-  };
-
-  for (const file of files) {
-    const json = JSON.parse(fs.readFileSync(path.join(resultsDir, file), 'utf8'));
-    const status = json.status || 'unknown';
-
-    stats.total += 1;
-    if (status === 'passed') stats.passed += 1;
-    else if (status === 'failed') stats.failed += 1;
-    else if (status === 'broken') stats.broken += 1;
-    else if (status === 'skipped') stats.skipped += 1;
-    else stats.unknown += 1;
-  }
-
-  return stats;
+function readJsonIfExists(filePath, fallback = {}) {
+  if (!fs.existsSync(filePath)) return fallback;
+  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
 function postToSlack(webhookUrl, payload) {
@@ -38,14 +16,23 @@ function postToSlack(webhookUrl, payload) {
         hostname: url.hostname,
         path: url.pathname + url.search,
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
       (res) => {
         let body = '';
-        res.on('data', (chunk) => (body += chunk));
+
+        res.on('data', (chunk) => {
+          body += chunk;
+        });
+
         res.on('end', () => {
-          if (res.statusCode >= 200 && res.statusCode < 300) resolve(body);
-          else reject(new Error(`Slack request failed: ${res.statusCode} ${body}`));
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            resolve(body);
+          } else {
+            reject(new Error(`Slack request failed: ${res.statusCode} ${body}`));
+          }
         });
       },
     );
@@ -58,20 +45,34 @@ function postToSlack(webhookUrl, payload) {
 
 async function main() {
   const webhookUrl = process.env.SLACK_WEBHOOK_URL;
-  if (!webhookUrl) throw new Error('Missing SLACK_WEBHOOK_URL');
+  if (!webhookUrl) {
+    throw new Error('Missing SLACK_WEBHOOK_URL');
+  }
 
-  const repo = process.env.GITHUB_REPOSITORY || 'unknown-repo';
+  const repo = 'https://github.com/pwAutomationSL/smartflyer' || 'unknown-repo';
   const branch = process.env.GITHUB_REF_NAME || 'unknown-branch';
   const runUrl = `${process.env.GITHUB_SERVER_URL}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
 
-  const stats = getAllureStats(path.join(process.cwd(), 'allure-results'));
+  const stats = readJsonIfExists(path.join(process.cwd(), 'slack-data.json'), {
+    total: 0,
+    passed: 0,
+    failed: 0,
+    broken: 0,
+    skipped: 0,
+    unknown: 0,
+  });
 
-  const meta = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'report-meta.json'), 'utf8'));
+  const meta = readJsonIfExists(path.join(process.cwd(), 'report-meta.json'), {
+    reportUrlPath: '/',
+  });
 
-  const baseUrl = process.env.ALLURE_REPORT_BASE_URL;
-  const reportUrl = `${baseUrl}${meta.reportUrlPath}`;
+  const baseUrl = (process.env.ALLURE_REPORT_BASE_URL || '').replace(/\/$/, '');
+  const reportPath = (meta.reportUrlPath || '/').startsWith('/')
+    ? meta.reportUrlPath
+    : `/${meta.reportUrlPath}`;
+  const reportUrl = `${baseUrl}${reportPath}`;
 
-  const hasFailures = stats.failed > 0 || stats.broken > 0;
+  const hasFailures = Number(stats.failed) > 0 || Number(stats.broken) > 0;
   const statusEmoji = hasFailures ? '❌' : '✅';
   const statusText = hasFailures ? 'FAILED' : 'PASSED';
 
@@ -110,11 +111,20 @@ async function main() {
             type: 'button',
             text: {
               type: 'plain_text',
-              text: 'View Detailed Report',
+              text: 'View Full Report',
               emoji: true,
             },
             style: 'primary',
             url: reportUrl,
+          },
+          {
+            type: 'button',
+            text: {
+              type: 'plain_text',
+              text: 'Open GitHub Run',
+              emoji: true,
+            },
+            url: runUrl,
           },
         ],
       },
@@ -125,7 +135,7 @@ async function main() {
   console.log('Slack notification sent successfully');
 }
 
-main().catch((err) => {
-  console.error(err);
+main().catch((error) => {
+  console.error(error);
   process.exit(1);
 });
