@@ -105,19 +105,11 @@ async function main() {
         },
       },
       {
-        type: 'actions',
-        elements: [
-          {
-            type: 'button',
-            text: {
-              type: 'plain_text',
-              text: 'View Detailed Report',
-              emoji: true,
-            },
-            style: 'primary',
-            url: reportUrl,
-          },
-        ],
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: `*Links:*\n` + `• <${reportUrl}|View Detailed Report>\n`,
+        },
       },
     ],
   };
