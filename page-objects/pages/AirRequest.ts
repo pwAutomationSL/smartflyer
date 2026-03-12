@@ -42,7 +42,7 @@ export class AirRequest {
   public readonly CLIENT_ID = `//input[contains(@name,'client_identity')]`;
   public readonly GENDER_RED_ASTERISK = `//input[contains(@name,'gender')]//..//p[contains(@class,'after:text-red-500')]`;
   public readonly GENDER_DROPDOWN = (index: number = 1) =>
-    `(//div[contains(.,'Select...') and contains(@id,'select')]/../../div[2])[${index}]`;
+    `(//p[text()='Gender']/following-sibling::div/div/div[2])[${index}]`;
   public readonly GENDER_DROPDOWN_POPUP = `//dialog//div[contains(.,'Select...') and contains(@id,'select')]/../../div[2]`;
   public readonly MALE_DROPDOWN = `//div[@role="listbox"]//p[contains(.,'Male')]`;
   public readonly FEMALE_DROPDOWN = `//div[@role="listbox"]//p[contains(.,'Female')]`;

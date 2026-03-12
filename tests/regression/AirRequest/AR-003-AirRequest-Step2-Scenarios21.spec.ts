@@ -1,7 +1,7 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 
 const PROGAM = 'American Airlines: AAdvantage';
-const PHONE = '23442343242332';
+const PHONE = '12321';
 const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
 test.describe('AR-003 - Air Request - Step #21 ', () => {
   test.setTimeout(200_000);
