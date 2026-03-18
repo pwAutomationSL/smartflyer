@@ -3,7 +3,7 @@ interface EnvConfig {
   USERNAME: string;
   PASSWORD: string;
 }
-process.env.ENVIRONMENT = process.env.ENVIRONMENT?.trim() || 'qa2';
+process.env.ENVIRONMENT = process.env.ENVIRONMENT?.trim() || 'stage';
 export function getEnvConfig(): EnvConfig {
   const env = process.env.ENVIRONMENT ?? 'stage';
   switch (env) {
