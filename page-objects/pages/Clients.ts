@@ -9,6 +9,8 @@ export class Clients {
   public readonly HEADER = `//h1`;
   public readonly HEADER_H2 = `//h2`;
   public readonly POPUP_HEADER_H2 = `//dialog//h2`;
+  public readonly POPUP_EDIT_HEADER = `(//dialog//header/following-sibling::div/div/p)[1]`;
+  public readonly POPUP_EDIT_HEADER_INFO = `(//dialog//header/following-sibling::div/div/p)[2]`;
   public readonly QUICK_ADD = `//button[contains(.,'Quick Add')]`;
   public readonly SPINNER_LOADER = `//div[@id="ClientTable_processing"]`;
   public readonly USERNAME_HEADER = `//div[contains(@class,'user-data')]//h4`;
@@ -60,7 +62,7 @@ export class Clients {
   public readonly DATES_NUMNBERS_PASSPORT_NAME = `(//h5[text()="Passport Details"]/following-sibling::div/div[2]/div/div)[1]`;
   public readonly PRIMARY_PASSENGER_FIRST_NAME = `//input[@name="primary_passenger.client.first_name"]`;
   public readonly PRIMARY_PASSENGER_LAST_NAME = `//input[@name="primary_passenger.client.last_name"]`;
-  public readonly PRIMARY_PASSENGER_DATE_OF_BIRTH = `//input[@name="primary_passenger.client.date_of_birth"]`;
+  public readonly PRIMARY_PASSENGER_DATE_OF_BIRTH = `//*[contains(@for,'primary_passenger.client.date_of_birth')]/following-sibling::div//input`;
   public readonly PRIMARY_PASSENGER_GENDER = `//div[contains(text(),'Select gender')]/../following-sibling::div`;
   public readonly PRIMARY_PASSENGER_EMAIL = `//input[@name="primary_passenger.client.email"]`;
   public readonly PRIMARY_PASSENGER_PHONE_NUMBER = `//input[@name="primary_passenger.client.phone"]`;
@@ -77,16 +79,22 @@ export class Clients {
   public readonly CLIENT_PROFILE_DOB = `(//h1/../following-sibling::div//span)[1]`;
   public readonly CLIENT_PROFILE_PHONE = `(//h1/../following-sibling::div//span)[2]`;
   public readonly CLIENT_PROFILE_EMAIL = `(//h1/../following-sibling::div//span)[3]`;
-  public readonly CLIENT_PROFILE_NAME_BI = `(//h5[text()="Basic Information"]/following-sibling::div//p)[1]`;
-  public readonly CLIENT_PROFILE_DOB_BI = `(//h5[text()="Basic Information"]/following-sibling::div//p)[3]`;
-  public readonly CLIENT_PROFILE_GENDER_BI = `(//h5[text()="Basic Information"]/following-sibling::div//p)[4]`;
-  public readonly CLIENT_PROFILE_EMAIL_BI = `(//h5[text()="Basic Information"]/following-sibling::div//p)[5]`;
-  public readonly CLIENT_PROFILE_PHONE_BI = `(//h5[text()="Basic Information"]/following-sibling::div//p)[6]`;
-  public readonly RELATED_PASSENGER_NAME_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[1]`;
-  public readonly RELATED_PASSENGER_DOB_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[2]`;
-  public readonly RELATED_PASSENGER_GENDER_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[3]`;
-  public readonly RELATED_PASSENGER_EMAIL_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[5]`;
-  public readonly RELATED_PASSENGER_PHONE_BI = `(//h5[text()="Basic Information"]/following-sibling::div//span)[8]`;
+  public readonly CLIENT_PROFILE_NAME_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//p)[1]`;
+  public readonly CLIENT_PROFILE_DOB_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//p)[3]`;
+  public readonly CLIENT_PROFILE_GENDER_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//p)[4]`;
+  public readonly CLIENT_PROFILE_EMAIL_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//p)[5]`;
+  public readonly CLIENT_PROFILE_PHONE_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//p)[6]`;
+  public readonly RELATED_PASSENGER_NAME_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//span)[1]`;
+  public readonly RELATED_PASSENGER_DOB_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//span)[2]`;
+  public readonly RELATED_PASSENGER_GENDER_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//span)[3]`;
+  public readonly RELATED_PASSENGER_EMAIL_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//span)[5]`;
+  public readonly RELATED_PASSENGER_PHONE_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//span)[8]`;
+  public readonly CLIENT_PROFILE_STREET_ADRESS = `(//h5[text()="Address"]/../following-sibling::div//p)[2]`;
+  public readonly CLIENT_PROFILE_ZIP_CODE_ADRESS = `(//h5[text()="Address"]/../following-sibling::div//p)[3]`;
+  public readonly CLIENT_PROFILE_COUNTRY_CITY_ADRESS = `(//h5[text()="Address"]/../following-sibling::div//p)[4]`;
+  public readonly CLIENT_PROFILE_EMERGENCY_CONTACT_NAME = `(//h5[text()="Emergency Contact"]/../following-sibling::div//p)[1]`;
+  public readonly CLIENT_PROFILE_EMERGENCY_CONTACT_EMAIL = `(//h5[text()="Emergency Contact"]/../following-sibling::div//p)[2]`;
+  public readonly CLIENT_PROFILE_EMERGENCY_CONTACT_PHONE = `(//h5[text()="Emergency Contact"]/../following-sibling::div//p)[3]`;
   public readonly CLIENT_NAME_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[1]`;
   public readonly CLIENT_EMAIL_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[2]`;
   public readonly CLIENT_PHONE_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[3]`;
@@ -151,6 +159,8 @@ export class Clients {
     `//input[@name="primary_passenger.client.emergency_contact_${variable}"]`;
   public readonly TRAVEL_DATA_GLOBAL_ENTRY = `//input[@name="primary_passenger.tsa.global_entry"]`;
   public readonly TRAVEL_DATA_KTN = `//input[@name="primary_passenger.tsa.tsa_pre_check_number"]`;
+  public readonly PASSPORT_NUMBER_TD = `//input[@name="primary_passenger.passport.passport_number"]`;
+  public readonly SAVE_CHANGES = `//button[text()="Save changes"]`;
   public async clickCreate() {
     await this.page.locator(this.HEADER).click();
   }
@@ -402,7 +412,7 @@ export class Clients {
   }
 
   public async fillAddressLine1(value: string) {
-    await this.page.getByRole('textbox', { name: 'Street address' }).fill(value);
+    await this.page.getByRole('textbox', { name: 'Street address' }).first().fill(value);
   }
 
   public async selectCountry(value: string) {
@@ -411,11 +421,11 @@ export class Clients {
   }
 
   public async fillCity(value: string) {
-    await this.page.getByRole('textbox', { name: 'Enter city' }).fill(value);
+    await this.page.getByRole('textbox', { name: 'Enter city' }).first().fill(value);
   }
 
   public async fillZipCode(value: string) {
-    await this.page.getByRole('textbox', { name: 'Enter ZIP or postal code' }).fill(value);
+    await this.page.getByRole('textbox', { name: 'Enter ZIP or postal code' }).first().fill(value);
   }
 
   public async fillPassport(value: string) {
@@ -565,7 +575,9 @@ export class Clients {
   public async fillTravelData(global_entry: string, ktn: string) {
     await this.page.locator(`//h5[text()="Travel Data"]/../..`).click();
     await this.page.locator(this.TRAVEL_DATA_GLOBAL_ENTRY).fill(global_entry);
-    await this.page.locator(`//input[@name="primary_passenger.tsa.global_expiry_date"]`).click();
+    await this.page
+      .locator(`//label[text()='Global entry expiry date']/following-sibling::div//input`)
+      .click();
     await this.page.locator(`//select[@aria-label="Select year"]`).selectOption('2030');
     await this.page.waitForTimeout(200);
     await this.page
@@ -575,8 +587,21 @@ export class Clients {
       .last()
       .click();
     await this.page.locator(this.TRAVEL_DATA_KTN).fill(ktn);
-    await this.page.locator(`//input[@name="primary_passenger.tsa.expiry_date"]`).click();
+    await this.page
+      .locator(`//label[text()='KTN expiry date']/following-sibling::div//input`)
+      .click();
     await this.page.locator(`//select[@aria-label="Select year"]`).selectOption('2030');
+    await this.page.waitForTimeout(200);
+    await this.page
+      .locator(
+        `//div[@class="react-datepicker__week"][3]//div[@role="option" and @aria-disabled="false"]`,
+      )
+      .last()
+      .click();
+    await this.page.locator(this.PASSPORT_NUMBER_TD).fill('44444444');
+    await this.page
+      .locator(`//label[text()='Passport expiry date']/following-sibling::div//input`)
+      .click();
     await this.page.waitForTimeout(200);
     await this.page
       .locator(
@@ -674,6 +699,56 @@ export class Clients {
         .click();
     }
     await this.page.locator(`//h5[text()='Preferred Home Airport(s)']`).click();
+  }
+
+  public async editClientBySection(section: string) {
+    await this.page.locator(`//h5[text()='${section}']/following-sibling::button`).click();
+  }
+  public async editBasicInfoFirstName(value: string) {
+    await this.page.locator(this.PRIMARY_PASSENGER_FIRST_NAME).fill(value);
+  }
+
+  public async editBasicInfoLastName(value: string) {
+    await this.page.locator(this.PRIMARY_PASSENGER_LAST_NAME).fill(value);
+  }
+
+  public async editBasicInfoEmail(value: string) {
+    await this.page.locator(this.PRIMARY_PASSENGER_EMAIL).fill(value);
+  }
+
+  public async editBasicInfoDOB(value: string) {
+    await this.page.locator(this.PRIMARY_PASSENGER_DATE_OF_BIRTH).fill(value);
+  }
+
+  public async editBasicInfoGender(value: string) {
+    await this.page.locator(this.PRIMARY_PASSENGER_GENDER).click();
+    await this.page.locator(`//p[text()='${value}']`).click();
+  }
+
+  public async editBasicInfoPhoneNumber(value: string) {
+    await this.page.locator(this.PRIMARY_PASSENGER_PHONE_NUMBER).fill(value);
+  }
+
+  public async editBasicInfoPreferredAirport(value: string) {
+    await this.page.locator('#airport_container').getByLabel('', { exact: true }).click();
+    await this.page.locator('input[type="search"]').fill(value);
+    await this.page.getByRole('treeitem', { name: value, exact: true }).click();
+  }
+  public async saveChanges() {
+    await this.page.locator(this.SAVE_CHANGES).click();
+  }
+  public async editSelectCountry(value: string) {
+    await this.page.locator(`(//p[text()='Country'])[1]/following-sibling::div/div/div[2]`).click();
+    await this.page.locator(`//div[@role="listbox"]/div/p[text()='${value}']`).click();
+  }
+  public async editEmergencyContact(data: { name: string; email: string; phone: string }) {
+    await this.page.locator(this.EMERGENCY_CONTACT_FIELD('name')).fill(data.name);
+    await this.page.locator(this.EMERGENCY_CONTACT_FIELD('email')).fill(data.email);
+    await this.page.locator(this.EMERGENCY_CONTACT_FIELD('phone')).fill(data.phone);
+  }
+  public async editAddressLine1(value: string) {
+    await this.page.getByRole('textbox', { name: 'Street address' }).first().fill(value);
+    await this.page.locator(`//label[text()='Address Line 2']`).first().click();
   }
 }
 export const clients = (page: Page) => new Clients({ page });
