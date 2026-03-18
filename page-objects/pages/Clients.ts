@@ -52,7 +52,7 @@ export class Clients {
   public readonly SHARE_EMAIL_CC = `//label[@for="cc_email"]`;
   public readonly SHARE_EMAIL_BCC = `//label[@for="bcc_email"]`;
   public readonly SHARE_EMAIL_MESSAGE = `//textarea[@id="clientMessage"]`;
-  public readonly SHARE_EMAIL_MESSAGE_LIMIT = `//label[@for="message"]/following-sibling::span`;
+  public readonly SHARE_EMAIL_MESSAGE_LIMIT = `//label[@for="message"]/../following-sibling::div//span`;
   public readonly SHARE_CANCEL = `//button[text()="Cancel"]`;
   public readonly SHARE_SEND_FORM = `//button[text()="Send form"]`;
   public readonly RELATED_PASSENGER_ADDED_NAME = `(//button[contains(.,'Related Passengers')]/following-sibling::div//button)[1]//h4`;
@@ -109,7 +109,7 @@ export class Clients {
   public readonly ALLERGIES_RESTRICTIONS = `//h5[text()='Allergies & Dietary Restrictions']/../../following-sibling::div`;
   public readonly BEVERAGE_PREFERENCES_SECTION = `//h5[text()='Beverage Preferences']/following-sibling::div/div`;
   public readonly PILLOW_PREFERENCES_SECTION = `//h5[text()='Pillow Preferences']/following-sibling::div/div`;
-  public readonly ROOM_CONFIGURATION_SECTION = `//h5[text()='Room Configuration']/following-sibling::div/div`;
+  public readonly ROOM_CONFIGURATION_SECTION = `//h5[text()='Room Configuration Preferences']/following-sibling::div/div`;
   public readonly SPA_PREFERENCES_SECTION = `//h5[text()='Spa Preferences']/following-sibling::div/div`;
   public readonly GENERAL_LIKES_DISLIKES_SECTION = `//h5[text()='General Likes & Dislikes']/following-sibling::div/div`;
   public readonly COMFORT_RELATED_DETAILS_HEIGHT_SECTION = `//h5[text()='Comfort-related Details']/../../following-sibling::div/div/div[1]/div[2]`;
@@ -130,7 +130,7 @@ export class Clients {
     `//input[@name="related_passengers.${index}.client.last_name"]`;
 
   public readonly RELATED_PASSENGER_DATE_OF_BIRTH = (index: number) =>
-    `//input[@name="related_passengers.${index}.client.date_of_birth"]`;
+    `//*[contains(@for,'related_passengers.${index}.client.date_of_birth')]/following-sibling::div`;
 
   public readonly RELATED_PASSENGER_GENDER = (index: number) =>
     `//input[@name="related_passengers.${index}.client.gender"]`;
