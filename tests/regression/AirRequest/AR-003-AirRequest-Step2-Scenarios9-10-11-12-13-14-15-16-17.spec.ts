@@ -332,7 +332,7 @@ test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
       });
       await test.step('13# Scenario - Edit Secondary Passenger Last Name', async () => {
         try {
-          await airRequest.fillPassengerLastName('', 1);
+          await airRequest.clearPassengerLastName(1);
           await airRequest.clickLabel();
           await expect(page.locator(airRequest.WARNING_LAST_NAME)).toContainText(
             'Last name is required',
@@ -398,7 +398,7 @@ test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
       });
       await test.step('16# Scenario - Edit Secondary Passenger phone number', async () => {
         try {
-          await airRequest.fillPassengerPhone(' ', 1);
+          await airRequest.fillPassengerPhone('2', 1);
           await airRequest.clickGeneric();
           await expect(page.locator(airRequest.WARNING_PHONE)).toContainText(
             'Invalid phone number',

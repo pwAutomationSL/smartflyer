@@ -259,6 +259,9 @@ export class AirRequest {
   public async fillPassengerLastName(name: string, index: number = 0) {
     await this.page.locator(this.LAST_NAME_PASSENGER(index)).fill(name);
   }
+  public async clearPassengerLastName(index: number = 0) {
+    await this.page.locator(this.LAST_NAME_PASSENGER(index)).clear();
+  }
   public async clickLabel() {
     await this.page.locator(this.KNOW_TRAVELER_LABEL).last().click({ delay: 200 });
   }
