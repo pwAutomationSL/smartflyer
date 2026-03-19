@@ -166,7 +166,7 @@ test.describe('PF-005 - e2e for Partner Form', () => {
       await partnersHotel.societySetting();
     });
     await test.step('21 - Click Save and Finish', async () => {
-      await partners.saveAndNext();
+      await partners.saveAndFinish();
     });
     await test.step('22 - Click Save and Finish', async () => {
       await sidebar.goToModule('Partners');

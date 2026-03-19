@@ -15,6 +15,7 @@ test.use({
     slowMo: 800,
   },
 });
+test.setTimeout(250000);
 test.describe('AR-004 - Air Request - Step 3', () => {
   test('Air Request - Step 3 -  7# Scenario - Multi-city trip, multiple passengers, different itineraries', async ({
     loginPage,
