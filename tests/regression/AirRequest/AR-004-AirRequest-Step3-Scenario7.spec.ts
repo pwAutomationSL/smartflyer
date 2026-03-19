@@ -12,7 +12,7 @@ const DEPARTURE_F2 = 'Chicago Rockford Airport';
 const DEPARTURE_SHORT_F2 = 'RFD';
 test.use({
   launchOptions: {
-    slowMo: 600,
+    slowMo: 800,
   },
 });
 test.describe('AR-004 - Air Request - Step 3', () => {

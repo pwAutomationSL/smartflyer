@@ -95,7 +95,7 @@ test.describe('AR-007 - Air Request - E2E - 3 - One Passenger, Multi City flight
       await airRequest.selectTravelDateFlight2();
       await airRequest.confirmDates();
       await airRequest.selectDepartureTimeFlight2(RETURN_TIME);
-      await airRequest.selectCabinClassMultiF1(CABIN_CLASS);
+      await airRequest.selectCabinClassMultiF1(CABIN_CLASS_2);
       await airRequest.selectCabinClassMultiF2(CABIN_CLASS_2);
       await airRequest.addAdditionalTripNotes('Window seat preferred');
       await airRequest.clickContinue();
@@ -137,7 +137,7 @@ test.describe('AR-007 - Air Request - E2E - 3 - One Passenger, Multi City flight
       await expect(page.locator(airRequest.TRAVEL_DATE).last()).toContainText('15, 2026');
       await expect(page.locator(airRequest.DEPARTURE_TIME).first()).toContainText(DEPARTURE_TIME);
       await expect(page.locator(airRequest.DEPARTURE_TIME).last()).toContainText(RETURN_TIME);
-      await expect(page.locator(airRequest.CABIN_CLASS).first()).toContainText(CABIN_CLASS);
+      await expect(page.locator(airRequest.CABIN_CLASS).first()).toContainText(CABIN_CLASS_2);
       await expect(page.locator(airRequest.CABIN_CLASS).last()).toContainText(CABIN_CLASS_2);
       await expect(page.locator(airRequest.UPDATE_TRAVEL_PREFERENCES)).toBeEnabled();
       const airlines = await page.locator(airRequest.AIRLINES);
