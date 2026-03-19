@@ -35,8 +35,8 @@ export class Clients {
   public readonly INPUT_PASSPORT = `//input[@id="fileInput"]`;
   public readonly SAVE_MODAL = `//button[text()='Save Changes']`;
   public readonly PASSPORT_NUMBER = `//input[contains(@name,"passport_number")]`;
-  public readonly PASSPORT_DATE_OF_ISSUE = `//input[contains(@name,"issue_date")]`;
-  public readonly PASSPORT_DATE_OF_EXPIRY = `//input[contains(@name,"expiry_date")]`;
+  public readonly PASSPORT_DATE_OF_ISSUE = `//*[contains(.,'Date of Issue')]/following-sibling::div/div/div/input`;
+  public readonly PASSPORT_DATE_OF_EXPIRY = `//*[contains(.,'Date of Expiration')]/following-sibling::div/div/div/input`;
   public readonly PASSENGER_DOB = `//form//input[@id="passport_dob"]`;
   public readonly SUCCESS_MODAL = `//h2[contains(.,'Success')]`;
   public readonly PRIMARY_PASSENGER = `//button[contains(.,'Primary Passenger')]`;
@@ -57,9 +57,12 @@ export class Clients {
   public readonly SHARE_SEND_FORM = `//button[text()="Send form"]`;
   public readonly RELATED_PASSENGER_ADDED_NAME = `(//button[contains(.,'Related Passengers')]/following-sibling::div//button)[1]//h4`;
   public readonly EDIT_CLIENT_DETAILS = `//button[text()='Edit']`;
+  public readonly ADD_DOCUMENT_BUTTON = `//button[text()='Add Document']`;
+  public readonly ADD_DOCUMENT = `//span[text()='Add Document']`;
   public readonly CONFIRM_UPLOAD = `//button[contains(.,'Upload Files')]`;
-  public readonly PASSPORT_ISSUE_COUNTRY = `//p[text()='Passport issue country']/following-sibling::div/div/div[2]`;
+  public readonly PASSPORT_ISSUE_COUNTRY = `//p[text()='Passport issuing country']/following-sibling::div/div/div[2]`;
   public readonly DATES_NUMNBERS_PASSPORT_NAME = `(//h5[text()="Passport Details"]/following-sibling::div/div[2]/div/div)[1]`;
+  public readonly DATES_NUMNBERS_PASSPORT_NUMBER = `(//h5[text()="Uploads"]/../following-sibling::div//tbody/tr/td[3])`;
   public readonly PRIMARY_PASSENGER_FIRST_NAME = `//input[@name="primary_passenger.client.first_name"]`;
   public readonly PRIMARY_PASSENGER_LAST_NAME = `//input[@name="primary_passenger.client.last_name"]`;
   public readonly PRIMARY_PASSENGER_DATE_OF_BIRTH = `//*[contains(@for,'primary_passenger.client.date_of_birth')]/following-sibling::div//input`;
@@ -176,12 +179,25 @@ export class Clients {
   public async startFromScratch() {
     await this.page.getByRole('button', { name: 'Start from scratch' }).click();
   }
-  public async mainInformationQuickAdd(LAST_NAME: string, EMAIL: string) {
+  public async mainInformationQuickAdd(LAST_NAME: string, email: string) {
+    const emailInput = this.page.locator('#qa_email');
+    await emailInput.evaluate((el, value) => {
+      const input = el as HTMLInputElement;
+      const setter = Object.getOwnPropertyDescriptor(
+        window.HTMLInputElement.prototype,
+        'value',
+      )?.set;
+
+      setter?.call(input, value);
+      input.dispatchEvent(new InputEvent('input', { bubbles: true, data: value as string }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      input.dispatchEvent(new FocusEvent('blur', { bubbles: true }));
+    }, email);
+    await this.page.waitForTimeout(500);
     await this.page.getByRole('textbox', { name: 'Enter Preferred name' }).fill('TestName');
     await this.page.getByRole('textbox', { name: 'Enter First Name' }).fill('FirstName');
-    await this.page.getByRole('textbox', { name: 'Enter Middle Name' }).fill('Middle');
     await this.page.getByRole('textbox', { name: 'Enter Last Name' }).fill(LAST_NAME);
-    await this.page.getByRole('textbox', { name: 'Enter Email Address' }).fill(EMAIL);
+    await this.page.getByRole('textbox', { name: 'Enter Middle Name' }).fill('Middle');
     await this.page.getByRole('textbox', { name: 'eg.8000011111' }).fill('08001111111');
     await this.page.getByPlaceholder('mm/dd/yy').fill('2000-11-19');
     await this.page.getByRole('textbox', { name: 'Select Gender' }).click();
@@ -749,6 +765,26 @@ export class Clients {
   public async editAddressLine1(value: string) {
     await this.page.getByRole('textbox', { name: 'Street address' }).first().fill(value);
     await this.page.locator(`//label[text()='Address Line 2']`).first().click();
+  }
+  public async addDocument() {
+    await this.page.locator(this.ADD_DOCUMENT).click();
+  }
+  public async thisIsAPassport() {
+    await this.page
+      .locator(`//label[text()='This is a passport']/preceding-sibling::button`)
+      .click();
+  }
+  public async addNewPassportv2(passport_name: string) {
+    await this.page.locator(this.INPUT_PASSPORT).setInputFiles('./data/images/testImage.jpg');
+    await this.page.locator(this.PASSPORT_NUMBER).fill(passport_name);
+    await this.page.locator(this.PASSPORT_ISSUE_COUNTRY).click();
+    await this.page.locator(this.PASSPORT_ISSUE_COUNTRY_OPTION('United States')).click();
+    await this.page.waitForTimeout(100);
+    await this.page.locator(this.PASSPORT_DATE_OF_ISSUE).click();
+    await this.page.locator(`//div[@class="react-datepicker__week"][1]/div[1]`).click();
+    await this.page.locator(this.PASSPORT_DATE_OF_EXPIRY).click();
+    await this.page.locator(`//div[@class="react-datepicker__week"][4]/div[6]`).click();
+    await this.page.locator(this.ADD_DOCUMENT_BUTTON).click();
   }
 }
 export const clients = (page: Page) => new Clients({ page });

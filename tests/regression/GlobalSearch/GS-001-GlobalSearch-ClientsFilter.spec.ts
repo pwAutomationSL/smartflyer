@@ -2,7 +2,7 @@ import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { uniqueId } from '../../../page-objects';
 const unique = uniqueId();
 const LAST_NAME = `LastName` + unique;
-const EMAIL = `email` + unique + `@test.com`;
+const EMAIL = `${LAST_NAME}@asd.com`;
 test.describe('GS-001 - Search - Clients filter', () => {
   test('Login at Society (env) as an Admin Search by Last Name', async ({
     loginPage,

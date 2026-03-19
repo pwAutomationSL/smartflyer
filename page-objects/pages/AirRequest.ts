@@ -111,7 +111,7 @@ export class AirRequest {
   public readonly FREQUENT_FLYER_PROGRAM_SELECTED = `(//p[contains(.,'Airline program')]/../div/div/div[1]/div)[1]`;
   public readonly AIRLINE_PROGRAMS = `//div[contains(@id,'listbox')]//div`;
   public readonly DELETE_FF_PROGRAM = `//p[contains(.,'Frequent flyer program')]/../div//button`;
-  public readonly TRIP_NOTES = `//label[contains(.,'Additional trip notes')]/../following-sibling::div/textarea`;
+  public readonly TRIP_NOTES = `//label[contains(.,'Additional trip notes')]/../following-sibling::div//textarea`;
   public readonly CITY_COUNTRY_RESULT = `//div/div/../../../li/div/div/div/p[2]`;
   public readonly EMPTY_RESULTS = `//div/div/div/ul/li/div`;
   public readonly PREVIOUS_MONTH = `(//button[@aria-label="Previous Month"])[1]`;
@@ -193,7 +193,7 @@ export class AirRequest {
       .click();
   }
   public async selectFirstAgent() {
-    await this.page.locator(`(//div[contains(@id,'listbox')]/div/p)[1]`).click();
+    await this.page.locator(`(//div[contains(@id,'listbox')]/div/p)[2]`).click();
   }
   public async startFromScrath() {
     await this.page.waitForTimeout(400);
@@ -567,6 +567,7 @@ export class AirRequest {
     await this.page.waitForTimeout(400);
   }
   public async overWriteArrivalAirportFlight2(airport: string, airportShort: string) {
+    await this.page.waitForTimeout(700);
     await this.page
       .locator(`//input[@name="passengerTrips.0.flights.1.arrival"]`)
       .first()
