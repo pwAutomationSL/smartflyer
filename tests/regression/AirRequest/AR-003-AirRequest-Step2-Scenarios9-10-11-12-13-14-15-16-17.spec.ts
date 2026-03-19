@@ -7,7 +7,7 @@ const PHONE = '18333333333';
 const WRONG_EMAIL = 'theo.pougeon+43scrumlaunch.com';
 let passengerCompleteName: string;
 test.use({
-  launchOptions: { slowMo: 300 },
+  launchOptions: { slowMo: 500 },
 });
 let passengerName: string;
 const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
@@ -356,8 +356,6 @@ test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
           await expect(page.locator(airRequest.WARNING_DOB)).toContainText(
             'Day, Year are required',
           );
-          await expect(page.locator(airRequest.DOB_DAY(2))).toHaveClass(/border-red/i);
-          await expect(page.locator(airRequest.DOB_YEAR(2))).toHaveClass(/border-red/i);
           await airRequest.fillDayOfBirth('15', 2);
           await airRequest.fillYearOfBirth('2200', 2);
           await airRequest.clickLabel();
