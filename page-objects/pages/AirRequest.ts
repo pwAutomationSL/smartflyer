@@ -262,6 +262,7 @@ export class AirRequest {
   public async clearPassengerLastName(index: number = 0) {
     await this.page.waitForTimeout(500);
     await this.page.locator(this.LAST_NAME_PASSENGER(index)).clear();
+    await this.page.locator(this.LAST_NAME_PASSENGER(index)).press('Tab');
     await this.page.waitForTimeout(500);
   }
   public async clickLabel() {
