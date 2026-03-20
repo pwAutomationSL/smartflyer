@@ -7,7 +7,7 @@ const PHONE = '18333333333';
 const WRONG_EMAIL = 'theo.pougeon+43scrumlaunch.com';
 let passengerCompleteName: string;
 test.use({
-  launchOptions: { slowMo: 500 },
+  launchOptions: { slowMo: 800 },
 });
 let passengerName: string;
 const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
