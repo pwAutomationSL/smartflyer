@@ -785,6 +785,7 @@ export class Clients {
     await this.page.locator(this.PASSPORT_DATE_OF_EXPIRY).click();
     await this.page.locator(`//div[@class="react-datepicker__week"][4]/div[6]`).click();
     await this.page.locator(this.ADD_DOCUMENT_BUTTON).click();
+    await this.page.waitForTimeout(2500);
   }
 }
 export const clients = (page: Page) => new Clients({ page });

@@ -260,10 +260,13 @@ export class AirRequest {
     await this.page.locator(this.LAST_NAME_PASSENGER(index)).fill(name);
   }
   public async clearPassengerLastName(index: number = 0) {
+    await this.page.waitForTimeout(500);
     await this.page.locator(this.LAST_NAME_PASSENGER(index)).clear();
+    await this.page.waitForTimeout(500);
   }
   public async clickLabel() {
-    await this.page.locator(this.KNOW_TRAVELER_LABEL).last().click({ delay: 200 });
+    await this.page.locator(this.KNOW_TRAVELER_LABEL).last().click();
+    await this.page.waitForTimeout(300);
   }
   public async fillPassengerPhone(phone: string, index: number = 0) {
     await this.page.locator(this.PHONE_INPUT_PASSENGER(index)).fill(phone);
@@ -287,8 +290,16 @@ export class AirRequest {
   public async fillDayOfBirth(day: string, index: number = 1) {
     await this.page.locator(this.DOB_DAY(index)).fill(day);
   }
+  public async clearDayOfBirth(index: number = 1) {
+    await this.page.waitForTimeout(500);
+    await this.page.locator(this.DOB_DAY(index)).clear();
+    await this.page.locator(this.DOB_DAY(index)).press('Tab');
+  }
   public async fillYearOfBirth(year: string, index: number = 1) {
     await this.page.locator(this.DOB_YEAR(index)).fill(year);
+  }
+  public async clearYearOfBirth(index: number = 1) {
+    await this.page.locator(this.DOB_YEAR(index)).clear();
   }
   public async fillMonth(index: number = 1) {
     await this.page.waitForTimeout(400);

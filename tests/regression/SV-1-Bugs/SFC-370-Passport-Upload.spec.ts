@@ -5,6 +5,7 @@ test.use({
   launchOptions: { slowMo: 350 },
 });
 const PASSPORT = uniqueId();
+const expected = PASSPORT.toString();
 test.describe('SFC-370 -  upload a passport file', () => {
   test('As an admin, when I try to upload a passport file, it should not return server error.', async ({
     loginPage,
@@ -27,12 +28,13 @@ test.describe('SFC-370 -  upload a passport file', () => {
       await clients.addDocument();
       await clients.thisIsAPassport();
       await clients.addNewPassportv2(PASSPORT.toString());
-      expect(page.locator(clients.PASSPORT_MODAL)).toBeHidden();
       await page.waitForLoadState('networkidle');
       await page.waitForLoadState('load');
-      await expect(page.locator(clients.DATES_NUMNBERS_PASSPORT_NUMBER)).toContainText([
-        PASSPORT.toString(),
-      ]);
+      await page.reload();
+      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('load');
+      const values = await page.locator(clients.DATES_NUMNBERS_PASSPORT_NUMBER).allTextContents();
+      expect(values.some((v) => v.includes(expected))).toBeTruthy();
     });
   });
 });

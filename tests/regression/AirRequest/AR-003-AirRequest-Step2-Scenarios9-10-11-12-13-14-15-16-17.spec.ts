@@ -349,9 +349,9 @@ test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
       });
       await test.step('14# Scenario - Edit Secondary Passenger DoB', async () => {
         try {
-          await airRequest.fillDayOfBirth('', 2);
+          await airRequest.clearDayOfBirth(2);
           await airRequest.fillMonth();
-          await airRequest.fillYearOfBirth('', 2);
+          await airRequest.clearYearOfBirth(2);
           await airRequest.clickLabel();
           await expect(page.locator(airRequest.WARNING_DOB)).toContainText(
             'Day, Year are required',
