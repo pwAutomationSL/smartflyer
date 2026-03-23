@@ -619,6 +619,7 @@ export class Clients {
       .locator(`//label[text()='Passport expiry date']/following-sibling::div//input`)
       .click();
     await this.page.waitForTimeout(200);
+    await this.page.locator(`//select[@aria-label="Select year"]`).selectOption('2030');
     await this.page
       .locator(
         `//div[@class="react-datepicker__week"][3]//div[@role="option" and @aria-disabled="false"]`,
