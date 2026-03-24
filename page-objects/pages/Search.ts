@@ -17,14 +17,14 @@ export class SearchPage {
   public readonly PARTNERS_BRAND_FILTER_CHECKBOX = `//span[contains(.,'Brand')]/../../label/input`;
   public readonly SEARCH_RESULT_LINKS = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https')]`;
   public readonly SEARCH_RESULT_MATCHES = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https')]/div/div/div/p/span//mark`;
-  public readonly SEARCH_RESULT_MATCHES_A = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//mark`;
+  public readonly SEARCH_RESULT_MATCHES_A = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//mark)[1]`;
   public readonly SEARCH_RESULT_IMAGES = `//div[contains(@class,'Layout_content')]//a//img`;
   public readonly SEARCH_RESULT_MATCHES_A_FIRSTONLY = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//span)[1]`;
   public readonly SEARCH_RESULT_MATCHES_DIRECTORY_FIRSTONLY = `(//div[contains(@class,'Layout_content')]//div//div/p/span)[1]`;
   public readonly HEADER = `//h1`;
   public readonly NO_RESULTS = `//h3`;
   public readonly SUBHEADER = `//div[contains(@class,'toolkit')]//h4`;
-  public readonly SEARCH_RESULT_MATCHES_DETAIL = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//p`;
+  public readonly SEARCH_RESULT_MATCHES_DETAIL = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//p)[2]`;
   public readonly SPINNER_LOADER = `//div[contains(@class,'Spinner_load')]`;
   public async clickClientFilter() {
     await this.page.locator(this.CLIENT_FILTER_BUTTON).click();

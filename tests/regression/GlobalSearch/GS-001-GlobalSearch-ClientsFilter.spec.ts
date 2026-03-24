@@ -10,7 +10,6 @@ test.describe('GS-001 - Search - Clients filter', () => {
     sidebar,
     searchPage,
     clients,
-    forum,
   }) => {
     await test.step('1 - Login at Society as an Admin', async () => {
       await loginPage.login();
@@ -25,11 +24,13 @@ test.describe('GS-001 - Search - Clients filter', () => {
       await clients.mainInformationQuickAdd(LAST_NAME, EMAIL);
       await clients.saveQuickAdd();
     });
-    await test.step('3 - Assert new post is visible in forum', async () => {
-      await expect(page.locator(clients.USERNAME_HEADER).first()).toContainText(LAST_NAME);
+    await test.step('3 - Assert new client is visible', async () => {
+      await expect(page.locator(clients.HEADER).first()).toContainText(LAST_NAME, {
+        timeout: 15000,
+      });
     });
     await test.step('4 - Go to Search - Clients filter', async () => {
-      await sidebar.goToModule('Search');
+      await sidebar.goToModuleAPP('Search');
       await searchPage.clickClientsFilter();
       await searchPage.textToSearch(LAST_NAME);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();

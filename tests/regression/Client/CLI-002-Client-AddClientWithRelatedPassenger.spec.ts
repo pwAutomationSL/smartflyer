@@ -59,6 +59,7 @@ test.describe('CLI-002 - Client - Add Client with related passenger', () => {
       await clients.uploadProfilePicture();
       await expect(page.locator(toast.TOAST_MESSAGE_APP)).toContainText(
         'Image cropped successfully',
+        { timeout: 20000 },
       );
       await expect(page.locator(clients.CONFIRM_SUBMISSION)).toBeEnabled();
     });

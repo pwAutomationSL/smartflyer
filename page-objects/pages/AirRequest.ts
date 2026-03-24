@@ -767,7 +767,7 @@ export class AirRequest {
     await this.page.getByRole('button', { name: 'Upload Files' }).nth(1).click();
   }
   public async closeAddedFilesTripOverview() {
-    await this.page.getByRole('button', { name: 'Close' }).click();
+    await this.page.getByRole('button', { name: 'Close' }).last().click();
   }
   public async getArrivalAirport(index: number) {
     const airport = await this.page
