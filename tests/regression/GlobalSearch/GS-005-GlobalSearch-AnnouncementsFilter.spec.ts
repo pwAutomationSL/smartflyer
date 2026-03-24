@@ -16,7 +16,7 @@ test.describe('GS-005 - Search - Announcements filter', () => {
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
     });
     await test.step('2 - Go to Forum, Add new Post', async () => {
-      await expect(page.locator(sidebar.MODULE_BY_TEXT('Forum'))).toBeVisible({
+      await expect(page.locator(sidebar.MODULE_BY_TEXT('Forum')).first()).toBeVisible({
         timeout: 10000,
       });
       await sidebar.goToModule('Forum');
@@ -40,9 +40,9 @@ test.describe('GS-005 - Search - Announcements filter', () => {
       const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
       expect(count).toBe(1);
       await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(TITLE);
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_DETAIL).last()).toHaveText(
-        DETAILS,
-      );
+      await expect(
+        page.locator(searchPage.SEARCH_RESULT_MATCHES_DETAIL_LAST_PART).last(),
+      ).toHaveText(DETAILS);
     });
   });
 });

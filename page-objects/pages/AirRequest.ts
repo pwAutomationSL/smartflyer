@@ -159,6 +159,10 @@ export class AirRequest {
   public async clickCancel() {
     await this.page.locator(this.CANCEL_BUTTON).click();
   }
+  public async clickCancelAndWait() {
+    await this.page.locator(this.CANCEL_BUTTON).click();
+    await this.page.waitForTimeout(1800);
+  }
   public async clickContinue() {
     await this.page.locator(this.CONTINUE_BUTTON).click();
   }

@@ -25,6 +25,7 @@ export class SearchPage {
   public readonly NO_RESULTS = `//h3`;
   public readonly SUBHEADER = `//div[contains(@class,'toolkit')]//h4`;
   public readonly SEARCH_RESULT_MATCHES_DETAIL = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//p)[2]`;
+  public readonly SEARCH_RESULT_MATCHES_DETAIL_LAST_PART = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//p)[3]`;
   public readonly SPINNER_LOADER = `//div[contains(@class,'Spinner_load')]`;
   public async clickClientFilter() {
     await this.page.locator(this.CLIENT_FILTER_BUTTON).click();

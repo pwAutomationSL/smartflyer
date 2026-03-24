@@ -1,7 +1,7 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
-
+import { uniqueId } from '../../../page-objects';
 const PASSENGER_FIRST_NAME = 'firstNameNT';
-const PASSENGER_LAST_NAME = 'LastNameNT';
+const PASSENGER_LAST_NAME = 'LastNameNT' + uniqueId();
 const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
 const MONTH = 'June';
 const DAY = '7';
@@ -95,7 +95,7 @@ test.describe('AR-003 - Air Request - Step #19 ', () => {
         await expect(page.locator(airRequest.DELETE_TRAVELER_BUTTON)).toBeVisible();
         await airRequest.deleteTraveler();
         await airRequest.addAdditionalPassenger();
-        await airRequest.searchTraveler(PASSENGER_FIRST_NAME);
+        await airRequest.searchTraveler(PASSENGER_LAST_NAME);
         await expect(page.locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES).first()).toBeVisible();
         const allNames = await page
           .locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES)
@@ -109,23 +109,30 @@ test.describe('AR-003 - Air Request - Step #19 ', () => {
       await test.step('19# Go back to clients page- related travelers ', async () => {
         await airRequest.clickCancel();
         await airRequest.goBack();
-        await airRequest.clickCancel();
+        await airRequest.clickCancelAndWait();
         await page.waitForLoadState('domcontentloaded');
         await page.waitForLoadState('networkidle');
         await expect(page.getByRole('button', { name: 'Related Travelers' })).toBeVisible({
           timeout: 10000,
         });
-        await clients.clickRelatedTravelers();
+        await clients.goToRelatedTravelersTab();
+        await expect(page.locator(clients.ALL_RELATED_TRAVELERS_APP).first()).toBeVisible({
+          timeout: 15000,
+        });
         await page.waitForLoadState('networkidle');
-        const allTravelers = await page.locator(clients.ALL_RELATED_TRAVELERS).allTextContents();
+        const allTravelers = await page
+          .locator(clients.ALL_RELATED_TRAVELERS_APP)
+          .allTextContents();
         await expect(allTravelers).toContain(`${PASSENGER_FIRST_NAME} ${PASSENGER_LAST_NAME}`);
       });
       await test.step('19# Delete added user ', async () => {
-        await clients.deleteAddedTraveler(PASSENGER_FIRST_NAME);
-        await expect(page.locator(clients.HEADER_H2)).toContainText('Are you sure?');
+        await clients.deleteAddedTraveler(PASSENGER_LAST_NAME);
+        await expect(page.locator(clients.HEADER_H2)).toContainText('Delete passenger?');
         await clients.confirmDelete();
-        await expect(page.locator(clients.HEADER_H2)).toContainText('Success');
-        await clients.clickOkPopUp();
+        const allTravelers = await page
+          .locator(clients.ALL_RELATED_TRAVELERS_APP)
+          .allTextContents();
+        await expect(allTravelers).not.toContain(`${PASSENGER_FIRST_NAME} ${PASSENGER_LAST_NAME}`);
       });
     });
   });

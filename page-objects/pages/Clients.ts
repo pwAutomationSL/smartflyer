@@ -16,7 +16,8 @@ export class Clients {
   public readonly USERNAME_HEADER = `//div[contains(@class,'user-data')]//h4`;
   public readonly ALL_ACTIVE_CLIENTS = `//tbody/tr//p`;
   public readonly ALL_RELATED_TRAVELERS = `//tbody[@id="related_travellers_list"]/tr/td[2]/span`;
-  public readonly CONFIRM_DELETE = `//button[contains(.,'Yes, release it')]`;
+  public readonly ALL_RELATED_TRAVELERS_APP = `//div[@aria-label="Expand"]//a`;
+  public readonly CONFIRM_DELETE = `//dialog//button[contains(.,'Delete')]`;
   public readonly CONFIRM_DELETE_FF = `//button[contains(.,'Yes, delete it!')]`;
   public readonly CONFIRM_DELETE_PASSPORT = `//div[@id="modal-content"]//button[contains(.,'Delete')]`;
   public readonly LOYALTY_PROGRAMS_POPUP = `//form[@id="add-important-number-single"]`;
@@ -125,7 +126,7 @@ export class Clients {
   public readonly TRAVELER_ADDED = (traveler: string) =>
     `//tbody[@id="related_travellers_list"]/tr/td[2]/span[contains(.,'${traveler}')]//../../td//button[contains(@id,'dropdown')]`;
   public readonly REMOVE_TRAVELER_BY_NAME = (traveler: string) =>
-    `//tbody[@id="related_travellers_list"]/tr/td[2]/span[contains(.,'${traveler}')]//../../td//a[contains(.,'Remove')]`;
+    `//div[@aria-label="Expand"]//a[contains(.,'${traveler}')]/../../following-sibling::button`;
   public readonly RELATED_PASSENGER_FIRST_NAME = (index: number) =>
     `//input[@name="related_passengers.${index}.client.first_name"]`;
 
@@ -328,11 +329,11 @@ export class Clients {
   }
 
   public async deleteAddedTraveler(traveler: string) {
-    await this.page.locator(this.TRAVELER_ADDED(traveler)).first().click();
     await this.page.locator(this.REMOVE_TRAVELER_BY_NAME(traveler)).first().click();
   }
   public async confirmDelete() {
     await this.page.locator(this.CONFIRM_DELETE).click();
+    await this.page.waitForTimeout(3000);
   }
   public async confirmDeleteFF() {
     await this.page.locator(this.CONFIRM_DELETE_FF).click();
@@ -532,7 +533,7 @@ export class Clients {
     await this.page.locator(this.RELATED_PASSENGER_PASSPORT(index)).fill(value);
   }
   public async goToRelatedTravelersTab() {
-    await this.page.locator(this.RELATED_PASSENGERS_TAB).click();
+    await this.page.locator(this.RELATED_PASSENGERS_TAB).click({ force: true });
   }
   public async goToPreferencesTab() {
     await this.page.locator(this.PREFERENCES_TAB).click();
