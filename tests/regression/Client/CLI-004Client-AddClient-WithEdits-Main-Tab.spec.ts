@@ -29,6 +29,7 @@ const emergencyContactEdited = {
   email: 'john.doeEdited@test.com',
   phone: '14155552675',
 };
+
 const normalizePhoneNumber = (str: string | null | undefined): string => {
   if (!str) return '';
   return str.replace(/\D/g, '');
@@ -229,6 +230,74 @@ test.describe('CLI-001 - Client - Add Client', () => {
         .locator(clients.CLIENT_PROFILE_EMERGENCY_CONTACT_PHONE)
         .textContent();
       expect(normalizePhoneNumber(phoneUIBI)).toEqual(emergencyContactEdited.phone);
+    });
+  });
+  test('Edit Created Client- verify individual popup for Important Dates Edit', async ({
+    loginPage,
+    page,
+    sidebar,
+    clients,
+    toast,
+  }) => {
+    const section = 'Important Dates';
+    await test.step('1 - Login at Society as an Admin and search for the created client', async () => {
+      await loginPage.login();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
+      await sidebar.goToModule('Clients');
+      await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
+    });
+    await test.step('2 -Edit Important Dates', async () => {
+      await clients.clickDatesAndNumbers();
+      await clients.editClientBySection(section);
+      await expect(page.locator(clients.SAVE_CHANGES)).toBeDisabled();
+      await expect(page.locator(clients.POPUP_EDIT_HEADER)).toContainText('Important dates');
+      await expect(page.locator(clients.POPUP_EDIT_HEADER_INFO)).toContainText(
+        'Manage important client travel dates and recurring events.',
+      );
+      await clients.editNameEvent('Special Event');
+      await clients.addDate();
+      await clients.addFrequency();
+      await expect(page.locator(clients.SAVE_CHANGES)).toBeEnabled();
+      await clients.saveChanges();
+      await expect(page.locator(toast.TOAST_MESSAGE_APP)).toContainText(
+        'Important dates updated successfully',
+      );
+      await expect(page.locator(clients.IMPORTANT_DATES(1))).toContainText('Special Event');
+      await expect(page.locator(clients.IMPORTANT_DATES(2))).toContainText('Monthly');
+    });
+  });
+  test('Edit Created Client- verify individual popup for Loyalty Programs Edit', async ({
+    loginPage,
+    page,
+    sidebar,
+    clients,
+    toast,
+  }) => {
+    const section = 'Loyalty Programs';
+    const newLoyaltyProgram = 'Marriott Bonvoy';
+    const newNumber = '99999999';
+    await test.step('1 - Login at Society as an Admin and search for the created client', async () => {
+      await loginPage.login();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
+      await sidebar.goToModule('Clients');
+      await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
+    });
+    await test.step('2 -Edit Loyalty Programs', async () => {
+      await clients.clickDatesAndNumbers();
+      await clients.editClientBySection(section);
+      await expect(page.locator(clients.SAVE_CHANGES)).toBeEnabled();
+      await expect(page.locator(clients.POPUP_EDIT_HEADER)).toContainText('Loyalty programs');
+      await expect(page.locator(clients.POPUP_EDIT_HEADER_INFO)).toContainText(
+        'Airline and hotel loyalty memberships associated with the client.',
+      );
+      await clients.editLoyaltyProgram(newLoyaltyProgram);
+      await clients.editLoyaltyProgramNumber(newNumber);
+      await clients.saveChanges();
+      await expect(page.locator(toast.TOAST_MESSAGE_APP)).toContainText(
+        'Client updated successfully',
+      );
+      await expect(page.locator(clients.LOYALTY_PROGRAM(1))).toContainText(newLoyaltyProgram);
+      await expect(page.locator(clients.LOYALTY_PROGRAM(2))).toContainText(newNumber);
     });
   });
 });

@@ -165,6 +165,13 @@ export class Clients {
   public readonly TRAVEL_DATA_KTN = `//input[@name="primary_passenger.tsa.tsa_pre_check_number"]`;
   public readonly PASSPORT_NUMBER_TD = `//input[@name="primary_passenger.passport.passport_number"]`;
   public readonly SAVE_CHANGES = `//button[text()="Save changes"]`;
+  public readonly NAME_EVENT = `//input[@name="important_dates.0.name"]`;
+  public readonly IMPORTANT_DATES = (index: number) =>
+    `//h5[text()="Important Dates"]/../following-sibling::div//tbody//td[${index}]`;
+
+  public readonly LOYALTY_PROGRAM = (index: number) =>
+    `//h5[text()="Loyalty Programs"]/../following-sibling::div//tbody//td[${index}]`;
+
   public async clickCreate() {
     await this.page.locator(this.HEADER).click();
   }
@@ -790,6 +797,29 @@ export class Clients {
     await this.page.locator(`//div[@class="react-datepicker__week"][4]/div[6]`).click();
     await this.page.locator(this.ADD_DOCUMENT_BUTTON).click();
     await this.page.waitForTimeout(2500);
+  }
+  public async editNameEvent(name: string) {
+    await this.page.locator(this.NAME_EVENT).fill(name);
+  }
+  public async addDate() {
+    await this.page.getByRole('textbox', { name: 'MM/DD/YYYY' }).press('Enter');
+    await this.page.getByRole('textbox', { name: 'MM/DD/YYYY' }).fill('03/03/2030');
+  }
+  public async addFrequency() {
+    await this.page.locator(`//p[text()='Frequency']/following-sibling::div/div/div[2]`).click();
+    await this.page.locator(`//div[@role="option"]/p[text()='Monthly']`).click();
+  }
+  public async editLoyaltyProgram(name: string) {
+    await this.page.waitForTimeout(1000);
+    await this.page
+      .locator(`//p[text()='Loyalty program']/following-sibling::div/div/div[2]`)
+      .click();
+    await this.page.locator(`//div[@role="option"]/p[text()='${name}']`).click();
+  }
+  public async editLoyaltyProgramNumber(number: string) {
+    await this.page
+      .locator(`//input[@name="primary_passenger.loyalty_numbers.0.number"]`)
+      .fill(number);
   }
 }
 export const clients = (page: Page) => new Clients({ page });
