@@ -172,6 +172,14 @@ export class Clients {
   public readonly LOYALTY_PROGRAM = (index: number) =>
     `//h5[text()="Loyalty Programs"]/../following-sibling::div//tbody//td[${index}]`;
 
+  public readonly TRAVEL_DATA_NUMBER_BY_PROGRAM = (text: string) =>
+    `//table//tr[contains(.,'${text}')]/td[2]//p`;
+  public readonly TRAVEL_DATA_DATE_BY_PROGRAM = (text: string) =>
+    `//table//tr[contains(.,'${text}')]/td[3]//p`;
+
+  public readonly EDIT_DATE_BY_FIELD = (field: string) =>
+    `//label[text()='${field}']/following-sibling::div//input`;
+
   public async clickCreate() {
     await this.page.locator(this.HEADER).click();
   }
@@ -820,6 +828,13 @@ export class Clients {
     await this.page
       .locator(`//input[@name="primary_passenger.loyalty_numbers.0.number"]`)
       .fill(number);
+  }
+  public async editNumberByType(name: string, number: string) {
+    await this.page.locator(`//label[text()='${name}']/following-sibling::div/input`).fill(number);
+  }
+  public async editDate(name: string, date: string) {
+    await this.page.locator(this.EDIT_DATE_BY_FIELD(name)).press('Enter');
+    await this.page.locator(this.EDIT_DATE_BY_FIELD(name)).fill(date);
   }
 }
 export const clients = (page: Page) => new Clients({ page });

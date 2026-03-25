@@ -300,4 +300,63 @@ test.describe('CLI-001 - Client - Add Client', () => {
       await expect(page.locator(clients.LOYALTY_PROGRAM(2))).toContainText(newNumber);
     });
   });
+  test('Edit Created Client- verify individual popup for Important Travel Data Edit', async ({
+    loginPage,
+    page,
+    sidebar,
+    clients,
+    toast,
+  }) => {
+    const section = 'Important Travel Data';
+    const program1 = 'Global entry number';
+    const program2 = 'Known traveler number (KTN)';
+    const program3 = 'Passport';
+    const editedNumber1 = '11111111';
+    const editedNumber2 = '22222222';
+    const editedNumber3 = '33333333';
+    const editedDate = '03/03/2033';
+    await test.step('1 - Login at Society as an Admin and search for the created client', async () => {
+      await loginPage.login();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
+      await sidebar.goToModule('Clients');
+      await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
+    });
+    await test.step('2 -Edit Loyalty Programs', async () => {
+      await clients.clickDatesAndNumbers();
+      await clients.editClientBySection(section);
+      await expect(page.locator(clients.SAVE_CHANGES)).toBeEnabled();
+      await expect(page.locator(clients.POPUP_EDIT_HEADER)).toContainText('Important travel data');
+      await expect(page.locator(clients.POPUP_EDIT_HEADER_INFO)).toContainText(
+        'Client travel identification numbers and related expiration dates.',
+      );
+      await clients.editNumberByType(program1, editedNumber1);
+      await clients.editDate('Global entry expiry date', editedDate);
+      await clients.editNumberByType(program2, editedNumber2);
+      await clients.editDate('KTN expiry date', editedDate);
+      await clients.editNumberByType('Passport number', editedNumber3);
+      await clients.editDate('Passport expiry date', editedDate);
+      await clients.saveChanges();
+      await expect(page.locator(toast.TOAST_MESSAGE_APP)).toContainText(
+        'Client updated successfully',
+      );
+      await expect(page.locator(clients.TRAVEL_DATA_NUMBER_BY_PROGRAM(program1))).toContainText(
+        editedNumber1,
+      );
+      await expect(page.locator(clients.TRAVEL_DATA_NUMBER_BY_PROGRAM(program2))).toContainText(
+        editedNumber2,
+      );
+      await expect(page.locator(clients.TRAVEL_DATA_NUMBER_BY_PROGRAM(program3))).toContainText(
+        editedNumber3,
+      );
+      await expect(page.locator(clients.TRAVEL_DATA_DATE_BY_PROGRAM(program1))).toContainText(
+        editedDate,
+      );
+      await expect(page.locator(clients.TRAVEL_DATA_DATE_BY_PROGRAM(program2))).toContainText(
+        editedDate,
+      );
+      await expect(page.locator(clients.TRAVEL_DATA_DATE_BY_PROGRAM(program3))).toContainText(
+        editedDate,
+      );
+    });
+  });
 });
