@@ -18,6 +18,7 @@ export class SearchPage {
   public readonly SEARCH_RESULT_LINKS = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https')]`;
   public readonly SEARCH_RESULT_MATCHES = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https')]/div/div/div/p/span//mark`;
   public readonly SEARCH_RESULT_MATCHES_A = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//mark)[1]`;
+  public readonly SEARCH_RESULT_MATCHES_SPAN = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//span)[1]`;
   public readonly SEARCH_RESULT_IMAGES = `//div[contains(@class,'Layout_content')]//a//img`;
   public readonly SEARCH_RESULT_MATCHES_A_FIRSTONLY = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//span)[1]`;
   public readonly SEARCH_RESULT_MATCHES_DIRECTORY_FIRSTONLY = `(//div[contains(@class,'Layout_content')]//div//div/p/span)[1]`;
@@ -74,9 +75,10 @@ export class SearchPage {
     await this.page.locator(this.FAQ_FILTER_BUTTON).click();
   }
   public async clickFirstToolkit() {
-    await this.page.locator(this.SEARCH_RESULT_MATCHES_A).first().click();
+    await this.page.locator(this.SEARCH_RESULT_MATCHES_SPAN).first().click();
   }
   public async getFirstName() {
+    await this.page.waitForTimeout(1000);
     const name = await this.page.locator(this.SEARCH_RESULT_MATCHES_A_FIRSTONLY).textContent();
     return name ? name : 'not found';
   }

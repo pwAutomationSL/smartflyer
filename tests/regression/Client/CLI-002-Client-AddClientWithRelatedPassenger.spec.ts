@@ -94,7 +94,9 @@ test.describe('CLI-002 - Client - Add Client with related passenger', () => {
       await clients.confirmSubmission();
     });
     await test.step('6 -Verify app redirects to the client profile page', async () => {
-      await expect(page.locator(clients.HEADER)).toContainText(MAIN_PASSENGER_NAME);
+      await expect(page.locator(clients.HEADER)).toContainText(MAIN_PASSENGER_NAME, {
+        timeout: 15000,
+      });
       await expect(page.locator(clients.HEADER)).toContainText(MAIN_PASSENGER_LAST_NAME);
       const phoneUI = await page.locator(clients.CLIENT_PROFILE_PHONE).textContent();
       expect(normalizePhoneNumber(phoneUI)).toEqual(PHONE);

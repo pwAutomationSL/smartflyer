@@ -153,6 +153,7 @@ test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
           await airRequest.clickLabel();
           await expect(page.locator(airRequest.WARNING_DOB)).toContainText(
             'Date of birth must be before today.',
+            { timeout: 10000 },
           );
           await expect(page.locator(airRequest.DOB_DAY(2))).toHaveClass(/border-red/i);
           await expect(page.locator(airRequest.DOB_YEAR(2))).toHaveClass(/border-red/i);

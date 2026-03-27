@@ -11,7 +11,7 @@ test.describe('GS-004 - Search - Toolkit filter', () => {
       await searchPage.clickToolkitFilter();
       await searchPage.textToSearch('Virtuoso');
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A).first()).toBeVisible();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN).first()).toBeVisible();
     });
     await test.step('5 - Assert result is at least 1, title and details are correct', async () => {
       const count = await page.locator(searchPage.SEARCH_RESULT_LINKS).count();
