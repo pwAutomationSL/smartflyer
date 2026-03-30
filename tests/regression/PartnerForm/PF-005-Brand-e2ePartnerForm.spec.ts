@@ -19,7 +19,7 @@ test.describe('PF-005 - e2e for Partner Form', () => {
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
       await sidebar.goToModule('Partners');

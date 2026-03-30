@@ -15,11 +15,11 @@ export class SideBar {
     `//*//a[contains(.,'${submenu}') and contains(@class,'dropdown')]`;
   public async goToModule(module: string) {
     await this.page.locator(this.MODULE_BY_TEXT(module)).first().click();
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForLoadState('networkidle');
   }
   public async goToModuleAPP(module: string) {
     await this.page.locator(this.MODULE_BY_TEXT_APP(module)).first().click();
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForLoadState('networkidle');
   }
   public async goToSearchApp() {
     await this.page.locator(this.SEARCH_APP).click();

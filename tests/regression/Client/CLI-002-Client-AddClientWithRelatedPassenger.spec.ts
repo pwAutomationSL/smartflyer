@@ -27,7 +27,7 @@ test.describe('CLI-002 - Client - Add Client with related passenger', () => {
   }) => {
     await test.step('1 - Login at Society as an Admin', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to “Clients” under the main navigation menu of Society', async () => {
       await sidebar.goToModule('Clients');

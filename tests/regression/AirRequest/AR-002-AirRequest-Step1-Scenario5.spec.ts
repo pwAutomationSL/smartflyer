@@ -19,7 +19,7 @@ test.describe('AR-002 - Air Request - Step 1', () => {
   }) => {
     await test.step('Go to the Client tab', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });
 

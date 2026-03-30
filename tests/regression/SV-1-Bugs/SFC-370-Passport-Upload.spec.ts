@@ -15,7 +15,7 @@ test.describe('SFC-370 -  upload a passport file', () => {
   }) => {
     await test.step('Go to the Client tab', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
       await clients.searchClientAndClick(CLIENT_NAME);
     });

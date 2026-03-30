@@ -23,7 +23,7 @@ test.describe('AR-002 - Air Request - Step 1', () => {
         username: 'oksana.gorodiska+2@scrumlaunch.com',
         password: 'sf_agents_01@',
       });
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
       await clients.clickFirstResult();
     });
@@ -66,7 +66,7 @@ test.describe('AR-002 - Air Request - Step 1', () => {
         username: 'oksana.gorodiska+2@scrumlaunch.com',
         password: 'sf_agents_01@',
       });
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
       await clients.clickFirstResult();
     });

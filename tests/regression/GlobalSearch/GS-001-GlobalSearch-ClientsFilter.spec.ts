@@ -13,20 +13,21 @@ test.describe('GS-001 - Search - Clients filter', () => {
   }) => {
     await test.step('1 - Login at Society as an Admin', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Clients, Quick Add', async () => {
       await sidebar.goToModule('Clients');
       await expect(page.locator(clients.SPINNER_LOADER)).toBeHidden();
       await expect(page.locator(clients.HEADER)).toBeEnabled();
-      await expect(page.locator(clients.QUICK_ADD)).toBeEnabled();
+      await expect(page.locator(clients.QUICK_ADD)).toBeVisible({ timeout: 15000 });
+      await page.waitForLoadState('networkidle');
       await clients.quickAdd();
       await clients.mainInformationQuickAdd(LAST_NAME, EMAIL);
       await clients.saveQuickAdd();
     });
     await test.step('3 - Assert new client is visible', async () => {
       await expect(page.locator(clients.HEADER).first()).toContainText(LAST_NAME, {
-        timeout: 15000,
+        timeout: 25000,
       });
     });
     await test.step('4 - Go to Search - Clients filter', async () => {

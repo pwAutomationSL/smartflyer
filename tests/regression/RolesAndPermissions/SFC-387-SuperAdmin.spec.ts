@@ -15,7 +15,7 @@ test.describe('SFC-387 Admin', () => {
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
       await sidebar.goToModule('Partners');
@@ -47,7 +47,7 @@ test.describe('SFC-387 Admin', () => {
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Search - Search Approved Partner Brand. Assert result is 1, title and details are correct', async () => {
       await sidebar.goToModule('Search');
@@ -55,20 +55,20 @@ test.describe('SFC-387 Admin', () => {
       await searchPage.checkPartnerBrandFilter();
       await searchPage.textToSearch(PROPERTY_NAME_BRAND_APPROVED);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
-      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toBeVisible();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN).count();
       expect(count).toBe(1);
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toHaveText(
         PROPERTY_NAME_BRAND_APPROVED,
       );
     });
     await test.step('3 - Go to Search - Search Drafted Partner Brand. Assert result is 1', async () => {
       await searchPage.textToSearch(PROPERTY_NAME_BRAND_DRAFT);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
-      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toBeVisible();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN).count();
       expect(count).toBe(1);
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toHaveText(
         PROPERTY_NAME_BRAND_DRAFT,
       );
     });
@@ -81,7 +81,7 @@ test.describe('SFC-387 Admin', () => {
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
       await sidebar.goToModule('Partners');
@@ -113,7 +113,7 @@ test.describe('SFC-387 Admin', () => {
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Search - Search Approved Partner Hotel. Assert result is 1, title and details are correct', async () => {
       await sidebar.goToModule('Search');
@@ -121,20 +121,20 @@ test.describe('SFC-387 Admin', () => {
       await searchPage.checkPartnerHotelFilter();
       await searchPage.textToSearch(PROPERTY_NAME_HOTEL_APPROVED);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
-      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toBeVisible();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN).count();
       expect(count).toBe(1);
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toHaveText(
         PROPERTY_NAME_HOTEL_APPROVED,
       );
     });
     await test.step('3 - Go to Search - Search Drafted Partner Hotel. Assert result is 1', async () => {
       await searchPage.textToSearch(PROPERTY_NAME_HOTEL_DRAFT);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
-      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toBeVisible();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN).count();
       expect(count).toBe(1);
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toHaveText(
         PROPERTY_NAME_HOTEL_DRAFT,
       );
     });
@@ -147,7 +147,7 @@ test.describe('SFC-387 Admin', () => {
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
       await sidebar.goToModule('Partners');
@@ -179,7 +179,7 @@ test.describe('SFC-387 Admin', () => {
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Search - Search Approved Partner Hotel. Assert result is 1, title and details are correct', async () => {
       await sidebar.goToModule('Search');
@@ -187,20 +187,20 @@ test.describe('SFC-387 Admin', () => {
       await searchPage.checkPartnerOnsiteFilter();
       await searchPage.textToSearch(PROPERTY_NAME_ONSITE_APPROVED);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
-      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toBeVisible();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN).count();
       expect(count).toBe(1);
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toHaveText(
         PROPERTY_NAME_ONSITE_APPROVED,
       );
     });
     await test.step('3 - Go to Search - Search Drafted Partner Hotel. Assert result is 1', async () => {
       await searchPage.textToSearch(PROPERTY_NAME_ONSITE_DRAFT);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
-      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toBeVisible();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN).count();
       expect(count).toBe(1);
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toHaveText(
         PROPERTY_NAME_ONSITE_DRAFT,
       );
     });

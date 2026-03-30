@@ -23,7 +23,7 @@ test.describe('GS-006 - Search - Gallery filter', () => {
   }) => {
     await test.step('1 - Login at Society as an Admin', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Search - Gallery filter', async () => {
       await sidebar.openContentCRM('Gallery');

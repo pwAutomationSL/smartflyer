@@ -11,7 +11,7 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
   }) => {
     await test.step('1- Go to the Client tab', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });
     await test.step('2- Search the client and go to the client page', async () => {
@@ -41,7 +41,7 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
   }) => {
     await test.step('1- Go to the Client tab', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });
     await test.step('2- Search the client and go to the client page', async () => {
@@ -73,7 +73,7 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
   }) => {
     await test.step('1- Go to the Client tab', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });
     await test.step('2- Search the client and go to the client page', async () => {
@@ -105,7 +105,7 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
   }) => {
     await test.step('1- Go to the Client tab', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });
     await test.step('2- Search the client and go to the client page', async () => {

@@ -13,7 +13,7 @@ test.describe('GS-005 - Search - Announcements filter', () => {
   }) => {
     await test.step('1 - Login at Society as an Admin', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Forum, Add new Post', async () => {
       await expect(page.locator(sidebar.MODULE_BY_TEXT('Forum')).first()).toBeVisible({

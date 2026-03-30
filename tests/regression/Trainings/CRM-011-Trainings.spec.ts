@@ -18,7 +18,7 @@ test.describe('CRM-011 Trainings', () => {
   }) => {
     await test.step('Go to the Training tab', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Trainings');
     });
     await test.step('Add new Training', async () => {

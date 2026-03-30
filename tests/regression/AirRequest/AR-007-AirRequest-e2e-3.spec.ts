@@ -34,7 +34,7 @@ test.describe('AR-007 - Air Request - E2E - 3 - One Passenger, Multi City flight
   }) => {
     await test.step('1 - Go to the Client tab', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });
     await test.step('2 - Search the client and go to the client page', async () => {

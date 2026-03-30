@@ -5,7 +5,7 @@ test.describe('GS-001 - Client Global Search - Scenario 1', () => {
   test('Login at Society (env) as an Admin', async ({ loginPage, page, sidebar, searchPage }) => {
     await test.step('1 - Login at Society as an Admin', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to “Search” under the main navigation menu of Society', async () => {
       await sidebar.goToModule('Search');

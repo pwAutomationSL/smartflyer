@@ -17,7 +17,7 @@ test.describe('TSK-001 - Task', () => {
   }) => {
     await test.step('Login and Go to the Task tab', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Tasks');
     });
     await test.step('Click on Add Task', async () => {

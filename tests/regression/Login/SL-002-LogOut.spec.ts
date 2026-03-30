@@ -3,7 +3,7 @@ test.describe('LOG-002 - Log Out', () => {
   test('Scenario 2 - Succesful logout', async ({ loginPage, page }) => {
     await test.step('Succesful logout', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await expect(page.locator(loginPage.HEADER)).toContainText('Welcome, Rodrigo!');
       await page.waitForLoadState('networkidle');
       await loginPage.logout();

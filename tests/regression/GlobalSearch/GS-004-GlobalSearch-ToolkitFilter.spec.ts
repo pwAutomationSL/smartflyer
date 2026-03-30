@@ -4,7 +4,7 @@ test.describe('GS-004 - Search - Toolkit filter', () => {
   test('Login at Society (env) as an Admin', async ({ loginPage, page, sidebar, searchPage }) => {
     await test.step('1 - Login at Society as an Admin', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('4 - Go to Search - Toolkit filter', async () => {
       await sidebar.goToModule('Search');

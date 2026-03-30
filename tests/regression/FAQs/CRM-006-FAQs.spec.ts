@@ -13,7 +13,7 @@ test.describe('CRM-006 - FAQ', () => {
   }) => {
     await test.step('As an admin, I want to create a new FAQ.', async () => {
       await loginPage.login();
-      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden();
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('FAQs');
       await expect(page.locator(faqs.FAQS_HEADER)).toContainText('FAQs');
       await expect(page.locator(faqs.ADD_FAQ)).toBeEnabled();

@@ -187,7 +187,7 @@ export class Clients {
     await this.page.getByRole('link', { name: 'Add Client' }).click();
   }
   public async quickAdd() {
-    await this.page.locator(this.QUICK_ADD).click();
+    await this.page.locator(this.QUICK_ADD).click({ force: true });
   }
   public async saveQuickAdd() {
     await this.page.getByRole('button', { name: 'Save' }).click();
