@@ -802,7 +802,7 @@ export class Clients {
     await this.page.locator(this.PASSPORT_ISSUE_COUNTRY_OPTION('United States')).click();
     await this.page.waitForTimeout(100);
     await this.page.locator(this.PASSPORT_DATE_OF_ISSUE).click();
-    await this.page.locator(`//div[@class="react-datepicker__week"][1]/div[1]`).click();
+    await this.page.locator(`//div[@class="react-datepicker__week"][3]/div[3]`).click();
     await this.page.locator(this.PASSPORT_DATE_OF_EXPIRY).click();
     await this.page.locator(`//div[@class="react-datepicker__week"][4]/div[6]`).click();
     await this.page.locator(this.ADD_DOCUMENT_BUTTON).click();
