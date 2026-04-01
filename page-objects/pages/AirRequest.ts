@@ -164,7 +164,9 @@ export class AirRequest {
     await this.page.waitForTimeout(1800);
   }
   public async clickContinue() {
-    await this.page.locator(this.CONTINUE_BUTTON).click();
+    await this.page.waitForLoadState('networkidle');
+    await this.page.locator(this.CONTINUE_BUTTON).waitFor({ state: 'attached' });
+    await this.page.locator(this.CONTINUE_BUTTON).click({ force: true });
   }
   public async searchDraftByID(draftID: string) {
     await this.page.locator(this.SEARCH_DRAFT).fill(draftID);
@@ -200,8 +202,9 @@ export class AirRequest {
     await this.page.locator(`(//div[contains(@id,'listbox')]/div/p)[2]`).click();
   }
   public async startFromScrath() {
-    await this.page.waitForTimeout(400);
     await this.page.getByRole('button', { name: 'Start from scratch' }).click({ force: true });
+    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForTimeout(800);
   }
   public async startFromScrathAndGetUserData() {
     const waitForCreate = this.page.waitForResponse(

@@ -119,7 +119,8 @@ export class Clients {
   public readonly COMFORT_RELATED_DETAILS_HEIGHT_SECTION = `//h5[text()='Comfort-related Details']/../../following-sibling::div/div/div[1]/div[2]`;
   public readonly COMFORT_RELATED_DETAILS_WHEIGHT_SECTION = `//h5[text()='Comfort-related Details']/../../following-sibling::div/div/div[2]/div[2]`;
   public readonly COMFORT_RELATED_DETAILS_SECTION = `//h5[text()='Comfort-related Details']/../../following-sibling::div/div[2]`;
-
+  public readonly RELATED_PASSENGER_NAMES = `//a[contains(@href,'client-detail')]`;
+  public readonly RELATED_PASSENGER_NAMES_STEP2 = `//div[@id="modal-content"]//label/span[2]`;
   public readonly PASSPORT_ISSUE_COUNTRY_OPTION = (country: string) =>
     `//div[@role="listbox"]//p[text()='${country}']`;
   public readonly MAIN_PASSENGER_TAB = `(//div[contains(@class,"Layout_content")]//button[@aria-expanded="false"])[1]`;
@@ -551,6 +552,7 @@ export class Clients {
   }
   public async goToRelatedTravelersTab() {
     await this.page.locator(this.RELATED_PASSENGERS_TAB).click({ force: true });
+    await this.page.waitForLoadState('networkidle');
   }
   public async goToPreferencesTab() {
     await this.page.locator(this.PREFERENCES_TAB).click();

@@ -1,14 +1,11 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
+import { USERS } from '../../../fixtures/users';
 const PROPERTY_NAME_BRAND_DRAFT = 'Olympus';
 const PROPERTY_NAME_BRAND_APPROVED = 'Disney Cruise Line';
 const PROPERTY_NAME_HOTEL_DRAFT = 'Mountain View Lodge';
 const PROPERTY_NAME_HOTEL_APPROVED = 'The Kensington';
 const PROPERTY_NAME_ONSITE_DRAFT = 'Azure Horizon Resort Test';
 const PROPERTY_NAME_ONSITE_APPROVED = 'Abercrombie & Kent Japan';
-const BRAND_USERNAME = {
-  username: 'oksana.gorodiska+6@scrumlaunch.com',
-  password: 'sf_airteam_01@',
-};
 test.setTimeout(200000);
 test.describe('SFC-387 Air Team', () => {
   test('As an Air Team user i can not see draft, and can seepublished partners without Status Column- Brand', async ({
@@ -18,7 +15,7 @@ test.describe('SFC-387 Air Team', () => {
     partners,
   }) => {
     await test.step('1 - Log in to Society ', async () => {
-      await loginPage.login(BRAND_USERNAME);
+      await loginPage.login(USERS.AIR_USERNAME);
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
@@ -52,7 +49,7 @@ test.describe('SFC-387 Air Team', () => {
     searchPage,
   }) => {
     await test.step('1 - Log in to Society ', async () => {
-      await loginPage.login(BRAND_USERNAME);
+      await loginPage.login(USERS.AIR_USERNAME);
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Search - Search Approved Partner Brand. Assert result is 1, title and details are correct', async () => {
@@ -82,7 +79,7 @@ test.describe('SFC-387 Air Team', () => {
     partners,
   }) => {
     await test.step('1 - Log in to Society ', async () => {
-      await loginPage.login(BRAND_USERNAME);
+      await loginPage.login(USERS.AIR_USERNAME);
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
@@ -116,7 +113,7 @@ test.describe('SFC-387 Air Team', () => {
     searchPage,
   }) => {
     await test.step('1 - Log in to Society ', async () => {
-      await loginPage.login(BRAND_USERNAME);
+      await loginPage.login(USERS.AIR_USERNAME);
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Search - Search Approved Partner Hotel. Assert result is 1, title and details are correct', async () => {
@@ -146,7 +143,7 @@ test.describe('SFC-387 Air Team', () => {
     partners,
   }) => {
     await test.step('1 - Log in to Society ', async () => {
-      await loginPage.login(BRAND_USERNAME);
+      await loginPage.login(USERS.AIR_USERNAME);
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
@@ -180,7 +177,7 @@ test.describe('SFC-387 Air Team', () => {
     searchPage,
   }) => {
     await test.step('1 - Log in to Society ', async () => {
-      await loginPage.login(BRAND_USERNAME);
+      await loginPage.login(USERS.AIR_USERNAME);
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Search - Search Approved Partner Hotel. Assert result is 1, title and details are correct', async () => {
