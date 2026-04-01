@@ -173,6 +173,9 @@ export class AirRequest {
   public async searchDraftByID(draftID: string) {
     await this.page.locator(this.SEARCH_DRAFT).fill(draftID);
   }
+  public async waitLong() {
+    await this.page.waitForTimeout(4000);
+  }
   public async confirmDeleteDraft() {
     await this.page.locator(this.CONFIRM_DELETE_DRAFTS).click();
   }

@@ -117,6 +117,7 @@ test.describe('AR-005 - Air Request - Step 5', () => {
       await airRequest.selectSeatsAndSpecialRequest(SPECIAL_REQUEST);
     });
     await test.step('17 - Continue', async () => {
+      await airRequest.waitLong();
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText('Review air request');
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(

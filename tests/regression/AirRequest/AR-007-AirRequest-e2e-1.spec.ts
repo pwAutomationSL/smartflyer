@@ -102,6 +102,7 @@ test.describe('AR-007 - Air Request - E2E - 1 - One Passenger, One-Way flight', 
       await airRequest.addPreferredAircrafts();
       await airRequest.selectPreferences();
       await airRequest.selectSeatsAndSpecialRequest(SPECIAL_REQUEST);
+      await airRequest.waitLong();
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText('Review air request');
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
