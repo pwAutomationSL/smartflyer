@@ -40,6 +40,7 @@ test.describe('AR-003 - Air Request - Step 2', () => {
         'rgb(46, 139, 87)',
       );
       await test.step('ER - check validation for incorrect file', async () => {
+        await airRequest.removeFilesIfPresent();
         try {
           await airRequest.addPassportInformation();
           await airRequest.addIncorrectFile();

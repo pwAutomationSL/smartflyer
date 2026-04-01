@@ -72,6 +72,7 @@ export class AirRequest {
   public readonly MONTH_OPTION = (month: string) =>
     `//div[contains(@id,'option') and contains(.,'${month}')]`;
   public readonly UPLOAD_FILE_BUTTON = `//button[contains(.,'Upload Files')]`;
+  public readonly UPLOAD_MORE_FILE_BUTTON = `//button[contains(.,'Upload More Files')]`;
   public readonly UPLOAD_FILE_P = `//button[contains(.,'Upload Files')]//../../p`;
   public readonly INPUT_FILE = `//input[contains(@id,'passportFileInput')]`;
   public readonly FILES_UPLOAD_POPUP = `//form[@id="passenger-form"]/../div`;
@@ -155,6 +156,7 @@ export class AirRequest {
   public readonly SUBMIT_REQUEST = `//button[contains(.,'Submit Request')]`;
   public readonly AIRLINE_PROGRAM_BY_NAME = (text: string) =>
     `//div[contains(@id,'listbox')]//div/p[contains(.,'${text}')]`;
+  public readonly REMOVE_FILE_BUTTON = `//div/following-sibling::button[contains(@class,'bg-red-500')]`;
 
   public async clickCancel() {
     await this.page.locator(this.CANCEL_BUTTON).click();
@@ -316,7 +318,11 @@ export class AirRequest {
     await this.page.locator(this.JANUARY_OPTION).click();
   }
   public async addPassportInformation(index: number = 1) {
-    await this.page.locator(this.ADD_PASSPORT_INFORMATION(index)).click();
+    const passportButton = this.page.locator(this.ADD_PASSPORT_INFORMATION(index));
+    const ariaChecked = await passportButton.getAttribute('aria-checked');
+    if (ariaChecked === 'false') {
+      await passportButton.click();
+    }
   }
   public async addAdditionalPassenger() {
     await this.page.locator(this.ADD_ADDITIONAL_PASSENGER).click();
@@ -336,6 +342,20 @@ export class AirRequest {
   }
   public async addFilePassport(image: string) {
     await this.page.locator(this.INPUT_FILE).setInputFiles(`./data/images/${image}`);
+    await this.page.waitForTimeout(1500);
+  }
+  public async removeFilesIfPresent() {
+    const removeButton = this.page.locator(this.REMOVE_FILE_BUTTON);
+    while ((await removeButton.count()) > 0) {
+      await removeButton.first().click();
+      await this.page.waitForTimeout(500);
+    }
+
+    await this.page
+      .locator(this.UPLOAD_FILE_P, { hasText: 'Drag your file(s) to start uploading' })
+      .first()
+      .waitFor({ state: 'visible' });
+
     await this.page.waitForTimeout(1500);
   }
   public async uploadAddedFiles() {
@@ -582,7 +602,7 @@ export class AirRequest {
   public async overWriteArrivalAirportFlight1(airport: string, airportShort: string) {
     await this.page.waitForTimeout(700);
     await this.page.locator(`//input[@name="passengerTrips.0.flights.0.arrival"]`).first().click();
-    await this.page.waitForTimeout(500);
+    await this.page.waitForTimeout(700);
     await this.page.getByRole('button').filter({ hasText: /^$/ }).nth(1).first().click();
     await this.page.getByRole('textbox', { name: 'Arriving at' }).first().click();
     await this.page.getByRole('textbox', { name: 'Arriving at' }).first().fill(airportShort);
