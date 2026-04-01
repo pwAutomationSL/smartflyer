@@ -275,6 +275,7 @@ export class AirRequest {
   }
   public async fillPassengerPhone(phone: string, index: number = 0) {
     await this.page.locator(this.PHONE_INPUT_PASSENGER(index)).fill(phone);
+    await this.page.locator(this.PHONE_INPUT_PASSENGER(index)).press('Tab');
     await this.page.waitForTimeout(1000);
   }
   public async checkCertify() {
