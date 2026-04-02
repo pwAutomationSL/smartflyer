@@ -15,7 +15,7 @@ const SPECIAL_REQUEST = `Lorem ipsum do`;
 const DEPARTURE_TIME = 'Morning';
 const CABIN_CLASS = 'Business';
 test.use({
-  launchOptions: { slowMo: 450 },
+  launchOptions: { slowMo: 650 },
 });
 test.describe('AR-005 - Air Request - Step 5', () => {
   test('Air Request - Step 5 - Review', async ({

@@ -17,7 +17,7 @@ const CABIN_CLASS = 'Business';
 const DATE_OF_BIRTH = 'Jan 15, 1990';
 const GENDER = 'Male';
 test.use({
-  launchOptions: { slowMo: 200 },
+  launchOptions: { slowMo: 650 },
 });
 test.describe('AR-007 - Air Request - E2E - 2 - One Passenger, Round Trip flight', () => {
   test('Air Request - 2 -One Passenger, Round Trip flight', async ({
@@ -103,6 +103,7 @@ test.describe('AR-007 - Air Request - E2E - 2 - One Passenger, Round Trip flight
       await airRequest.addPreferredAircrafts();
       await airRequest.selectPreferences();
       await airRequest.selectSeatsAndSpecialRequest(SPECIAL_REQUEST);
+      await airRequest.waitLong();
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER)).toContainText('Review air request');
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(

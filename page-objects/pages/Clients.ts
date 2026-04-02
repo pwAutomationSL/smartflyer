@@ -340,10 +340,10 @@ export class Clients {
     await this.page.getByText(client).click();
   }
   public async searchClientByName(client: string) {
-    await this.page.waitForTimeout(1000);
+    await this.page.getByRole('textbox', { name: 'Search' }).waitFor({ state: 'visible' });
     await this.page.getByRole('textbox', { name: 'Search' }).fill(client);
     await this.page.getByRole('textbox', { name: 'Search' }).press('Enter');
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(1500);
   }
 
   public async deleteAddedTraveler(traveler: string) {

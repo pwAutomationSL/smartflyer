@@ -603,11 +603,13 @@ export class AirRequest {
   }
 
   public async overWriteArrivalAirportFlight1(airport: string, airportShort: string) {
-    await this.page.waitForTimeout(700);
+    await this.page.waitForTimeout(500);
     await this.page.locator(`//input[@name="passengerTrips.0.flights.0.arrival"]`).first().click();
-    await this.page.waitForTimeout(700);
+    await this.page.waitForTimeout(500);
     await this.page.getByRole('button').filter({ hasText: /^$/ }).nth(1).first().click();
+    await this.page.waitForTimeout(500);
     await this.page.getByRole('textbox', { name: 'Arriving at' }).first().click();
+    await this.page.waitForTimeout(500);
     await this.page.getByRole('textbox', { name: 'Arriving at' }).first().fill(airportShort);
     await this.page.waitForTimeout(500);
     await this.page.locator(`//p[contains(.,'${airport}')]`).first().click();

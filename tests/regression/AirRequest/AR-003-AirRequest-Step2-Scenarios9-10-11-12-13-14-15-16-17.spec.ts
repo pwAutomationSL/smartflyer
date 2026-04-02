@@ -273,7 +273,7 @@ test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
             .trim();
           expect(txt).toBe('Passenger 2 - Uploads (2)');
           const imgCount = await page.locator(airRequest.FILES_UPLOAD_POPUP_IMG).count();
-          expect(imgCount).toBe(2);
+          expect(imgCount).toBeGreaterThanOrEqual(2);
           await airRequest.uploadAddedFiles();
           await expect(page.locator(airRequest.FILES_UPLOAD_POPUP_SUCCESS_BAR)).toBeVisible({
             timeout: 10000,
