@@ -858,6 +858,7 @@ export class AirRequest {
       .locator(`//span[contains(.,'Flexible dates for better fare')]//../span[1]`)
       .first()
       .click();
+    await this.page.waitForLoadState('networkidle');
   }
   public async selectSeatsAndSpecialRequest(text: string = 'Test') {
     await this.page.locator(`//span[contains(.,'Window')]//../span[1]`).first().click();

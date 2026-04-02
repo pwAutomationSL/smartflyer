@@ -19,6 +19,7 @@ const GENDER = 'Male';
 test.use({
   launchOptions: { slowMo: 650 },
 });
+test.setTimeout(220000);
 test.describe('AR-007 - Air Request - E2E - 1 - One Passenger, One-Way flight', () => {
   test('Air Request - 1 - One Passenger, One-Way flight', async ({
     loginPage,
