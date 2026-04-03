@@ -3,17 +3,8 @@ const { spawn } = require('child_process');
 process.env.ENVIRONMENT = 'stage';
 
 const commands = [
-  ['npx', ['playwright', 'test', '--project=chromium-air-request', '--workers=1', '--headed']],
-  [
-    'npx',
-    [
-      'playwright',
-      'test',
-      '--project=chromium-client-FAQs-GlobalSearch',
-      '--workers=1',
-      '--headed',
-    ],
-  ],
+  ['npx', ['playwright', 'test', '--project=chromium-air-request', '--workers=1']],
+  ['npx', ['playwright', 'test', '--project=chromium-client-FAQs-GlobalSearch', '--workers=1']],
   [
     'npx',
     [
@@ -21,7 +12,6 @@ const commands = [
       'test',
       '--project=chromium-RolesAndPermissions-Trainings-Toolkit-Tasks-SV-1-Bugs-Login',
       '--workers=1',
-      '--headed',
     ],
   ],
 ];
