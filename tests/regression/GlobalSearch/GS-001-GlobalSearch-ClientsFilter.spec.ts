@@ -37,12 +37,14 @@ test.describe('GS-001 - Search - Clients filter', () => {
       await searchPage.clickClientsFilter();
       await searchPage.textToSearch(LAST_NAME);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_FULL_NAME)).toBeVisible();
     });
     await test.step('5 - Assert result is 1, title and details are correct', async () => {
-      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_FULL_NAME).count();
       expect(count).toBe(1);
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toContainText(LAST_NAME);
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_FULL_NAME)).toContainText(
+        LAST_NAME,
+      );
       await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_DETAIL).last()).toContainText(
         EMAIL,
       );
@@ -50,10 +52,10 @@ test.describe('GS-001 - Search - Clients filter', () => {
     await test.step('6 - Search Again by Email', async () => {
       await searchPage.textToSearch(EMAIL);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_FULL_NAME)).toBeVisible();
     });
     await test.step('7 - Assert result is 1, title and details are correct', async () => {
-      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_FULL_NAME).count();
       expect(count).toBe(1);
       await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_DETAIL).first()).toContainText(
         LAST_NAME,
