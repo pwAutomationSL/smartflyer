@@ -38,7 +38,7 @@ Promise.all(
   children.map(
     (child) =>
       new Promise((resolve, reject) => {
-        child.on('exit', (code: number | null) => {
+        child.on('exit', (code) => {
           if (code === 0) resolve(code);
           else reject(new Error(`Process exited with code ${code}`));
         });

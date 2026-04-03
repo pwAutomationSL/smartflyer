@@ -4,7 +4,8 @@
     "page-objects/**/*",
     "tests/**/*",
     "playwright.config.ts",
-    "**/*.ts"
+    "**/*.ts",
+    "scripts/run-stage.js"
   ],
   "compilerOptions": {
     "target": "ESNext",
