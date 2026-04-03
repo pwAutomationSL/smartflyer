@@ -6,7 +6,7 @@
   "scripts": {
     "test": "playwright test --headed",
     "test:chromium:allure": "npx playwright test --project=chromium",
-    "test:chromium:allure:stage": "node scripts/run-stage.ts",
+    "test:chromium:allure:stage": "node scripts/run-stage.js",
     "test:ui": "playwright test --ui",
     "report": "node generate-report.js",
     "codegen": "playwright codegen"
