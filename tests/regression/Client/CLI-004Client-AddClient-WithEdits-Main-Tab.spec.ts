@@ -381,7 +381,6 @@ test.describe('CLI-001 - Client - Add Client - Edits by section and Finally chec
     page,
     sidebar,
     clients,
-    toast,
   }) => {
     await test.step('1 - Login at Society as an Admin and search for the created client', async () => {
       await loginPage.login({ username, password });

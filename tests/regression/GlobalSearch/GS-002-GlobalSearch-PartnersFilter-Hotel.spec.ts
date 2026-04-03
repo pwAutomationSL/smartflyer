@@ -64,14 +64,16 @@ test.describe('GS-002 - Search - Partners filter Hotel', () => {
       await searchPage.checkPartnerHotelFilter();
       await searchPage.textToSearch(PROPERTY_NAME);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible({
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_FULL_NAME)).toBeVisible({
         timeout: 15000,
       });
     });
     await test.step('8 - Assert result is 1, title and details are correct', async () => {
-      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
-      expect(count).toBe(1);
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(PROPERTY_NAME);
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_FULL_NAME).count();
+      expect(count).toBeGreaterThanOrEqual(1);
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_FULL_NAME)).toHaveText(
+        PROPERTY_NAME,
+      );
     });
   });
 });

@@ -60,7 +60,7 @@ test.describe('TSK-001 - Task', () => {
       await tasks.clickOK();
       await tasks.searchTask(TASK_NAME);
       await expect(page.locator(tasks.COLUMNS_BY_INDEX(1))).toContainText(
-        'No matching records found',
+        'No data available in table',
       );
     });
   });

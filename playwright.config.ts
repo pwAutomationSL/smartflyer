@@ -48,13 +48,8 @@ export default defineConfig<MyOptions>({
       },
     },
     {
-      name: 'chromium-client-FAQs-GlobalSearch',
-      testMatch: [
-        '**/tests/regression/Client/**/*.spec.ts',
-        '**/tests/regression/GlobalSearch/**/*.spec.ts',
-        '**/tests/regression/PartnerForm/**/*.spec.ts',
-        '**/tests/regression/FAQs/**/*.spec.ts',
-      ],
+      name: 'chromium-client',
+      testMatch: ['**/tests/regression/Client/**/*.spec.ts'],
       use: {
         ...chromiumBase,
         username: USERS.ADMIN_SECONDARY.username,
@@ -62,9 +57,22 @@ export default defineConfig<MyOptions>({
       },
     },
     {
+      name: 'chromium-FAQs-GlobalSearch-PartnerForm',
+      testMatch: [
+        '**/tests/regression/GlobalSearch/**/*.spec.ts',
+        '**/tests/regression/PartnerForm/**/*.spec.ts',
+        '**/tests/regression/FAQs/**/*.spec.ts',
+      ],
+      use: {
+        ...chromiumBase,
+        username: USERS.ADMIN_TERTIARY.username,
+        password: USERS.ADMIN_TERTIARY.password,
+      },
+    },
+    {
       name: 'chromium-RolesAndPermissions-Trainings-Toolkit-Tasks-SV-1-Bugs-Login',
       testMatch: [
-        // '**/tests/regression/RolesAndPermissions/**/*.spec.ts',
+        '**/tests/regression/RolesAndPermissions/**/*.spec.ts',
         '**/tests/regression/Trainings/**/*.spec.ts',
         '**/tests/regression/Toolkit/**/*.spec.ts',
         '**/tests/regression/Tasks/**/*.spec.ts',
@@ -73,8 +81,8 @@ export default defineConfig<MyOptions>({
       ],
       use: {
         ...chromiumBase,
-        username: USERS.ADMIN_TERTIARY.username,
-        password: USERS.ADMIN_TERTIARY.password,
+        username: USERS.ADMIN_FOURTH.username,
+        password: USERS.ADMIN_FOURTH.password,
       },
     },
   ],

@@ -11,6 +11,10 @@ export const USERS = {
     username: 'rodrigo.santone+02@scrumlaunch.com',
     password: 'Testing33!',
   },
+  ADMIN_FOURTH: {
+    username: 'rodrigo.santone+03@scrumlaunch.com',
+    password: 'Testing33!',
+  },
   AGENT_USERNAME: {
     username: 'useragent@scrumlaunch.com',
     password: 'sf_agents_01@',

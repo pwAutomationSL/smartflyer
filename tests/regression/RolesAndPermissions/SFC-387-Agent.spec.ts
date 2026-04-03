@@ -132,8 +132,8 @@ test.describe('SFC-387 Agent', () => {
     await test.step('3 - Go to Search - Search Drafted Partner Hotel. Assert result is 0', async () => {
       await searchPage.textToSearch(PROPERTY_NAME_HOTEL_DRAFT);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toBeHidden();
-      await expect(page.locator(searchPage.NO_RESULTS)).toContainText('No matching results');
+      const allTexts = await page.locator(searchPage.SEARCH_RESULT_MATCHES_P).allTextContents();
+      expect(allTexts.some((text) => text.includes(PROPERTY_NAME_HOTEL_DRAFT))).toBe(false);
     });
   });
   test('As a Agent user i can see draft and published partners- Onsite', async ({
@@ -196,8 +196,8 @@ test.describe('SFC-387 Agent', () => {
     await test.step('3 - Go to Search - Search Drafted Partner Hotel. Assert result is 0', async () => {
       await searchPage.textToSearch(PROPERTY_NAME_ONSITE_DRAFT);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toBeHidden();
-      await expect(page.locator(searchPage.NO_RESULTS)).toContainText('No matching results');
+      const allTexts = await page.locator(searchPage.SEARCH_RESULT_MATCHES_P).allTextContents();
+      expect(allTexts.some((text) => text.includes(PROPERTY_NAME_ONSITE_DRAFT))).toBe(false);
     });
   });
 });

@@ -4,9 +4,10 @@ process.env.ENVIRONMENT = 'stage';
 
 const commands = [
   ['chromium-air-request', ['playwright', 'test', '--project=chromium-air-request', '--workers=1']],
+  ['chromium-client', ['playwright', 'test', '--project=chromium-client', '--workers=1']],
   [
-    'chromium-client-FAQs-GlobalSearch',
-    ['playwright', 'test', '--project=chromium-client-FAQs-GlobalSearch', '--workers=1'],
+    'chromium-FAQs-GlobalSearch-PartnerForm',
+    ['playwright', 'test', '--project=chromium-FAQs-GlobalSearch-PartnerForm', '--workers=1'],
   ],
   [
     'chromium-RolesAndPermissions-Trainings-Toolkit-Tasks-SV-1-Bugs-Login',
