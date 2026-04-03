@@ -10,13 +10,15 @@ test.describe('AR-003 - Air Request - Step #18 ', () => {
   test.setTimeout(200_000);
   test('Air Request - Step 2 - 18# Scenario - Add new traveler, don’t save to client profile', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
     airRequest,
   }) => {
     await test.step('1 - Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });

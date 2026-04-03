@@ -13,13 +13,15 @@ test.use({
 test.describe('AR-005 - Air Request - Step 4', () => {
   test('Air Request - Step 4 - 3# Scenario - Non Refundable', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
     airRequest,
   }) => {
     await test.step('1 - Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });

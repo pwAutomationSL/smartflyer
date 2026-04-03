@@ -12,13 +12,15 @@ test.use({
 test.describe('AR-002 - Air Request - Step 1', () => {
   test('Scenario 1 - Admin - Start From Scratch and Continue', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
     airRequest,
   }) => {
     await test.step('Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });
@@ -52,13 +54,15 @@ test.describe('AR-002 - Air Request - Step 1', () => {
   });
   test('Scenario 1 - Admin → Start From Scratch and Cancel', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
     airRequest,
   }) => {
     await test.step('Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
       await test.step('Search the client and go to the client page', async () => {

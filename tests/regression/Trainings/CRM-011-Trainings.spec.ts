@@ -12,12 +12,14 @@ test.use({
 test.describe('CRM-011 Trainings', () => {
   test('As an admin, i want to create a new training', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     trainings,
   }) => {
     await test.step('Go to the Training tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Trainings');
     });

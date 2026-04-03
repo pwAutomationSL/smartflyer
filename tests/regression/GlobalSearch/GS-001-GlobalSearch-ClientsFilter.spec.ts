@@ -6,13 +6,15 @@ const EMAIL = `${LAST_NAME}@asd.com`;
 test.describe('GS-001 - Search - Clients filter', () => {
   test('Login at Society (env) as an Admin Search by Last Name', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     searchPage,
     clients,
   }) => {
     await test.step('1 - Login at Society as an Admin', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Clients, Quick Add', async () => {

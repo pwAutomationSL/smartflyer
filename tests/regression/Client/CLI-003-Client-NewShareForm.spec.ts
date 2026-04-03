@@ -5,12 +5,14 @@ const message = `Lorem ipsum dolor sit amet consectetur adipiscing elit.`;
 test.describe('CLI-003 - Client - Validate new share form', () => {
   test('Login as an Admin and verify Share Form Pop Up is updated ', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
   }) => {
     await test.step('1- Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });
@@ -35,12 +37,14 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
   });
   test('Credit Card Form - Login as an Admin, click Share Form, fill data and send ', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
   }) => {
     await test.step('1- Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });
@@ -67,12 +71,14 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
   });
   test('Profile Form - Login as an Admin, click Share Form, fill data and send', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
   }) => {
     await test.step('1- Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });
@@ -99,12 +105,14 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
   });
   test('Both Forms - Login as Admin click Share Form, fill data and send', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
   }) => {
     await test.step('1- Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });

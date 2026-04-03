@@ -11,12 +11,14 @@ test.use({
 test.describe('TSK-001 - Task', () => {
   test('As an admin,i want to be able to add a new task, search it, edit and finally delete it', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     tasks,
   }) => {
     await test.step('Login and Go to the Task tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Tasks');
     });

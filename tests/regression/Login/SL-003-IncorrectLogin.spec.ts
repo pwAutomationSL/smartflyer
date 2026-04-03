@@ -2,7 +2,7 @@ import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 test.describe('LOG-003 - Login - Incorrect Login', () => {
   test('Scenario 1 - Wrong username', async ({ loginPage, page }) => {
     await test.step('Go to the Client tab', async () => {
-      await loginPage.login({ username: 'rodrigo.santone@nonexistant.com' });
+      await loginPage.login({ username: 'rodrigo.santone@nonexistant.com', password: '12345' });
       await expect(page.locator(loginPage.ERROR_MESSAGE)).toContainText(
         'These credentials do not match our records.',
       );
@@ -11,7 +11,10 @@ test.describe('LOG-003 - Login - Incorrect Login', () => {
   });
   test('Scenario 2 - Wrong password', async ({ loginPage, page }) => {
     await test.step('Go to the Client tab', async () => {
-      await loginPage.login({ password: '12345' });
+      await loginPage.login({
+        username: 'rodrigo.santone@scrumlaunch.com',
+        password: 'wrongpassword',
+      });
       await expect(page.locator(loginPage.ERROR_MESSAGE)).toContainText(
         'The provided password is incorrect.',
       );

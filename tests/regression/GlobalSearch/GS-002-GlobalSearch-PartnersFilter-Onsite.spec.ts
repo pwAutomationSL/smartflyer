@@ -11,6 +11,8 @@ let json: any;
 test.describe('GS-002 - Search - Partners filter Onsite', () => {
   test('Login at Society (env) as an Admin', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     partners,
@@ -18,7 +20,7 @@ test.describe('GS-002 - Search - Partners filter Onsite', () => {
     toast,
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {

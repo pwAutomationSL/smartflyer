@@ -16,13 +16,15 @@ test.describe('GS-006 - Search - Gallery filter', () => {
   });
   test('Login at Society (env) as an Admin', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     searchPage,
     galleryPage,
   }) => {
     await test.step('1 - Login at Society as an Admin', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Search - Gallery filter', async () => {

@@ -1,6 +1,11 @@
 import { Page } from '@playwright/test';
 
 import { getEnvConfig } from '../../utils/envConfig';
+type LoginOptions = {
+  username: string;
+  password: string;
+  host?: string;
+};
 export class LoginPage {
   public readonly page: Page;
   constructor({ page }: { page: Page }) {
@@ -13,15 +18,7 @@ export class LoginPage {
   public readonly HEADER = `//h1`;
   public readonly USER_DROPDOWN_BUTTON = `//button[@id="dropdownMenuButton1"]`;
   public readonly LOGOUT = `//a[@href="/logout"]`;
-  async login({
-    username = 'rodrigo.santone@scrumlaunch.com',
-    password = 'Testing33!',
-    host = getEnvConfig().BASE_URL,
-  }: {
-    username?: string;
-    password?: string;
-    host?: string;
-  } = {}) {
+  async login({ username, password, host = getEnvConfig().BASE_URL }: LoginOptions): Promise<void> {
     await this.page.goto(host);
     await this.page.locator(this.EMAIL_INPUT).fill(username);
     await this.page.locator(this.PASSWORD_INPUT).fill(password);

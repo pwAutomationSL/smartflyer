@@ -10,13 +10,15 @@ const CLIENT_ID = 'SQ4715';
 test.describe('AR-003 - Air Request - Step 2', () => {
   test('Scenario 1 - Navigate to Step 2', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
     airRequest,
   }) => {
     await test.step('1 - Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });

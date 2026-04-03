@@ -10,13 +10,15 @@ function getDate(): string {
 test.describe('AR-002 - Air Request - Step 1', () => {
   test('Scenario 3 - Admin → Continue from Draft', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
     airRequest,
   }) => {
     await test.step('Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });

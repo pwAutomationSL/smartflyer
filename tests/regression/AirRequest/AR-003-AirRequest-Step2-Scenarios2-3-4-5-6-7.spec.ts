@@ -8,13 +8,15 @@ const WRONG_EMAIL = 'fake_candiceconway84gmail.com';
 test.describe('AR-003 - Air Request - Step 2', () => {
   test('Air Request - Step 2 - 2,3,4,5,6,7# Scenario', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
     airRequest,
   }, testInfo) => {
     await test.step('1 - Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });

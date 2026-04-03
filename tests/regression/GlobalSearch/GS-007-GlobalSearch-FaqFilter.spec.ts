@@ -5,13 +5,15 @@ const FAQ = `New FAQ ` + uniqueId();
 test.describe('GS-007 - Search - FAQs filter', () => {
   test('Login at Society (env) as an Admin', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     searchPage,
     faqs,
   }) => {
     await test.step('1 - Login at Society as an Admin', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Search - FAQs filter', async () => {
