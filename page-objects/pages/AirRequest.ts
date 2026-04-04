@@ -619,7 +619,6 @@ export class AirRequest {
       .waitFor({ state: 'visible' });
     await this.page.getByRole('textbox', { name: 'Arriving at' }).first().fill(airportShort);
     await this.page.waitForTimeout(500);
-    await this.page.locator(`//*[contains(.,'${airport}')]`).first().click();
     const noResultsLocator = `(//label[text()='Arrival airport']/../../following-sibling::div//b[text()='No results found.'])[1]`;
     if (await this.page.locator(noResultsLocator).isVisible()) {
       await this.page.getByRole('button').filter({ hasText: /^$/ }).nth(1).first().click();
@@ -628,8 +627,13 @@ export class AirRequest {
       await this.page
         .locator(`//form//li/button[not(contains(@class,'hidden'))]/following-sibling::div/div`)
         .waitFor({ state: 'visible' });
-      await this.page.getByRole('textbox', { name: 'Arriving at' }).first().fill(airportShort);
+      await this.page
+        .getByRole('textbox', { name: 'Arriving at' })
+        .first()
+        .pressSequentially(airportShort);
       await this.page.waitForTimeout(500);
+      await this.page.locator(`//*[contains(.,'${airport}')]`).first().click();
+    } else {
       await this.page.locator(`//*[contains(.,'${airport}')]`).first().click();
     }
     await this.page.waitForTimeout(400);
