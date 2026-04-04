@@ -255,6 +255,10 @@ export class AirRequest {
 
   public async clickGenderDropdown(index: number = 1) {
     await this.page.locator(this.GENDER_DROPDOWN(index)).click();
+    if (!(await this.page.locator(this.MALE_DROPDOWN).isVisible())) {
+      await this.page.locator(this.GENDER_DROPDOWN(index)).click();
+    }
+    await this.page.locator(this.MALE_DROPDOWN).waitFor({ state: 'visible' });
   }
   public async selectMale() {
     await this.page.locator(this.MALE_DROPDOWN).click();
@@ -316,7 +320,7 @@ export class AirRequest {
     await this.page.locator(this.DOB_YEAR(index)).clear();
   }
   public async fillMonth(index: number = 1) {
-    await this.page.waitForTimeout(400);
+    await this.page.waitForTimeout(600);
     await this.page.locator(this.DOB_MONTH(index)).click();
     await this.page.locator(this.JANUARY_OPTION).click();
   }
@@ -609,10 +613,25 @@ export class AirRequest {
     await this.page.getByRole('button').filter({ hasText: /^$/ }).nth(1).first().click();
     await this.page.waitForTimeout(500);
     await this.page.getByRole('textbox', { name: 'Arriving at' }).first().click();
-    await this.page.waitForTimeout(500);
+    await this.page
+      .locator(`//form//li/button[not(contains(@class,'hidden'))]/following-sibling::div/div`)
+      .first()
+      .waitFor({ state: 'visible' });
     await this.page.getByRole('textbox', { name: 'Arriving at' }).first().fill(airportShort);
     await this.page.waitForTimeout(500);
-    await this.page.locator(`//p[contains(.,'${airport}')]`).first().click();
+    await this.page.locator(`//*[contains(.,'${airport}')]`).first().click();
+    const noResultsLocator = `(//label[text()='Arrival airport']/../../following-sibling::div//b[text()='No results found.'])[1]`;
+    if (await this.page.locator(noResultsLocator).isVisible()) {
+      await this.page.getByRole('button').filter({ hasText: /^$/ }).nth(1).first().click();
+      await this.page.waitForTimeout(500);
+      await this.page.getByRole('textbox', { name: 'Arriving at' }).first().click();
+      await this.page
+        .locator(`//form//li/button[not(contains(@class,'hidden'))]/following-sibling::div/div`)
+        .waitFor({ state: 'visible' });
+      await this.page.getByRole('textbox', { name: 'Arriving at' }).first().fill(airportShort);
+      await this.page.waitForTimeout(500);
+      await this.page.locator(`//*[contains(.,'${airport}')]`).first().click();
+    }
     await this.page.waitForTimeout(400);
   }
   public async overWriteArrivalAirportFlight2(airport: string, airportShort: string) {
@@ -647,8 +666,15 @@ export class AirRequest {
     await this.page.getByRole('textbox', { name: 'Arriving at' }).last().clear();
     await this.page.waitForTimeout(500);
     await this.page.getByRole('textbox', { name: 'Arriving at' }).last().fill(airportShort);
+    const noResultsLocator = `(//label[text()='Arrival airport']/../../following-sibling::div//b[text()='No results found.'])[1]`;
+    if (await this.page.locator(noResultsLocator).isVisible()) {
+      await this.page.getByRole('textbox', { name: 'Arriving at' }).last().click();
+      await this.page.getByRole('textbox', { name: 'Arriving at' }).last().clear();
+      await this.page.waitForTimeout(500);
+      await this.page.getByRole('textbox', { name: 'Arriving at' }).last().fill(airportShort);
+    }
     await this.page.waitForTimeout(500);
-    await this.page.locator(`//div[contains(.,'${airport}')]/../label/span`).last().click();
+    await this.page.locator(`//*[contains(.,'${airport}')]`).last().click();
   }
   public async selectTravelDate() {
     await this.page.getByRole('textbox', { name: 'Departure date' }).click();
