@@ -17,19 +17,21 @@ const CABIN_CLASS = 'Business';
 const DATE_OF_BIRTH = 'Jan 15, 1990';
 const GENDER = 'Male';
 test.use({
-  launchOptions: { slowMo: 650 },
+  launchOptions: { slowMo: 750 },
 });
 test.setTimeout(220000);
 test.describe('AR-007 - Air Request - E2E - 1 - One Passenger, One-Way flight', () => {
   test('Air Request - 1 - One Passenger, One-Way flight', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
     airRequest,
   }) => {
     await test.step('1 - Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });

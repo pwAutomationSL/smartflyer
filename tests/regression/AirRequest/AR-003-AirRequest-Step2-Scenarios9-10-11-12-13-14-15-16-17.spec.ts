@@ -15,14 +15,15 @@ test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
   test.setTimeout(200_000);
   test('Air Request - Step 2 - 9# and #10 Scenario - Add Additional Passenger', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
-    toast,
     airRequest,
   }, testInfo) => {
     await test.step('1 - Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });

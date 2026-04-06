@@ -9,12 +9,14 @@ const expected = PASSPORT.toString();
 test.describe('SFC-370 -  upload a passport file', () => {
   test('As an admin, when I try to upload a passport file, it should not return server error.', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
   }) => {
     await test.step('Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
       await clients.searchClientAndClick(CLIENT_NAME);

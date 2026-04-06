@@ -7,9 +7,17 @@ test.use({
 let addedRelatedPassenger: string[];
 let addedRelatedPassengerStep2AR: string[];
 test.describe('SFC-749 Inconsistent related passengers name showing in Air Request', () => {
-  test('Super Admin', async ({ loginPage, page, sidebar, clients, airRequest }) => {
+  test('Super Admin', async ({
+    loginPage,
+    page,
+    sidebar,
+    clients,
+    airRequest,
+    username,
+    password,
+  }) => {
     await test.step('1 - Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });

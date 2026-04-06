@@ -17,8 +17,10 @@ export class SearchPage {
   public readonly PARTNERS_BRAND_FILTER_CHECKBOX = `//span[contains(.,'Brand')]/../../label/input`;
   public readonly SEARCH_RESULT_LINKS = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https')]`;
   public readonly SEARCH_RESULT_MATCHES = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https')]/div/div/div/p/span//mark`;
+  public readonly SEARCH_RESULT_MATCHES_FULL_NAME = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//p)[1]`;
   public readonly SEARCH_RESULT_MATCHES_A = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//mark)[1]`;
   public readonly SEARCH_RESULT_MATCHES_SPAN = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//span)[1]`;
+  public readonly SEARCH_RESULT_MATCHES_P = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//p[1])`;
   public readonly SEARCH_RESULT_IMAGES = `//div[contains(@class,'Layout_content')]//a//img`;
   public readonly SEARCH_RESULT_MATCHES_A_FIRSTONLY = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//span)[1]`;
   public readonly SEARCH_RESULT_MATCHES_DIRECTORY_FIRSTONLY = `(//div[contains(@class,'Layout_content')]//div//div/p/span)[1]`;

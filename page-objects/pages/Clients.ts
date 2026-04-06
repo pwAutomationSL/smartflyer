@@ -121,6 +121,8 @@ export class Clients {
   public readonly COMFORT_RELATED_DETAILS_SECTION = `//h5[text()='Comfort-related Details']/../../following-sibling::div/div[2]`;
   public readonly RELATED_PASSENGER_NAMES = `//a[contains(@href,'client-detail')]`;
   public readonly RELATED_PASSENGER_NAMES_STEP2 = `//div[@id="modal-content"]//label/span[2]`;
+  public readonly CLIENT_LOGS = `(//span[text()='Client profile form updated by '])[1]`;
+  public readonly AUDIT_LOGS = `//span[contains(.,'Audit Logs')]`;
   public readonly PASSPORT_ISSUE_COUNTRY_OPTION = (country: string) =>
     `//div[@role="listbox"]//p[text()='${country}']`;
   public readonly MAIN_PASSENGER_TAB = `(//div[contains(@class,"Layout_content")]//button[@aria-expanded="false"])[1]`;
@@ -837,6 +839,9 @@ export class Clients {
   public async editDate(name: string, date: string) {
     await this.page.locator(this.EDIT_DATE_BY_FIELD(name)).press('Enter');
     await this.page.locator(this.EDIT_DATE_BY_FIELD(name)).fill(date);
+  }
+  public async clickAuditLogs() {
+    await this.page.locator(this.AUDIT_LOGS).click();
   }
 }
 export const clients = (page: Page) => new Clients({ page });

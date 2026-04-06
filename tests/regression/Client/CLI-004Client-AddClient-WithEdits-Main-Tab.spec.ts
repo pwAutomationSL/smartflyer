@@ -36,19 +36,21 @@ const normalizePhoneNumber = (str: string | null | undefined): string => {
 };
 
 test.use({
-  launchOptions: { slowMo: 700 },
+  launchOptions: { slowMo: 500 },
 });
 
-test.describe('CLI-001 - Client - Add Client', () => {
+test.describe('CLI-001 - Client - Add Client - Edits by section and Finally check Logs', () => {
   test('Login at Society (env) as an Admin and add a client ', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
     toast,
   }) => {
     await test.step('1 - Login at Society as an Admin', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
     });
     await test.step('2 - Go to “Clients” under the main navigation menu of Society', async () => {
@@ -100,6 +102,8 @@ test.describe('CLI-001 - Client - Add Client', () => {
   });
   test('Edit Created Client- verify individual popup for Basic Information Edit', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
@@ -107,7 +111,7 @@ test.describe('CLI-001 - Client - Add Client', () => {
   }) => {
     const section = 'Basic Information';
     await test.step('1 - Login at Society as an Admin and search for the created client', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
       await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME);
@@ -155,6 +159,8 @@ test.describe('CLI-001 - Client - Add Client', () => {
   });
   test('Edit Created Client- verify individual popup for Address Edit', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
@@ -162,7 +168,7 @@ test.describe('CLI-001 - Client - Add Client', () => {
   }) => {
     const section = 'Address';
     await test.step('1 - Login at Society as an Admin and search for the created client', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
       await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
@@ -197,6 +203,8 @@ test.describe('CLI-001 - Client - Add Client', () => {
   });
   test('Edit Created Client- verify individual popup for Emergency Contact Edit', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
@@ -204,7 +212,7 @@ test.describe('CLI-001 - Client - Add Client', () => {
   }) => {
     const section = 'Emergency Contact';
     await test.step('1 - Login at Society as an Admin and search for the created client', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
       await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
@@ -234,6 +242,8 @@ test.describe('CLI-001 - Client - Add Client', () => {
   });
   test('Edit Created Client- verify individual popup for Important Dates Edit', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
@@ -241,7 +251,7 @@ test.describe('CLI-001 - Client - Add Client', () => {
   }) => {
     const section = 'Important Dates';
     await test.step('1 - Login at Society as an Admin and search for the created client', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
       await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
@@ -268,6 +278,8 @@ test.describe('CLI-001 - Client - Add Client', () => {
   });
   test('Edit Created Client- verify individual popup for Loyalty Programs Edit', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
@@ -277,7 +289,7 @@ test.describe('CLI-001 - Client - Add Client', () => {
     const newLoyaltyProgram = 'Marriott Bonvoy';
     const newNumber = '99999999';
     await test.step('1 - Login at Society as an Admin and search for the created client', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
       await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
@@ -302,6 +314,8 @@ test.describe('CLI-001 - Client - Add Client', () => {
   });
   test('Edit Created Client- verify individual popup for Important Travel Data Edit', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
@@ -316,7 +330,7 @@ test.describe('CLI-001 - Client - Add Client', () => {
     const editedNumber3 = '33333333';
     const editedDate = '03/03/2033';
     await test.step('1 - Login at Society as an Admin and search for the created client', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
       await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
@@ -357,6 +371,26 @@ test.describe('CLI-001 - Client - Add Client', () => {
       await expect(page.locator(clients.TRAVEL_DATA_DATE_BY_PROGRAM(program3))).toContainText(
         editedDate,
       );
+    });
+  });
+
+  test('Review Created Client- verify Logs were added in main tab', async ({
+    loginPage,
+    username,
+    password,
+    page,
+    sidebar,
+    clients,
+  }) => {
+    await test.step('1 - Login at Society as an Admin and search for the created client', async () => {
+      await loginPage.login({ username, password });
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
+      await sidebar.goToModule('Clients');
+      await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
+    });
+    await test.step('2 -Review Logs', async () => {
+      await clients.clickAuditLogs();
+      await expect(page.locator(clients.CLIENT_LOGS)).toBeVisible();
     });
   });
 });

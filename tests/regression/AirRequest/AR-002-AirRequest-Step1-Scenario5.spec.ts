@@ -11,6 +11,8 @@ const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
 test.describe('AR-002 - Air Request - Step 1', () => {
   test('Scenario 5 - Delete draft', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
@@ -18,7 +20,7 @@ test.describe('AR-002 - Air Request - Step 1', () => {
     airRequest,
   }) => {
     await test.step('Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });

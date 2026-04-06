@@ -12,13 +12,15 @@ const ARRIVAL = 'Los Angeles International Airport';
 test.describe('AR-004 - Air Request - Step 3', () => {
   test('Air Request - Step 3 - 2# Scenario', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
     airRequest,
   }) => {
     await test.step('1 - Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });

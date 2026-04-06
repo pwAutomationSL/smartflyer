@@ -6,6 +6,8 @@ const email = `test${lastName}@test.com`;
 test.skip('GS-003 - Search - Directory Filter - New User', () => {
   test('Directory Filter- New User', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     directories,
@@ -13,7 +15,7 @@ test.skip('GS-003 - Search - Directory Filter - New User', () => {
     toast,
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Directories ', async () => {

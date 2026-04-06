@@ -15,18 +15,20 @@ const SPECIAL_REQUEST = `Lorem ipsum do`;
 const DEPARTURE_TIME = 'Morning';
 const CABIN_CLASS = 'Business';
 test.use({
-  launchOptions: { slowMo: 650 },
+  launchOptions: { slowMo: 750 },
 });
 test.describe('AR-005 - Air Request - Step 5', () => {
   test('Air Request - Step 5 - Review', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
     airRequest,
   }) => {
     await test.step('1 - Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });

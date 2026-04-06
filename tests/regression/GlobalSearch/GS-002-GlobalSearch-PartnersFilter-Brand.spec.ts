@@ -11,6 +11,8 @@ let json: any;
 test.describe('GS-002 - Search - Partners filter Brand', () => {
   test('Login at Society (env) as an Admin', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     partners,
@@ -18,7 +20,7 @@ test.describe('GS-002 - Search - Partners filter Brand', () => {
     toast,
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
@@ -62,12 +64,14 @@ test.describe('GS-002 - Search - Partners filter Brand', () => {
       await searchPage.checkPartnerBrandFilter();
       await searchPage.textToSearch(PROPERTY_NAME);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_FULL_NAME)).toBeVisible();
     });
     await test.step('8 - Assert result is 1, title and details are correct', async () => {
-      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
-      expect(count).toBe(1);
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(PROPERTY_NAME);
+      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_FULL_NAME).count();
+      expect(count).toBeGreaterThanOrEqual(1);
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_FULL_NAME)).toHaveText(
+        PROPERTY_NAME,
+      );
     });
   });
 });

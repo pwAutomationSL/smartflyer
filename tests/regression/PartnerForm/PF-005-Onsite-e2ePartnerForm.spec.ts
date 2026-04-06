@@ -11,6 +11,8 @@ test.setTimeout(200000);
 test.describe('PF-005 - e2e for Partner Form', () => {
   test('Login at Society (env) as an Admin', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     partners,
@@ -19,7 +21,7 @@ test.describe('PF-005 - e2e for Partner Form', () => {
     toast,
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {

@@ -19,13 +19,15 @@ test.setTimeout(250000);
 test.describe('AR-004 - Air Request - Step 3', () => {
   test('Air Request - Step 3 -  7# Scenario - Multi-city trip, multiple passengers, different itineraries', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
     airRequest,
   }) => {
     await test.step('1 - Go to the Client tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
     });

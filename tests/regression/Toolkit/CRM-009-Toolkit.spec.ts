@@ -10,12 +10,14 @@ test.describe('CRM-009 - Toolkit', () => {
   const UNEXISTING_TOOLKIT_NAME = 'New Toolkit foo' + uniqueId();
   test('As an admin, i want to create a new toolkit', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     toolkit,
   }) => {
     await test.step('Go to the Toolkit tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.openContentCRM('Toolkit');
     });
@@ -35,12 +37,14 @@ test.describe('CRM-009 - Toolkit', () => {
   });
   test('As an admin, i want to search the created toolkit and also search a non existant toolkit', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     toolkit,
   }) => {
     await test.step('Go to the Toolkit tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.openContentCRM('Toolkit');
     });
@@ -63,12 +67,14 @@ test.describe('CRM-009 - Toolkit', () => {
   });
   test('As an admin, i want to edit the created toolkit', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     toolkit,
   }) => {
     await test.step('Go to the Toolkit tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.openContentCRM('Toolkit');
     });
@@ -94,13 +100,15 @@ test.describe('CRM-009 - Toolkit', () => {
   });
   test('As an admin, i want to delete the created toolkit', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     toolkit,
     toast,
   }) => {
     await test.step('Go to the Toolkit tab', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.openContentCRM('Toolkit');
     });

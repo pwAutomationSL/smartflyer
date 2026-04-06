@@ -20,13 +20,15 @@ const normalizePhoneNumber = (str: string | null | undefined): string => {
 test.describe('CLI-002 - Client - Add Client with related passenger', () => {
   test('Login at Society (env) as an Admin and add a client with related passenger', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     clients,
     toast,
   }) => {
     await test.step('1 - Login at Society as an Admin', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to “Clients” under the main navigation menu of Society', async () => {

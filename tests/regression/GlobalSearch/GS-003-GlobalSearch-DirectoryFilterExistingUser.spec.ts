@@ -5,9 +5,16 @@ const partnerUser = `Sophia Aitken`;
 const brandUser = `Sydney Adler`;
 
 test.describe('GS-003 - Search - Directory Filter ', () => {
-  test('Existing User - Agents', async ({ loginPage, page, sidebar, searchPage }) => {
+  test('Existing User - Agents', async ({
+    loginPage,
+    page,
+    sidebar,
+    searchPage,
+    username,
+    password,
+  }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('4 - Go to Search - Directory - Agents filter', async () => {
@@ -29,9 +36,16 @@ test.describe('GS-003 - Search - Directory Filter ', () => {
       );
     });
   });
-  test('Existing User - SuperAdmin', async ({ loginPage, page, sidebar, searchPage }) => {
+  test('Existing User - SuperAdmin', async ({
+    loginPage,
+    page,
+    sidebar,
+    searchPage,
+    username,
+    password,
+  }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('4 - Go to Search - Directory - Super Admin filter', async () => {
@@ -53,9 +67,16 @@ test.describe('GS-003 - Search - Directory Filter ', () => {
       );
     });
   });
-  test('Existing User - Partners', async ({ loginPage, page, sidebar, searchPage }) => {
+  test('Existing User - Partners', async ({
+    loginPage,
+    page,
+    sidebar,
+    searchPage,
+    username,
+    password,
+  }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('4 - Go to Search - Directory - Super Admin filter', async () => {
@@ -77,9 +98,16 @@ test.describe('GS-003 - Search - Directory Filter ', () => {
       );
     });
   });
-  test('Existing User - Brand', async ({ loginPage, page, sidebar, searchPage }) => {
+  test('Existing User - Brand', async ({
+    loginPage,
+    page,
+    sidebar,
+    searchPage,
+    username,
+    password,
+  }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('4 - Go to Search - Directory - Super Admin filter', async () => {

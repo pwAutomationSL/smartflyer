@@ -6,13 +6,14 @@ const FAQ_UPDATE = `Updated FAQ ` + uniqueId();
 test.describe('CRM-006 - FAQ', () => {
   test('The purpose of this test is to validate the action of adding a FAQ at the FAQs section at Society.', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
-    searchPage,
     faqs,
   }) => {
     await test.step('As an admin, I want to create a new FAQ.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('FAQs');
       await expect(page.locator(faqs.FAQS_HEADER)).toContainText('FAQs');

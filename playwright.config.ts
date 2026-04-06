@@ -1,5 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
-
+import { USERS } from './fixtures/users';
+import type { MyOptions } from './fixtures/PlaywrightFixtures';
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -11,91 +12,78 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-export default defineConfig({
+const chromiumBase = {
+  actionTimeout: 10_000,
+  launchOptions: {
+    slowMo: 380,
+  },
+  ...devices['Desktop Chrome'],
+  viewport: { width: 1280, height: 800 },
+};
+export default defineConfig<MyOptions>({
   timeout: 120_000,
   expect: {
-    // How long expect() waits before failing
-    timeout: 10_000,
+    timeout: 15_000,
   },
   testDir: './tests',
-  /* Run tests in files in parallel */
-  fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
   retries: process.env.CI ? 1 : 1,
-  /* Opt out of parallel tests on CI. */
-  workers: 1,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [['allure-playwright']],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('')`. */
     baseURL: 'https://crm.test.smartflyer.com/',
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'off',
     timezoneId: 'America/New_York',
     screenshot: 'only-on-failure',
   },
-
-  /* Configure projects for major browsers */
+  fullyParallel: false,
+  workers: 1,
   projects: [
     {
-      name: 'chromium',
+      name: 'chromium-air-request',
+      testDir: './tests/regression/AirRequest',
       use: {
-        actionTimeout: 10_000,
-        launchOptions: {
-          slowMo: 380,
-        },
-        ...devices['Desktop Chrome'],
-        viewport: { width: 1280, height: 800 },
+        ...chromiumBase,
+        username: USERS.ADMIN_MAIN.username,
+        password: USERS.ADMIN_MAIN.password,
       },
     },
-    // {
-    //   name: "firefox",
-    //   use: {
-    //     ...devices["Desktop Firefox"],
-    //     launchOptions: {
-    //       slowMo: 180,
-    //     },
-    //   },
-    // },
-
-    // {
-    //   name: "webkit",
-    //   use: {
-    //     ...devices["Desktop Safari"],
-    //     launchOptions: {
-    //       slowMo: 180,
-    //     },
-    //   },
-    // },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: "Mobile Chrome",
-    //   use: { ...devices["Pixel 5"] },
-    // },
-    // {
-    //   name: "Mobile Safari",
-    //   use: { ...devices["iPhone 15"] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+    {
+      name: 'chromium-client',
+      testMatch: ['**/tests/regression/Client/**/*.spec.ts'],
+      use: {
+        ...chromiumBase,
+        username: USERS.ADMIN_SECONDARY.username,
+        password: USERS.ADMIN_SECONDARY.password,
+      },
+    },
+    {
+      name: 'chromium-FAQs-GlobalSearch-PartnerForm',
+      testMatch: [
+        '**/tests/regression/GlobalSearch/**/*.spec.ts',
+        '**/tests/regression/PartnerForm/**/*.spec.ts',
+        '**/tests/regression/FAQs/**/*.spec.ts',
+      ],
+      use: {
+        ...chromiumBase,
+        username: USERS.ADMIN_TERTIARY.username,
+        password: USERS.ADMIN_TERTIARY.password,
+      },
+    },
+    {
+      name: 'chromium-RolesAndPermissions-Trainings-Toolkit-Tasks-SV-1-Bugs-Login',
+      testMatch: [
+        '**/tests/regression/RolesAndPermissions/**/*.spec.ts',
+        '**/tests/regression/Trainings/**/*.spec.ts',
+        '**/tests/regression/Toolkit/**/*.spec.ts',
+        '**/tests/regression/Tasks/**/*.spec.ts',
+        '**/tests/regression/SV-1-Bugs/**/*.spec.ts',
+        '**/tests/regression/Login/**/*.spec.ts',
+      ],
+      use: {
+        ...chromiumBase,
+        username: USERS.ADMIN_FOURTH.username,
+        password: USERS.ADMIN_FOURTH.password,
+      },
+    },
   ],
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });

@@ -9,12 +9,14 @@ test.setTimeout(200000);
 test.describe('SFC-387 Admin', () => {
   test('As an Admin user i can see draft and published partners- Brand', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     partners,
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
@@ -41,12 +43,14 @@ test.describe('SFC-387 Admin', () => {
   });
   test('As an Admin user i can see draft and published partners in global search- Brand', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     searchPage,
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Search - Search Approved Partner Brand. Assert result is 1, title and details are correct', async () => {
@@ -75,12 +79,14 @@ test.describe('SFC-387 Admin', () => {
   });
   test('As an Admin user i can see draft and published partners- Hotel', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     partners,
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
@@ -107,12 +113,14 @@ test.describe('SFC-387 Admin', () => {
   });
   test('As an Admin user i can see draft and published partners in global search- Hotel', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     searchPage,
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Search - Search Approved Partner Hotel. Assert result is 1, title and details are correct', async () => {
@@ -141,12 +149,14 @@ test.describe('SFC-387 Admin', () => {
   });
   test('As an Admin user i can see draft and published partners- Onsite', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     partners,
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - From the sidebar, navigate to Partners and open the Partners form.', async () => {
@@ -173,12 +183,14 @@ test.describe('SFC-387 Admin', () => {
   });
   test('As an Admin user i can see draft and published partners in global search- Onsite', async ({
     loginPage,
+    username,
+    password,
     page,
     sidebar,
     searchPage,
   }) => {
     await test.step('1 - Log in to Society with an Admin account.', async () => {
-      await loginPage.login();
+      await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
     await test.step('2 - Go to Search - Search Approved Partner Hotel. Assert result is 1, title and details are correct', async () => {
