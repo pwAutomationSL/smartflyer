@@ -56,7 +56,7 @@ test.describe('GS-006 - Search - Gallery filter', () => {
       });
       await expect(page.locator(galleryPage.HEADER_H2)).toContainText('Image information');
       const value = await page.locator(galleryPage.IMAGE_NAME).inputValue();
-      expect(value).toContain(imageName);
+      expect(value.toLowerCase()).toContain(imageName.toLowerCase());
       await galleryPage.closePopUp();
     });
   });

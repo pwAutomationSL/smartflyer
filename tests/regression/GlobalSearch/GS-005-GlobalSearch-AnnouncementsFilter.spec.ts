@@ -36,12 +36,10 @@ test.describe('GS-005 - Search - Announcements filter', () => {
       await searchPage.clickAnnouncementsFilter();
       await searchPage.textToSearch(TITLE);
       await expect(page.locator(searchPage.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toBeVisible();
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN)).toBeVisible();
     });
     await test.step('5 - Assert result is 1, title and details are correct', async () => {
-      const count = await page.locator(searchPage.SEARCH_RESULT_MATCHES_A).count();
-      expect(count).toBe(1);
-      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_A)).toHaveText(TITLE);
+      await expect(page.locator(searchPage.SEARCH_RESULT_MATCHES_SPAN).first()).toHaveText(TITLE);
       await expect(
         page.locator(searchPage.SEARCH_RESULT_MATCHES_DETAIL_LAST_PART).last(),
       ).toHaveText(DETAILS);

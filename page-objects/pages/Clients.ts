@@ -45,6 +45,7 @@ export class Clients {
   public readonly RELATED_PASSENGERS_TAB = `//button[text()="RELATED TRAVELERS"]`;
   public readonly PREFERENCES_TAB = `//button[text()="PREFERENCES"]`;
   public readonly SHARE_BUTTON = `//button[text()="Share"]`;
+  public readonly SEND_FORMS = `//button[text()="Send Forms"]`;
   public readonly PROFILE_FORM_CARD = `//button/h5[text()="Profile Form"]`;
   public readonly PROFILE_FORM_CARD_RADIO = `//button/h5[text()="Profile Form"]/preceding-sibling::span`;
   public readonly CREDIT_CARD_FORM = `//button/h5[text()="Credit Card Form"]`;
@@ -561,6 +562,9 @@ export class Clients {
   }
   public async clickShare() {
     await this.page.locator(this.SHARE_BUTTON).click();
+  }
+  public async clickSendForms() {
+    await this.page.locator(this.SEND_FORMS).click();
   }
   public async checkCCForm() {
     await this.page.locator(this.CREDIT_CARD_FORM_RADIO).click();

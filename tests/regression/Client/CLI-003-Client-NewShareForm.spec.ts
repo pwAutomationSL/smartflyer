@@ -19,8 +19,8 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
     await test.step('2- Search the client and go to the client page', async () => {
       await clients.searchClient(CLIENT_NAME);
     });
-    await test.step('3- Click Share Button', async () => {
-      await clients.clickShare();
+    await test.step('3- Click Send Forms Button', async () => {
+      await clients.clickSendForms();
       await expect(page.locator(clients.PROFILE_FORM_CARD)).toBeVisible();
       await expect(page.locator(clients.PROFILE_FORM_CARD_RADIO)).toBeVisible();
       await expect(page.locator(clients.CREDIT_CARD_FORM)).toBeVisible();
@@ -52,8 +52,8 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
       await clients.searchClient(CLIENT_NAME);
       await page.waitForLoadState('networkidle');
     });
-    await test.step('3- Click Share Button', async () => {
-      await clients.clickShare();
+    await test.step('3- Click Send Forms Button', async () => {
+      await clients.clickSendForms();
       await expect(page.locator(clients.PROFILE_FORM_CARD)).toBeVisible();
       await expect(page.locator(clients.CREDIT_CARD_FORM_RADIO)).toBeVisible();
     });
@@ -86,8 +86,8 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
       await clients.searchClient(CLIENT_NAME);
       await page.waitForLoadState('networkidle');
     });
-    await test.step('3- Click Share Button', async () => {
-      await clients.clickShare();
+    await test.step('3- Click Send Forms Button', async () => {
+      await clients.clickSendForms();
       await expect(page.locator(clients.PROFILE_FORM_CARD)).toBeVisible();
       await expect(page.locator(clients.CREDIT_CARD_FORM_RADIO)).toBeVisible();
     });
@@ -120,8 +120,8 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
       await clients.searchClient(CLIENT_NAME);
       await page.waitForLoadState('networkidle');
     });
-    await test.step('3- Click Share Button', async () => {
-      await clients.clickShare();
+    await test.step('3- Click Send Forms Button', async () => {
+      await clients.clickSendForms();
       await expect(page.locator(clients.PROFILE_FORM_CARD)).toBeVisible();
       await expect(page.locator(clients.CREDIT_CARD_FORM_RADIO)).toBeVisible();
     });
