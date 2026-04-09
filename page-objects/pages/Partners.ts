@@ -300,6 +300,13 @@ export class Partners {
     }
     await this.page.locator('[name="commission_detail"]').fill('5% on test, 10% on test 2');
   }
+  public async checkCommissionsOfferingCruise() {
+    const percentages = [5, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25];
+    for (const i of percentages) {
+      await this.page.locator(`//input[@id="commisiion_offer_percent_${i}"]`).check();
+      await this.page.locator(`//input[@id="commission_percent_2_${i}"]`).check();
+    }
+  }
 
   public async agentBenefitsUpload() {
     await this.page.getByRole('button', { name: 'Choose From Gallery' }).click();
@@ -415,6 +422,45 @@ export class Partners {
     await this.page.getByRole('checkbox', { name: 'Approve', exact: true }).check();
     await this.page.getByRole('checkbox', { name: 'Featured Leisure' }).check();
     await this.page.locator('input[name="overview[member_since]"]').fill('2025-11-11');
+  }
+  public async cruiseLineOverview() {
+    await this.page
+      .getByRole('textbox', { name: 'In 4-6 sentences, please share your brand story' })
+      .first()
+      .fill('Cruise Line Overview Test');
+  }
+  public async whatTypeOfCruise() {
+    await this.page.getByRole('checkbox', { name: 'Ocean' }).check();
+    await this.page.getByRole('checkbox', { name: 'River' }).check();
+    await this.page.getByRole('checkbox', { name: 'Expedition' }).check();
+  }
+  public async insiderTIps() {
+    await this.page
+      .getByRole('textbox', { name: 'Tell us your insider tips' })
+      .fill('Insider Tips Test');
+  }
+  public async cruiseELevate() {
+    await this.page.locator('#se_amentiesYes').check();
+    await this.page.getByRole('textbox', { name: 'Enter SmartFlyer Elevate' }).fill('test');
+    await this.page.locator('#pp_programYes').check();
+  }
+  public async cruisePreferredPartner() {
+    await this.page.getByRole('textbox', { name: 'Enter Preferred Partner' }).fill('test');
+    await this.page.getByRole('textbox', { name: 'Enter Here' }).fill('test');
+    await this.page.getByRole('textbox', { name: 'Insert Preferred Partner' }).fill('test');
+  }
+  public async virtuosoAmenities() {
+    await this.page.getByRole('radio', { name: 'Yes Yes Yes Yes' }).check();
+    await this.page.getByRole('textbox', { name: 'Enter Virtuoso Amenity here' }).fill('test');
+    await this.page.getByRole('checkbox', { name: 'Elevate amenities' }).check();
+    await this.page.getByRole('checkbox', { name: 'Preferred Partner amenities' }).check();
+    await this.page.getByRole('radio', { name: 'Elevate amenities' }).check();
+    await this.page.getByRole('radio', { name: 'Preferred Partner amenities' }).check();
+    await this.page
+      .getByRole('textbox', { name: 'Briefly describe the' })
+      .fill('Cruise Line Specifics');
+    await this.page.getByRole('textbox', { name: 'Please answer in one sentence' }).fill('Vibes');
+    await this.page.getByRole('textbox', { name: 'Wellness enthusiasts,' }).fill('Wellness ');
   }
 }
 export const partners = (page: Page) => new Partners({ page });
