@@ -59,6 +59,7 @@ export default defineConfig<MyOptions>({
     {
       name: 'chromium-FAQs-GlobalSearch-PartnerForm',
       testMatch: [
+        '**/tests/regression/Gallery/**/*.spec.ts',
         '**/tests/regression/GlobalSearch/**/*.spec.ts',
         '**/tests/regression/PartnerForm/**/*.spec.ts',
         '**/tests/regression/FAQs/**/*.spec.ts',

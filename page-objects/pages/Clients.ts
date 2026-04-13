@@ -184,6 +184,10 @@ export class Clients {
   public readonly EDIT_DATE_BY_FIELD = (field: string) =>
     `//label[text()='${field}']/following-sibling::div//input`;
 
+  public readonly ALL_CLIENT_TABS = `//button[@role='tab']`;
+  public readonly CLIENT_TAB = (tabName: string) =>
+    `//button[@role='tab' and normalize-space(.)='${tabName}']`;
+
   public async clickCreate() {
     await this.page.locator(this.HEADER).click();
   }
