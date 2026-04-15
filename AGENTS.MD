@@ -193,3 +193,23 @@ public readonly CLIENT_TAB = (tabName: string) =>
 await expect(page.locator(clients.CLIENT_TAB('Inactive'))).toBeVisible();
 
 Try to avoid //\*[] xpaths, always try to find the type of the element for example : p, span, button, input, dialog, textarea, div
+
+Also generate a separate Notion-ready test case section with numbered steps and expected outcomes for each step.
+Do not create a file for the documentation unless I explicitly ask.
+Do not include selectors or code details in the test case wording.
+
+Test case: Create client successfully
+
+### Test Case example
+
+1. Open Clients page
+   Expected: Clients page is displayed
+
+2. Click New Client
+   Expected: Create Client form is displayed
+
+3. Fill required fields
+   Expected: Input values are accepted
+
+4. Click Save
+   Expected: Client is created successfully and success toast is shown

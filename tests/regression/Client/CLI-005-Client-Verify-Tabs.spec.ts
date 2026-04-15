@@ -26,4 +26,76 @@ test.describe('CLI-005 - Client - Verify tabs', () => {
       await expect(page.locator(clients.CLIENT_TAB('Deleted'))).toBeVisible();
     });
   });
+  test('Login as an AirTeam and verify client tabs are visible but no Delete and Inactive Tab are shown', async ({
+    loginPage,
+    page,
+    sidebar,
+    clients,
+  }) => {
+    await test.step('1 - Login at Society as an Admin', async () => {
+      await loginPage.login(USERS.AIR_USERNAME);
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
+    });
+
+    await test.step('2 - Go to Clients from the main navigation menu', async () => {
+      await sidebar.goToModule('Clients');
+      await expect(page.locator(clients.HEADER)).toContainText('Clients');
+    });
+
+    await test.step('3 - Verify the four client tabs are visible', async () => {
+      await expect(page.locator(clients.ALL_CLIENT_TABS)).toHaveCount(2);
+      await expect(page.locator(clients.CLIENT_TAB('Active'))).toBeVisible();
+      await expect(page.locator(clients.CLIENT_TAB('Inactive'))).toBeHidden();
+      await expect(page.locator(clients.CLIENT_TAB('Archive'))).toBeVisible();
+      await expect(page.locator(clients.CLIENT_TAB('Deleted'))).toBeHidden();
+    });
+  });
+  test('Login as an Brand and verify client tabs are visible but no Delete is shown', async ({
+    loginPage,
+    page,
+    sidebar,
+    clients,
+  }) => {
+    await test.step('1 - Login at Society as an Admin', async () => {
+      await loginPage.login(USERS.BRAND_USERNAME);
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
+    });
+
+    await test.step('2 - Go to Clients from the main navigation menu', async () => {
+      await sidebar.goToModule('Clients');
+      await expect(page.locator(clients.HEADER)).toContainText('Clients');
+    });
+
+    await test.step('3 - Verify the four client tabs are visible', async () => {
+      await expect(page.locator(clients.ALL_CLIENT_TABS)).toHaveCount(3);
+      await expect(page.locator(clients.CLIENT_TAB('Active'))).toBeVisible();
+      await expect(page.locator(clients.CLIENT_TAB('Inactive'))).toBeVisible();
+      await expect(page.locator(clients.CLIENT_TAB('Archive'))).toBeVisible();
+      await expect(page.locator(clients.CLIENT_TAB('Deleted'))).toBeHidden();
+    });
+  });
+  test('Login as an Agent and verify client tabs are visible but no Delete i976is shown', async ({
+    loginPage,
+    page,
+    sidebar,
+    clients,
+  }) => {
+    await test.step('1 - Login at Society as an Admin', async () => {
+      await loginPage.login(USERS.BRAND_USERNAME);
+      await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
+    });
+
+    await test.step('2 - Go to Clients from the main navigation menu', async () => {
+      await sidebar.goToModule('Clients');
+      await expect(page.locator(clients.HEADER)).toContainText('Clients');
+    });
+
+    await test.step('3 - Verify the four client tabs are visible', async () => {
+      await expect(page.locator(clients.ALL_CLIENT_TABS)).toHaveCount(3);
+      await expect(page.locator(clients.CLIENT_TAB('Active'))).toBeVisible();
+      await expect(page.locator(clients.CLIENT_TAB('Inactive'))).toBeVisible();
+      await expect(page.locator(clients.CLIENT_TAB('Archive'))).toBeVisible();
+      await expect(page.locator(clients.CLIENT_TAB('Deleted'))).toBeHidden();
+    });
+  });
 });
