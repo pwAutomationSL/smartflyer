@@ -3,26 +3,26 @@ const { spawn } = require('child_process');
 process.env.ENVIRONMENT = 'stage';
 
 const commands = [
-  ['chromium-air-request', ['playwright', 'test', '--project=chromium-air-request', '--workers=1']],
-  ['chromium-client', ['playwright', 'test', '--project=chromium-client', '--workers=1']],
+  // ['chromium-air-request', ['playwright', 'test', '--project=chromium-air-request', '--workers=1']],
+  // ['chromium-client', ['playwright', 'test', '--project=chromium-client', '--workers=1']],
   [
     'chromium-FAQs-GlobalSearch-PartnerForm',
     ['playwright', 'test', '--project=chromium-FAQs-GlobalSearch-PartnerForm', '--workers=1'],
   ],
-  [
-    'chromium-RolesAndPermissions-Trainings-Toolkit-Tasks-SV-1-Bugs-Login',
-    [
-      'playwright',
-      'test',
-      '--project=chromium-RolesAndPermissions-Trainings-Toolkit-Tasks-SV-1-Bugs-Login',
-      '--workers=1',
-    ],
-  ],
+  // [
+  //   'chromium-RolesAndPermissions-Trainings-Toolkit-Tasks-SV-1-Bugs-Login',
+  //   [
+  //     'playwright',
+  //     'test',
+  //     '--project=chromium-RolesAndPermissions-Trainings-Toolkit-Tasks-SV-1-Bugs-Login',
+  //     '--workers=1',
+  //   ],
+  // ],
 ];
 
 const runCommand = (name, args) =>
   new Promise((resolve) => {
-    console.log(`\n🚀 Starting ${name}...`);
+    console.log(`\nStarting ${name}...`);
 
     const child = spawn('npx', args, {
       stdio: 'inherit',

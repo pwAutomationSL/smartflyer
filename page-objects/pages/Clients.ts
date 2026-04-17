@@ -593,7 +593,7 @@ export class Clients {
     await this.page.locator(this.SHARE_BUTTON).click();
   }
   public async clickSendForms() {
-    await this.page.locator(this.SEND_FORMS).click();
+    await this.page.locator(this.SHARE_BUTTON).click();
   }
   public async checkCCForm() {
     await this.page.locator(this.CREDIT_CARD_FORM_RADIO).click();
