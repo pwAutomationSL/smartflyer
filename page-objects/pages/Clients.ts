@@ -187,6 +187,31 @@ export class Clients {
   public readonly ALL_CLIENT_TABS = `//button[@role='tab']`;
   public readonly CLIENT_TAB = (tabName: string) =>
     `//button[@role='tab' and normalize-space(.)='${tabName}']`;
+  public readonly CLIENT_ROW = (clientName: string) =>
+    `//table[@id='ClientTable']//tr[td[contains(normalize-space(.),'${clientName}')]]`;
+  public readonly CLIENT_STATUS_BUTTON = (clientName: string) =>
+    `${this.CLIENT_ROW(clientName)}//td[6]//span`;
+  public readonly CLIENT_ACTIONS_BUTTON = (clientName: string) =>
+    `${this.CLIENT_ROW(clientName)}//td[7]//button`;
+  public readonly CLIENT_ACTION_OPTION = (option: string) =>
+    `//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//*[normalize-space(.)='${option}']`;
+  public readonly CLIENT_STATUS_CONFIRM_POPUP = `//*[contains(@class,'swal2-popup')]`;
+  public readonly CLIENT_STATUS_CONFIRM_YES = `//button[normalize-space(.)='Yes']`;
+  public readonly CLIENT_ARCHIVE_CONFIRM_BUTTON = `//button[normalize-space(.)='Yes, archive it!']`;
+  public readonly CLIENT_DELETE_CONFIRM_BUTTON = `//button[contains(normalize-space(.),'Yes, move to Deleted')]`;
+  public readonly CLIENT_V3_STATUS_ICON = (clientName: string) =>
+    `//h1[contains(.,'${clientName}')]/following-sibling::span`;
+  public readonly CLIENT_V3_HOVER_STATUS = (clientName: string) =>
+    `//h1[contains(.,'${clientName}')]/following-sibling::span/following-sibling::*//span`;
+  public readonly CLIENT_V3_MENU = `//button[text()='Send Forms']/following-sibling::div`;
+  public readonly CLIENT_V3_CHANGE_STATUS = `//button[normalize-space(.)='Change status']`;
+  public readonly CLIENT_V3_CURRENT_STATUS = `//p[contains(normalize-space(.),'Current status:')]`;
+  public readonly CLIENT_V3_STATUS_OPTION = (status: string) =>
+    status === 'Archive'
+      ? `//dialog//*[normalize-space(.)='Archive' or normalize-space(.)='Archived']`
+      : `//dialog//*[normalize-space(.)='${status}']`;
+  public readonly CLIENT_V3_CANCEL = `//button[normalize-space(.)='Cancel']`;
+  public readonly CLIENT_V3_UPDATE_STATUS = `//button[normalize-space(.)='Update Status']`;
 
   public async clickCreate() {
     await this.page.locator(this.HEADER).click();

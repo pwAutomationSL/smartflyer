@@ -6,7 +6,7 @@ export class SideBar {
     this.page = page;
   }
   public readonly MODULE_BY_TEXT = (module: string) =>
-    `//div[@class="body-sidebar"]//a[contains(.,'${module}')]`;
+    `//div[contains(@class,"body-sidebar")]//a[contains(.,'${module}')]`;
   public readonly MODULE_BY_TEXT_APP = (module: string) => `//ul//p[text()="${module}"]`;
   public readonly CONTENT_MENU = `//*//p[contains(.,'Content')]`;
   public readonly CONTENT_SOCIETY_MENU = `//*//p[contains(.,'-society crm')]`;

@@ -1,0 +1,4 @@
+number,client_identity,loyalty_program,note,frequent_flyer_number
+LP-100001,MY6831,AA,John Doe loyalty program,DL-FF-001
+LP-100002,ZQ1841,SKYMILES,John Doe Delta loyalty,SM-FF-002
+LP-100003,VJ6642,TRUEBLUE,John Doe JetBlue loyalty,JB-FF-003

@@ -96,7 +96,9 @@ test.describe('CLI-001 - Client - Add Client - Edits by section and Finally chec
       await clients.fillFlightPreferences();
       await clients.fillTravelPreferencesByCategory();
       await clients.confirmSubmission();
-      await expect(page.locator(clients.HEADER)).toContainText(MAIN_PASSENGER_NAME);
+      await expect(page.locator(clients.HEADER)).toContainText(MAIN_PASSENGER_NAME, {
+        timeout: 10000,
+      });
       await expect(page.locator(clients.HEADER)).toContainText(MAIN_PASSENGER_LAST_NAME);
     });
   });

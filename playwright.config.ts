@@ -63,6 +63,7 @@ export default defineConfig<MyOptions>({
         '**/tests/regression/GlobalSearch/**/*.spec.ts',
         '**/tests/regression/PartnerForm/**/*.spec.ts',
         '**/tests/regression/FAQs/**/*.spec.ts',
+        '**/tests/api/**/*.spec.ts',
       ],
       use: {
         ...chromiumBase,
