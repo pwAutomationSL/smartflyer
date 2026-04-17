@@ -6,7 +6,7 @@ const unique = uniqueId();
 const LAST_NAME = `LastName` + unique;
 const EMAIL = `${LAST_NAME}@asd.com`;
 test.describe('CLI-005 - Client v3 - Status Change', () => {
-  test('Login to app qa2 and verify Change status modal in client profile', async ({
+  test('Login to app and verify Change status modal in client profile', async ({
     loginPage,
     page,
     clients,
@@ -48,7 +48,7 @@ test.describe('CLI-005 - Client v3 - Status Change', () => {
       expect(savedStatus).toEqual('Active');
     });
 
-    await test.step('4 - Open Change status and verify Pending can change to Active or Archive', async () => {
+    await test.step('4 - Open Change status and verify Active can change to Pending or Archive', async () => {
       await page.locator(clients.CLIENT_V3_MENU).click();
       await page.locator(clients.CLIENT_V3_CHANGE_STATUS).click();
 
@@ -71,7 +71,7 @@ test.describe('CLI-005 - Client v3 - Status Change', () => {
       expect(savedStatus).toEqual('Pending');
     });
 
-    await test.step('6 - Open Change status again and verify Active can change to Inactive or Archive', async () => {
+    await test.step('6 - Open Change status again and verify Pending can change to Active or Archive', async () => {
       await page.locator(clients.CLIENT_V3_MENU).click();
       await page.locator(clients.CLIENT_V3_CHANGE_STATUS).click();
 
