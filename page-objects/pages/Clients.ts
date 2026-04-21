@@ -203,6 +203,8 @@ export class Clients {
     `//h1[contains(.,'${clientName}')]/following-sibling::span`;
   public readonly CLIENT_V3_HOVER_STATUS = (clientName: string) =>
     `//h1[contains(.,'${clientName}')]/following-sibling::span/following-sibling::*//span`;
+  public readonly CLIENT_MENU = `//button[text()='Share']/following-sibling::div`;
+  public readonly CHANGE_AGENT = `//button[contains(.,'Change the agent')]`;
   public readonly CLIENT_V3_MENU = `//button[text()='Send Forms']/following-sibling::div`;
   public readonly CLIENT_V3_CHANGE_STATUS = `//button[normalize-space(.)='Change status']`;
   public readonly CLIENT_V3_CURRENT_STATUS = `//p[contains(normalize-space(.),'Current status:')]`;
@@ -357,6 +359,21 @@ export class Clients {
   }
   public async clickFirstResult() {
     await this.page.locator(this.ALL_ACTIVE_CLIENTS).first().click();
+  }
+  public async setAgentIfNotPresent() {
+    await this.page.locator(this.CLIENT_MENU).first().click();
+    await this.page.locator(this.CHANGE_AGENT).first().click();
+    await this.page
+      .locator(`//div[contains(.,'Search the agent')]/following-sibling::div/input`)
+      .click();
+    await this.page
+      .locator(`//div[contains(.,'Search the agent')]/following-sibling::div/input`)
+      .fill('Rodrigo Santone');
+    await this.page
+      .locator(`//div[@role='listbox']//p[contains(.,'Rodrigo Santone')]`)
+      .first()
+      .click();
+    await this.page.getByRole('button', { name: 'Save Changes' }).click();
   }
   public async goToCreditCard() {
     await this.page.getByRole('tab', { name: 'credit card' }).click();

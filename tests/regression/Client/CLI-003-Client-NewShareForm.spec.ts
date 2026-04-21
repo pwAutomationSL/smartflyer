@@ -1,6 +1,6 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 
-const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
+const CLIENT_NAME = 'LastName';
 const message = `Lorem ipsum dolor sit amet consectetur adipiscing elit.`;
 test.describe('CLI-003 - Client - Validate new share form', () => {
   test('Login as an Admin and verify Share Form Pop Up is updated ', async ({
@@ -17,7 +17,9 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
       await sidebar.goToModule('Clients');
     });
     await test.step('2- Search the client and go to the client page', async () => {
-      await clients.searchClient(CLIENT_NAME);
+      await clients.searchClientByName(CLIENT_NAME);
+      await clients.clickFirstResult();
+      await clients.setAgentIfNotPresent();
     });
     await test.step('3- Click Send Forms Button', async () => {
       await clients.clickSendForms();
@@ -49,7 +51,8 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
       await sidebar.goToModule('Clients');
     });
     await test.step('2- Search the client and go to the client page', async () => {
-      await clients.searchClient(CLIENT_NAME);
+      await clients.searchClientByName(CLIENT_NAME);
+      await clients.clickFirstResult();
       await page.waitForLoadState('networkidle');
     });
     await test.step('3- Click Send Forms Button', async () => {
@@ -83,7 +86,8 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
       await sidebar.goToModule('Clients');
     });
     await test.step('2- Search the client and go to the client page', async () => {
-      await clients.searchClient(CLIENT_NAME);
+      await clients.searchClientByName(CLIENT_NAME);
+      await clients.clickFirstResult();
       await page.waitForLoadState('networkidle');
     });
     await test.step('3- Click Send Forms Button', async () => {
@@ -117,7 +121,8 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
       await sidebar.goToModule('Clients');
     });
     await test.step('2- Search the client and go to the client page', async () => {
-      await clients.searchClient(CLIENT_NAME);
+      await clients.searchClientByName(CLIENT_NAME);
+      await clients.clickFirstResult();
       await page.waitForLoadState('networkidle');
     });
     await test.step('3- Click Send Forms Button', async () => {
