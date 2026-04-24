@@ -214,9 +214,45 @@ export class Clients {
       : `//dialog//*[normalize-space(.)='${status}']`;
   public readonly CLIENT_V3_CANCEL = `//button[normalize-space(.)='Cancel']`;
   public readonly CLIENT_V3_UPDATE_STATUS = `//button[normalize-space(.)='Update Status']`;
+  public readonly CLIENT_PROFILE_TAB = (tabName: string) =>
+    `//button[normalize-space(.)='${tabName}']`;
+  public readonly NOTES_HEADER = `//h3[contains(normalize-space(.),'Notes')]`;
+  public readonly NOTES_EMPTY_STATE_TITLE = `//h3[normalize-space(.)='No notes yet']`;
+  public readonly NOTES_EMPTY_STATE_DESCRIPTION = `//p[contains(normalize-space(.),'Add notes to capture important client details')]`;
+  public readonly ADD_NOTE_BUTTON = `//button[contains(normalize-space(.),'Add Note')]`;
+  public readonly NOTE_MODAL_TITLE = (title: string) => `//h2[normalize-space(.)='${title}']`;
+  public readonly NOTE_MODAL_DESCRIPTION = `//p[contains(normalize-space(.),'Add notes to capture') or contains(normalize-space(.),'Edit the details below as needed.')]`;
+  public readonly NOTE_TITLE_INPUT = `//input[@name='title']`;
+  public readonly NOTE_TAGGED_AGENTS = `//p[normalize-space(.)='Tagged agents']`;
+  public readonly NOTE_TAGGED_AGENTS_COMBOBOX = `//dialog//input[@role='combobox' and @aria-autocomplete='list']`;
+  public readonly NOTE_TAGGED_AGENTS_OPTIONS = `//div[@role='option']`;
+  public readonly NOTE_TAGGED_AGENTS_OPTION = (agentName: string) =>
+    `//div[@role='option'][.//*[normalize-space(.)='${agentName}']]`;
+  public readonly NOTE_DESCRIPTION_INPUT = `//textarea[@name='description']`;
+  public readonly NOTE_CHARACTER_COUNT = `//span[contains(normalize-space(.),'/300')]`;
+  public readonly NOTE_SAVE = `//dialog//button[normalize-space(.)='Save']`;
+  public readonly NOTE_SAVE_CHANGES = `//button[normalize-space(.)='Save Changes']`;
+  public readonly NOTE_ROW = (title: string) =>
+    `//tbody//tr[td//button[normalize-space(.)='${title}']]`;
+  public readonly NOTE_TABLE_HEADER = (header: string) => `//th[normalize-space(.)='${header}']`;
+  public readonly NOTE_ROW_DETAILS = (title: string) => `${this.NOTE_ROW(title)}//td[2]//p`;
+  public readonly NOTE_ROW_DATE = (title: string) => `${this.NOTE_ROW(title)}//td[3]//p`;
+  public readonly NOTE_ROW_TAGGED_AGENTS = (title: string) => `${this.NOTE_ROW(title)}//td[4]`;
+  public readonly NOTE_ROW_TAGGED_AGENTS_MORE = (title: string, count: number) =>
+    `${this.NOTE_ROW_TAGGED_AGENTS(title)}//*[normalize-space(.)='+${count}']`;
+  public readonly NOTE_EDIT_BUTTON = (title: string) =>
+    `${this.NOTE_ROW(title)}//td[last()]//button[1]`;
+  public readonly NOTE_DELETE_BUTTON = (title: string) =>
+    `${this.NOTE_ROW(title)}//td[last()]//button[2]`;
+  public readonly NOTE_DELETE_CONFIRMATION_TITLE = `//h2[contains(normalize-space(.),'Are you sure you want to delete this note?')]`;
+  public readonly NOTE_DELETE_CONFIRMATION_DESCRIPTION = `//p[contains(normalize-space(.),'This action cannot be undone.')]`;
+  public readonly NOTE_DELETE_CONFIRM = `//dialog//button[normalize-space(.)='Delete']`;
 
   public async clickCreate() {
     await this.page.locator(this.HEADER).click();
+  }
+  public async openClientProfileTab(tabName: string) {
+    await this.page.locator(this.CLIENT_PROFILE_TAB(tabName)).click();
   }
   public async clickAddClient() {
     await this.page.getByRole('link', { name: 'Add Client' }).click();
@@ -407,6 +443,86 @@ export class Clients {
   }
   public async clickOkPopUp() {
     await this.page.getByRole('button', { name: 'OK' }).click();
+  }
+  public async openAddNoteModal() {
+    await this.page.locator(this.ADD_NOTE_BUTTON).click();
+  }
+  public async fillNoteTitle(title: string) {
+    await this.page.locator(this.NOTE_TITLE_INPUT).fill(title);
+  }
+  public async fillNoteDescription(description: string) {
+    await this.page.locator(this.NOTE_DESCRIPTION_INPUT).fill(description);
+  }
+  public async createClientNote(title: string, description: string) {
+    await this.fillNoteTitle(title);
+    await this.fillNoteDescription(description);
+    await this.page.locator(this.NOTE_SAVE).click();
+  }
+  public async selectTaggedAgent(agentName: string) {
+    await this.page.locator(this.NOTE_TAGGED_AGENTS_COMBOBOX).fill(agentName);
+    await this.page.locator(this.NOTE_TAGGED_AGENTS_OPTION(agentName)).click();
+  }
+  public async selectFirstTaggedAgents(count: number) {
+    await this.page.locator(this.NOTE_TAGGED_AGENTS_COMBOBOX).click();
+    await this.page.locator(this.NOTE_TAGGED_AGENTS_OPTIONS).first().waitFor({ state: 'visible' });
+
+    const agentNames = (await this.page.locator(this.NOTE_TAGGED_AGENTS_OPTIONS).allTextContents())
+      .map((agentName) => agentName.trim())
+      .filter(Boolean)
+      .slice(0, count);
+
+    for (const agentName of agentNames) {
+      await this.page.locator(this.NOTE_TAGGED_AGENTS_OPTION(agentName)).click();
+    }
+
+    return agentNames;
+  }
+  public async createClientNoteWithTaggedAgent(
+    title: string,
+    taggedAgent: string,
+    description: string,
+  ) {
+    await this.fillNoteTitle(title);
+    await this.selectTaggedAgent(taggedAgent);
+    await this.fillNoteDescription(description);
+    await this.saveNote();
+  }
+  public async createClientNoteWithTaggedAgents(
+    title: string,
+    taggedAgents: string[],
+    description: string,
+  ) {
+    await this.fillNoteTitle(title);
+    for (const taggedAgent of taggedAgents) {
+      await this.page.locator(this.NOTE_TAGGED_AGENTS_OPTION(taggedAgent)).click();
+    }
+    await this.fillNoteDescription(description);
+    await this.saveNote();
+  }
+  public async saveNote() {
+    await this.page.locator(this.NOTE_SAVE).click();
+  }
+  public async saveNoteChanges() {
+    await this.page.locator(this.NOTE_SAVE_CHANGES).click();
+  }
+  public async clickNoteEditButton(title: string) {
+    await this.page.locator(this.NOTE_EDIT_BUTTON(title)).click();
+  }
+  public async clickNoteDeleteButton(title: string) {
+    await this.page.locator(this.NOTE_DELETE_BUTTON(title)).click();
+  }
+  public async hoverNoteTaggedAgentsMore(title: string, count: number) {
+    await this.page.locator(this.NOTE_ROW_TAGGED_AGENTS_MORE(title, count)).last().hover();
+  }
+  public async confirmNoteDelete() {
+    await this.page.locator(this.NOTE_DELETE_CONFIRM).click();
+  }
+  public async createNoteWithFirstTaggedAgents(title: string, description: string, count: number) {
+    await this.fillNoteTitle(title);
+    const taggedAgents = await this.selectFirstTaggedAgents(count);
+    await this.fillNoteDescription(description);
+    await this.page.locator(this.NOTE_SAVE).click();
+    return taggedAgents;
   }
   public async addPassportIfNotFull(passport_name: string) {
     const passportsAdded = await this.page.locator(this.PASSPORTS_ADDED).count();
