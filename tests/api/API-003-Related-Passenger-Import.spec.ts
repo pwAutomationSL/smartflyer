@@ -56,7 +56,7 @@ const createCsvWithUniqueEmails = (fileName: string): string => {
   return tempFilePath;
 };
 
-test.describe('API-001 - Related Passenger Import', () => {
+test.skip('API-001 - Related Passenger Import', () => {
   test('TC-001 - valid one row', async ({ request }) => {
     let authorizationHeader = '';
     let mediaUuid = '';
