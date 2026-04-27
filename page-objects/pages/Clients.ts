@@ -766,7 +766,7 @@ export class Clients {
     await this.page
       .locator(`//div[text()='Select relationship']/../following-sibling::div`)
       .click();
-    await this.page.locator(`//div[@role="option"]/p[text()='${data.relationship}']`).click();
+    await this.page.locator(`//div[@role="option"]//p[text()='${data.relationship}']`).click();
   }
 
   public async fillBillingAdress() {
@@ -823,7 +823,7 @@ export class Clients {
       .locator(`//div[text()='Select loyalty program']/../following-sibling::div`)
       .click();
     await this.page
-      .locator(`//div[@role="option"]/p[text()='American Airlines: AAdvantage']`)
+      .locator(`//div[@role="option"]//p[text()='American Airlines: AAdvantage']`)
       .click();
     await this.page.waitForTimeout(300);
     await this.page
@@ -985,14 +985,14 @@ export class Clients {
   }
   public async addFrequency() {
     await this.page.locator(`//p[text()='Frequency']/following-sibling::div/div/div[2]`).click();
-    await this.page.locator(`//div[@role="option"]/p[text()='Monthly']`).click();
+    await this.page.locator(`//div[@role="option"]//p[text()='Monthly']`).click();
   }
   public async editLoyaltyProgram(name: string) {
     await this.page.waitForTimeout(1000);
     await this.page
       .locator(`//p[text()='Loyalty program']/following-sibling::div/div/div[2]`)
       .click();
-    await this.page.locator(`//div[@role="option"]/p[text()='${name}']`).click();
+    await this.page.locator(`//div[@role="option"]//p[text()='${name}']`).click();
   }
   public async editLoyaltyProgramNumber(number: string) {
     await this.page

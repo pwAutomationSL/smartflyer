@@ -36,7 +36,7 @@ const normalizePhoneNumber = (str: string | null | undefined): string => {
 };
 
 test.use({
-  launchOptions: { slowMo: 500 },
+  launchOptions: { slowMo: 700 },
 });
 
 test.describe('CLI-001 - Client - Add Client - Edits by section and Finally check Logs', () => {
