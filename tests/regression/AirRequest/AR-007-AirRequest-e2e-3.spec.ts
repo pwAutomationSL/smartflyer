@@ -101,7 +101,7 @@ test.describe('AR-007 - Air Request - E2E - 3 - One Passenger, Multi City flight
       await airRequest.selectCabinClassMultiF2(CABIN_CLASS_2);
       await airRequest.addAdditionalTripNotes('Window seat preferred');
       await airRequest.clickContinue();
-      await expect(page.locator(airRequest.HEADER)).toContainText('Travel preferences');
+      await expect(page.locator(airRequest.HEADER_H2)).toContainText('Travel preferences');
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         'background-color',
         'rgb(46, 139, 87)',
@@ -116,7 +116,7 @@ test.describe('AR-007 - Air Request - E2E - 3 - One Passenger, Multi City flight
       await airRequest.selectSeatsAndSpecialRequest(SPECIAL_REQUEST);
       await airRequest.waitLong();
       await airRequest.clickContinue();
-      await expect(page.locator(airRequest.HEADER)).toContainText('Review air request');
+      await expect(page.locator(airRequest.HEADER_H2)).toContainText('Review air request');
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         'background-color',
         'rgb(46, 139, 87)',

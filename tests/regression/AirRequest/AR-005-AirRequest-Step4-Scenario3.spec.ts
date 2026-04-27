@@ -88,7 +88,7 @@ test.describe('AR-005 - Air Request - Step 4', () => {
 
     await test.step('11 - Click Continue', async () => {
       await airRequest.clickContinue();
-      await expect(page.locator(airRequest.HEADER)).toContainText('Travel preferences');
+      await expect(page.locator(airRequest.HEADER_H2)).toContainText('Travel preferences');
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         'background-color',
         'rgb(46, 139, 87)',
@@ -112,7 +112,7 @@ test.describe('AR-005 - Air Request - Step 4', () => {
     });
     await test.step('17 - Select Seat and Special requests', async () => {
       await airRequest.clickContinue();
-      await expect(page.locator(airRequest.HEADER)).toContainText('Review air request');
+      await expect(page.locator(airRequest.HEADER_H2)).toContainText('Review air request');
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         'background-color',
         'rgb(46, 139, 87)',
