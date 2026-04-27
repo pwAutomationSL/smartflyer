@@ -18,7 +18,8 @@ export class AirRequest {
   public readonly DRAFTS_ELEMENTS = `//div[@id="modal-content"]/div/div/div[2]/div`;
   public readonly DRAFTS_ELEMENTS_TIME_ONLY = `//div[@id="modal-content"]/div/div/div[2]/div/div[2]/p[2]`;
   public readonly DRAFTS_ELEMENTS_ID_ONLY = `//div[@id="modal-content"]/div/div/div[2]/div/div[2]/p[1]`;
-  public readonly HEADER = `//h2`;
+  public readonly HEADER = `//h1`;
+  public readonly HEADER_H2 = `//h2`;
   public readonly HEADER_H4 = `//h4`;
   public readonly USERNAME_HEADER = `//div[contains(@class,"flex items-center gap-6")]//p[2]`;
   public readonly DELETE_DRAFTS = `//div[@id="modal-content"]/div/div/div[2]/div/button`;
@@ -339,7 +340,7 @@ export class AirRequest {
     await this.page.locator(this.INPUT_FILE).setInputFiles('./data/docs/testDoc.txt');
   }
   public async addLargeSizeFile() {
-    const largeBuffer = Buffer.alloc(26 * 1024 * 1024); // 26 MB
+    const largeBuffer = Buffer.alloc(55 * 1024 * 1024); // 26 MB
 
     await this.page.setInputFiles(this.INPUT_FILE, {
       name: 'fake-large.pdf',

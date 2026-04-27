@@ -30,7 +30,7 @@ test.describe('AR-002 - Air Request - Step 1', () => {
       await airRequest.selectFirstAgent();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
       await airRequest.clickContinue();
-      await expect(page.locator(airRequest.HEADER)).toContainText('Passenger details');
+      await expect(page.locator(airRequest.HEADER_H2)).toContainText('Passenger details');
       await airRequest.goBack();
       await airRequest.clickCancel();
       await page.waitForLoadState('networkidle');

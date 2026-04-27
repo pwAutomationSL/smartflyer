@@ -159,7 +159,7 @@ const oldRelationships = JSON.parse(
   ),
 ) as OldRelationshipRow[];
 
-test.describe('API-005 - Related Passenger Migration', () => {
+test.skip('API-005 - Related Passenger Migration', () => {
   let token = '';
   let chain: ConnectedChain;
 

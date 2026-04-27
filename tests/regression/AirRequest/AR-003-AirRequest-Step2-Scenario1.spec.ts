@@ -42,7 +42,7 @@ test.describe('AR-003 - Air Request - Step 2', () => {
     });
     await test.step('7 - Click on Continue', async () => {
       await airRequest.clickContinue();
-      await expect(page.locator(airRequest.HEADER)).toContainText('Passenger details');
+      await expect(page.locator(airRequest.HEADER_H2)).toContainText('Passenger details');
       await expect(page.locator(airRequest.AGENT_SUCCESS)).toHaveCSS(
         'background-color',
         'rgb(46, 139, 87)',
@@ -120,7 +120,7 @@ test.describe('AR-003 - Air Request - Step 2', () => {
     });
     await test.step('ER 8 -  after clicking at the “Continue” button, the user moves to the next section', async () => {
       await airRequest.clickContinue();
-      await expect(page.locator(airRequest.HEADER)).toContainText('Trip overview');
+      await expect(page.locator(airRequest.HEADER_H2)).toContainText('Trip overview');
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         'background-color',
         'rgb(46, 139, 87)',

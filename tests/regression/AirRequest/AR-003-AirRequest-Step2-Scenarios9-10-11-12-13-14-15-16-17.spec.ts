@@ -51,7 +51,7 @@ test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
 
       await test.step('7 - Click on Continue', async () => {
         await airRequest.clickContinue();
-        await expect(page.locator(airRequest.HEADER)).toContainText('Passenger details');
+        await expect(page.locator(airRequest.HEADER_H2)).toContainText('Passenger details');
         await expect(page.locator(airRequest.AGENT_SUCCESS)).toHaveCSS(
           'background-color',
           'rgb(46, 139, 87)',
@@ -262,7 +262,7 @@ test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
             'Drag your file(s) to start uploading',
           );
           await expect(page.locator(airRequest.UPLOAD_FILE_P).nth(1)).toContainText(
-            'PDF, JPG or PNG (max 25MB per file)',
+            'PDF, HEIC, JPG or PNG (max 50MB per file)',
           );
           await airRequest.addFilePassport('testImage.jpg');
           await expect(page.locator(airRequest.INPUT_FILE)).toBeEnabled();

@@ -52,7 +52,7 @@ test.describe('AR-007 - Air Request - E2E - 2 - One Passenger, Round Trip flight
       await airRequest.selectFirstAgent();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
       await airRequest.clickContinue();
-      await expect(page.locator(airRequest.HEADER)).toContainText('Passenger details');
+      await expect(page.locator(airRequest.HEADER_H2)).toContainText('Passenger details');
       await expect(page.locator(airRequest.AGENT_SUCCESS)).toHaveCSS(
         'background-color',
         'rgb(46, 139, 87)',
@@ -73,7 +73,7 @@ test.describe('AR-007 - Air Request - E2E - 2 - One Passenger, Round Trip flight
       await airRequest.checkCertify();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
       await airRequest.clickContinue();
-      await expect(page.locator(airRequest.HEADER)).toContainText('Trip overview');
+      await expect(page.locator(airRequest.HEADER_H2)).toContainText('Trip overview');
       await expect(page.locator(airRequest.PASSENGERS_SUCCESS)).toHaveCSS(
         'background-color',
         'rgb(46, 139, 87)',

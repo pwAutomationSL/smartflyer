@@ -1,7 +1,7 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 
-const PROGAM = 'American Airlines: AAdvantage';
-const PHONE = '12321';
+const PROGAM = 'Marriott Bonvoy';
+const PHONE = '44444';
 const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
 test.describe('AR-003 - Air Request - Step #21 ', () => {
   test.setTimeout(200_000);
@@ -57,7 +57,7 @@ test.describe('AR-003 - Air Request - Step #21 ', () => {
 
     await test.step('7 - Click on Continue', async () => {
       await airRequest.clickContinue();
-      await expect(page.locator(airRequest.HEADER)).toContainText('Passenger details');
+      await expect(page.locator(airRequest.HEADER_H2)).toContainText('Passenger details');
       await expect(page.locator(airRequest.AGENT_SUCCESS)).toHaveCSS(
         'background-color',
         'rgb(46, 139, 87)',

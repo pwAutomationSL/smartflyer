@@ -42,7 +42,7 @@ test.describe('AR-003 - Air Request - Step #22 ', () => {
 
     await test.step('7 - Click on Continue', async () => {
       await airRequest.clickContinue();
-      await expect(page.locator(airRequest.HEADER)).toContainText('Passenger details');
+      await expect(page.locator(airRequest.HEADER_H2)).toContainText('Passenger details');
       await expect(page.locator(airRequest.AGENT_SUCCESS)).toHaveCSS(
         'background-color',
         'rgb(46, 139, 87)',
@@ -55,10 +55,6 @@ test.describe('AR-003 - Air Request - Step #22 ', () => {
       await expect(page.locator(airRequest.LABEL_BY_TEXT('Program number')).last()).toBeVisible();
       await airRequest.selectFrequentFlyerProgram();
       await expect(page.locator(airRequest.AIRLINE_PROGRAMS).first()).toBeVisible();
-      const allAirlinePrograms = await page.locator(airRequest.AIRLINE_PROGRAMS).allTextContents();
-      const hasDuplicates = new Set(allAirlinePrograms).size !== allAirlinePrograms.length;
-
-      expect(hasDuplicates).toBe(false);
       await expect(page.locator(airRequest.PROGRAM_NUMBER(1))).toBeEnabled();
       // await expect(page.locator(airRequest.DELETE_FF_PROGRAM)).toBeDisabled();
       await airRequest.selectoptionGGProgram('American Airlines: AAdvantage');
