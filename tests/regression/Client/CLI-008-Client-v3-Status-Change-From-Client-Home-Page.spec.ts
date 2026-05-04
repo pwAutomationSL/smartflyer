@@ -25,8 +25,8 @@ test.describe('CLI-008 - Client v3 - Status Change From Client Home Page', () =>
       await expect(page.locator(clients.QUICK_ADD)).toBeVisible({ timeout: 15000 });
       await page.waitForLoadState('networkidle');
       await clients.quickAdd();
-      await clients.mainInformationQuickAdd(LAST_NAME, EMAIL);
-      await clients.saveQuickAdd();
+      await clients.oldMainInformationQuickAdd(LAST_NAME, EMAIL);
+      await clients.oldSaveQuickAdd();
       await expect(page.locator(clients.HEADER).first()).toContainText(LAST_NAME, {
         timeout: 25000,
       });

@@ -11,7 +11,7 @@ export class Clients {
   public readonly POPUP_HEADER_H2 = `//dialog//h2`;
   public readonly POPUP_EDIT_HEADER = `(//dialog//header/following-sibling::div/div/p)[1]`;
   public readonly POPUP_EDIT_HEADER_INFO = `(//dialog//header/following-sibling::div/div/p)[2]`;
-  public readonly QUICK_ADD = `//button[contains(.,'Quick add')]`;
+  public readonly QUICK_ADD = `//button[contains(.,'Quick add') or contains(.,'Quick Add')]`;
   public readonly ADD_CLIENT = `//button[contains(.,'Add Client')]`;
   public readonly QUICK_ADD_FORM = `//dialog[.//h2[normalize-space(.)='Quick add client']]`;
   public readonly QUICK_ADD_CERTIFY_CHECKBOX = `${this.QUICK_ADD_FORM}//input[@name='userHasCertifiedTheInformation']`;
@@ -274,11 +274,17 @@ export class Clients {
     await this.page.getByRole('link', { name: 'Add Client' }).click();
   }
   public async quickAdd() {
+    await this.page.locator(this.QUICK_ADD).click({ force: true });
+  }
+  public async quickAddNew() {
     await this.page.locator(this.ADD_CLIENT).click({ force: true });
     await this.page.locator(this.QUICK_ADD).click({ force: true });
   }
   public async saveQuickAdd() {
     await this.page.locator(this.QUICK_ADD_SAVE).click();
+  }
+  public async oldSaveQuickAdd() {
+    await this.page.getByRole('button', { name: 'Save' }).click();
   }
   public async startFromScratch() {
     await this.page.getByRole('button', { name: 'Start from scratch' }).click();
@@ -315,6 +321,31 @@ export class Clients {
     await this.page.locator('input[type="search"]').fill('eze');
     await this.page.getByRole('treeitem', { name: 'EZE - Buenos Aires, Ezeiza' }).click();
   }
+  public async oldMainInformationQuickAdd(LAST_NAME: string, email: string) {
+    const emailInput = this.page.locator('#qa_email');
+    await emailInput.evaluate((el, value) => {
+      const input = el as HTMLInputElement;
+      const setter = Object.getOwnPropertyDescriptor(
+        window.HTMLInputElement.prototype,
+        'value',
+      )?.set;
+
+      setter?.call(input, value);
+      input.dispatchEvent(new InputEvent('input', { bubbles: true, data: value as string }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      input.dispatchEvent(new FocusEvent('blur', { bubbles: true }));
+    }, email);
+    await this.page.waitForTimeout(500);
+    await this.page.getByRole('textbox', { name: 'Enter Preferred name' }).fill('TestName');
+    await this.page.getByRole('textbox', { name: 'Enter First Name' }).fill('FirstName');
+    await this.page.getByRole('textbox', { name: 'Enter Last Name' }).fill(LAST_NAME);
+    await this.page.getByRole('textbox', { name: 'Enter Middle Name' }).fill('Middle');
+    await this.page.getByRole('textbox', { name: 'eg.8000011111' }).fill('08001111111');
+    await this.page.getByPlaceholder('mm/dd/yy').fill('2000-11-19');
+    await this.page.getByRole('textbox', { name: 'Select Gender' }).click();
+    await this.page.getByRole('treeitem', { name: 'Male', exact: true }).click();
+  }
+
   public async emergencyContact() {
     await this.page
       .getByRole('textbox', { name: 'Enter emergency contact name' })

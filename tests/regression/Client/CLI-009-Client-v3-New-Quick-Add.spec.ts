@@ -27,7 +27,7 @@ test.describe('CLI-009 - Client v3 - New Quick Add', () => {
       await expect(page.locator(clients.HEADER)).toBeEnabled();
       await expect(page.locator(clients.ADD_CLIENT)).toBeVisible({ timeout: 15000 });
       await page.waitForLoadState('networkidle');
-      await clients.quickAdd();
+      await clients.quickAddNew();
       await clients.mainInformationQuickAdd(LAST_NAME, EMAIL);
       await clients.saveQuickAdd();
     });
