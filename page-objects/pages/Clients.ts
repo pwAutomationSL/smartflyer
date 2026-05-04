@@ -11,7 +11,23 @@ export class Clients {
   public readonly POPUP_HEADER_H2 = `//dialog//h2`;
   public readonly POPUP_EDIT_HEADER = `(//dialog//header/following-sibling::div/div/p)[1]`;
   public readonly POPUP_EDIT_HEADER_INFO = `(//dialog//header/following-sibling::div/div/p)[2]`;
-  public readonly QUICK_ADD = `//button[contains(.,'Quick Add')]`;
+  public readonly QUICK_ADD = `//button[contains(.,'Quick add')]`;
+  public readonly ADD_CLIENT = `//button[contains(.,'Add Client')]`;
+  public readonly QUICK_ADD_FORM = `//dialog[.//h2[normalize-space(.)='Quick add client']]`;
+  public readonly QUICK_ADD_CERTIFY_CHECKBOX = `${this.QUICK_ADD_FORM}//input[@name='userHasCertifiedTheInformation']`;
+  public readonly QUICK_ADD_CERTIFY_LABEL = `${this.QUICK_ADD_FORM}//label[.//input[@name='userHasCertifiedTheInformation']]`;
+  public readonly QUICK_ADD_FIRST_NAME = `${this.QUICK_ADD_FORM}//input[@name='first_name']`;
+  public readonly QUICK_ADD_LAST_NAME = `${this.QUICK_ADD_FORM}//input[@name='last_name']`;
+  public readonly QUICK_ADD_MIDDLE_NAME = `${this.QUICK_ADD_FORM}//input[@name='middle_name']`;
+  public readonly QUICK_ADD_PREFERRED_NAME = `${this.QUICK_ADD_FORM}//input[@name='preferred_name']`;
+  public readonly QUICK_ADD_EMAIL = `${this.QUICK_ADD_FORM}//input[@name='email']`;
+  public readonly QUICK_ADD_PHONE = `${this.QUICK_ADD_FORM}//input[@name='phone']`;
+  public readonly QUICK_ADD_DATE_OF_BIRTH = `${this.QUICK_ADD_FORM}//input[@placeholder='MM/DD/YYYY']`;
+  public readonly QUICK_ADD_GENDER = `${this.QUICK_ADD_FORM}//p[normalize-space(.)='Gender']/following-sibling::div`;
+  public readonly QUICK_ADD_SOURCE = `${this.QUICK_ADD_FORM}//p[normalize-space(.)='Source']/following-sibling::div`;
+  public readonly QUICK_ADD_SELECT_OPTION = (option: string) =>
+    `//div[@role='option' and normalize-space(.)='${option}']`;
+  public readonly QUICK_ADD_SAVE = `${this.QUICK_ADD_FORM}//button[@type='submit' and normalize-space(.)='Save']`;
   public readonly SPINNER_LOADER = `//div[@id="ClientTable_processing"]`;
   public readonly USERNAME_HEADER = `//div[contains(@class,'user-data')]//h4`;
   public readonly ALL_ACTIVE_CLIENTS = `//tbody/tr//p`;
@@ -166,7 +182,7 @@ export class Clients {
   public readonly EMERGENCY_CONTACT_FIELD = (variable: string) =>
     `//input[@name="primary_passenger.client.emergency_contact_${variable}"]`;
   public readonly TRAVEL_DATA_GLOBAL_ENTRY = `//input[@name="primary_passenger.tsa.global_entry"]`;
-  public readonly TRAVEL_DATA_KTN = `//input[@name="primary_passenger.tsa.tsa_pre_check_number"]`;
+  public readonly TRAVEL_DATA_KTN = `//input[@name="primary_passenger.tsa.known_traveler_number"]`;
   public readonly PASSPORT_NUMBER_TD = `//input[@name="primary_passenger.passport.passport_number"]`;
   public readonly SAVE_CHANGES = `//button[text()="Save changes"]`;
   public readonly NAME_EVENT = `//input[@name="important_dates.0.name"]`;
@@ -258,37 +274,29 @@ export class Clients {
     await this.page.getByRole('link', { name: 'Add Client' }).click();
   }
   public async quickAdd() {
+    await this.page.locator(this.ADD_CLIENT).click({ force: true });
     await this.page.locator(this.QUICK_ADD).click({ force: true });
   }
   public async saveQuickAdd() {
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.locator(this.QUICK_ADD_SAVE).click();
   }
   public async startFromScratch() {
     await this.page.getByRole('button', { name: 'Start from scratch' }).click();
   }
   public async mainInformationQuickAdd(LAST_NAME: string, email: string) {
-    const emailInput = this.page.locator('#qa_email');
-    await emailInput.evaluate((el, value) => {
-      const input = el as HTMLInputElement;
-      const setter = Object.getOwnPropertyDescriptor(
-        window.HTMLInputElement.prototype,
-        'value',
-      )?.set;
-
-      setter?.call(input, value);
-      input.dispatchEvent(new InputEvent('input', { bubbles: true, data: value as string }));
-      input.dispatchEvent(new Event('change', { bubbles: true }));
-      input.dispatchEvent(new FocusEvent('blur', { bubbles: true }));
-    }, email);
-    await this.page.waitForTimeout(500);
-    await this.page.getByRole('textbox', { name: 'Enter Preferred name' }).fill('TestName');
-    await this.page.getByRole('textbox', { name: 'Enter First Name' }).fill('FirstName');
-    await this.page.getByRole('textbox', { name: 'Enter Last Name' }).fill(LAST_NAME);
-    await this.page.getByRole('textbox', { name: 'Enter Middle Name' }).fill('Middle');
-    await this.page.getByRole('textbox', { name: 'eg.8000011111' }).fill('08001111111');
-    await this.page.getByPlaceholder('mm/dd/yy').fill('2000-11-19');
-    await this.page.getByRole('textbox', { name: 'Select Gender' }).click();
-    await this.page.getByRole('treeitem', { name: 'Male', exact: true }).click();
+    await this.page.locator(this.QUICK_ADD_FORM).waitFor();
+    await this.page.locator(this.QUICK_ADD_CERTIFY_LABEL).click();
+    await this.page.locator(this.QUICK_ADD_PREFERRED_NAME).fill('TestName');
+    await this.page.locator(this.QUICK_ADD_FIRST_NAME).fill('FirstName');
+    await this.page.locator(this.QUICK_ADD_LAST_NAME).fill(LAST_NAME);
+    await this.page.locator(this.QUICK_ADD_MIDDLE_NAME).fill('Middle');
+    await this.page.locator(this.QUICK_ADD_EMAIL).fill(email);
+    await this.page.locator(this.QUICK_ADD_PHONE).fill('18333333333');
+    await this.page.locator(this.QUICK_ADD_DATE_OF_BIRTH).fill('11/19/2000');
+    await this.page.locator(this.QUICK_ADD_GENDER).click();
+    await this.page.locator(this.QUICK_ADD_SELECT_OPTION('Male')).click();
+    await this.page.locator(this.QUICK_ADD_SOURCE).click();
+    await this.page.locator(this.QUICK_ADD_SELECT_OPTION('Smartflyer.com')).click();
   }
 
   public async mainInformation() {
@@ -399,6 +407,10 @@ export class Clients {
   public async setAgentIfNotPresent() {
     await this.page.locator(this.CLIENT_MENU).first().click();
     await this.page.locator(this.CHANGE_AGENT).first().click();
+    if (await this.page.getByRole('button', { name: 'Save Changes' }).isDisabled()) {
+      await this.page.getByRole('button', { name: 'Cancel' }).click();
+      return;
+    }
     await this.page
       .locator(`//div[contains(.,'Search the agent')]/following-sibling::div/input`)
       .click();

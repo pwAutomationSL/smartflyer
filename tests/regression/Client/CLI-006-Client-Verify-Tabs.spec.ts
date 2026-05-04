@@ -1,7 +1,7 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { USERS } from '../../../fixtures/users';
 
-test.describe('CLI-005 - Client - Verify tabs', () => {
+test.describe('CLI-006 - Client - Verify tabs', () => {
   test('Login as an Admin and verify client tabs are visible', async ({
     loginPage,
     page,

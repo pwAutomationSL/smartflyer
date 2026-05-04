@@ -6,7 +6,7 @@ const unique = uniqueId();
 const LAST_NAME = `LastName${unique}`;
 const EMAIL = `${LAST_NAME}@asd.com`;
 
-test.describe('CLI-006 - Client v3 - Status Change From Client Home Page', () => {
+test.describe('CLI-008 - Client v3 - Status Change From Client Home Page', () => {
   test('Login to app qa2 and change client status from home page tabs', async ({
     loginPage,
     page,

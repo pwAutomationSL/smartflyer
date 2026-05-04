@@ -213,3 +213,29 @@ Test case: Create client successfully
 
 4. Click Save
    Expected: Client is created successfully and success toast is shown
+
+When creating a new API test:
+
+Create tests as simple as possible, they should be simple, easy to read, easy to maintain
+
+Fixture Usage: Use the built-in request fixture for all HTTP calls.
+
+Authentication: Reuse existing storageState or authenticated request contexts. Do not re-authenticate within individual tests.
+
+Payload Modularization: Define the payload as a constant at the top of the test block for easy modification and readability.
+
+Validation Layers:
+
+Status: Always assert expect(response.ok()).toBeTruthy() or specific status codes (e.g., 201).
+
+Schema: Validate that the response JSON structure matches the nested objects defined in the ticket.
+
+Data: Perform a "Round Trip" check—POST a nested structure, then GET it to verify the values persisted correctly.
+
+Step Documentation: Use test.step('Action Name', async () => { ... }) to wrap the Request and the Assertion separately.
+
+Legacy Preservation: For tickets involving refactors, explicitly include assertions for "unmapped" or "legacy" fields to prevent regressions.
+
+Avoid using as unknown as and things like that
+
+Dry Principle: If multiple tests use the same nested object structure, create a factory function or a constant helper to generate the JSON.

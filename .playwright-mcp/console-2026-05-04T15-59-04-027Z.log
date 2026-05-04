@@ -1,0 +1,20 @@
+[     477ms] [WARNING] Failed to decode downloaded font: https://crm.qa2.smartflyer.com/assets/fonts/TradeGothicLTPro-Light_1.woff2 @ https://crm.qa2.smartflyer.com/login:101
+[     477ms] [WARNING] OTS parsing error: Size of decompressed WOFF 2.0 font exceeds 300MB @ https://crm.qa2.smartflyer.com/login:101
+[     477ms] [WARNING] Failed to decode downloaded font: https://crm.qa2.smartflyer.com/assets/fonts/TradeGothicLTPro-Light_1.woff2 @ https://crm.qa2.smartflyer.com/login:101
+[     477ms] [WARNING] OTS parsing error: Size of decompressed WOFF 2.0 font exceeds 300MB @ https://crm.qa2.smartflyer.com/login:101
+[   10505ms] [LOG] defaultTimezone Europe/London @ https://crm.qa2.smartflyer.com/dashboard:160
+[   10513ms] [WARNING] Failed to decode downloaded font: https://crm.qa2.smartflyer.com/assets/fonts/TradeGothicLTPro-Light_1.woff2 @ https://crm.qa2.smartflyer.com/dashboard:478
+[   10514ms] [WARNING] OTS parsing error: Size of decompressed WOFF 2.0 font exceeds 300MB @ https://crm.qa2.smartflyer.com/dashboard:478
+[   10514ms] [WARNING] Failed to decode downloaded font: https://crm.qa2.smartflyer.com/assets/fonts/TradeGothicLTPro-Light_1.woff2 @ https://crm.qa2.smartflyer.com/dashboard:478
+[   10514ms] [WARNING] OTS parsing error: Size of decompressed WOFF 2.0 font exceeds 300MB @ https://crm.qa2.smartflyer.com/dashboard:478
+[   10803ms] [WARNING] Google Maps JavaScript API has been loaded directly without loading=async. This can result in suboptimal performance. For best-practice loading patterns please see https://goo.gle/js-api-loading @ https://maps.googleapis.com/maps/api/js?key=AIzaSyCOaGRlpFIpMJ6loh8PA9vIWNThNq-fRwY&libraries=places:1512
+[   10826ms] [WARNING] Failed to decode downloaded font: https://crm.qa2.smartflyer.com/assets/fonts/TradeGothicLTPro-Light_1.woff2 @ https://crm.qa2.smartflyer.com/assets/js/jquery.min.js:1
+[   10826ms] [WARNING] OTS parsing error: Size of decompressed WOFF 2.0 font exceeds 300MB @ https://crm.qa2.smartflyer.com/assets/js/jquery.min.js:1
+[   10826ms] [WARNING] Failed to decode downloaded font: https://crm.qa2.smartflyer.com/assets/fonts/TradeGothicLTPro-Light_1.woff2 @ https://crm.qa2.smartflyer.com/assets/js/jquery.min.js:1
+[   10826ms] [WARNING] OTS parsing error: Size of decompressed WOFF 2.0 font exceeds 300MB @ https://crm.qa2.smartflyer.com/assets/js/jquery.min.js:1
+[   10837ms] [WARNING] Geolocation permission has been blocked as the user has ignored the permission prompt several times. This can be reset in Page Info which can be accessed by clicking the tune icon next to the URL. See https://www.chromestatus.com/feature/6443143280984064 for more information. @ https://crm.qa2.smartflyer.com/dashboard:0
+[   10948ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://crm.qa2.smartflyer.com/storage/gallery/thumbnail/2025/05/_1c6af235_fe8e_4b34_98e4_97ddf91f5fc8_20250519_071850.jpg:0
+[   10948ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://crm.qa2.smartflyer.com/storage/gallery/thumbnail/2025/05/poppy_5199556_1280_20250519_072413.jpg:0
+[   11016ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://crm.qa2.smartflyer.com/assets/css/ajax-loader.gif:0
+[   21697ms] [LOG]  @ https://crm.qa2.smartflyer.com/dashboard:147
+[   21740ms] Invalid or unexpected token

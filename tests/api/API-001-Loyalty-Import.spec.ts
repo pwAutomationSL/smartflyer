@@ -2,6 +2,7 @@ import { createReadStream } from 'node:fs';
 import path from 'node:path';
 
 import { test, expect } from '../../fixtures/PlaywrightFixtures';
+import { USERS } from '../../fixtures/users';
 
 const env = process.env.ENVIRONMENT ?? 'qa2';
 
@@ -62,30 +63,27 @@ const dumpResponseOnFailure = async (
 };
 
 test.describe('API-001 - Loyalty Import', () => {
-  test('LOY_TC-001 - one valid row', async ({ request }) => {
-    let authorizationHeader = '';
-    let mediaUuid = '';
+  let authorizationHeader = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('LOY_TC-001-login', loginBody, error);
-      }
+  test.beforeAll(async ({ request }) => {
+    const loginResponse = await request.post(LOGIN_URL, {
+      data: {
+        email: USERS.ADMIN_MAIN.username,
+        password: USERS.ADMIN_MAIN.password,
+      },
     });
 
-    await test.step('2 - Upload LOY_TC-001_valid_one_row.csv and get media uuid', async () => {
+    expect(loginResponse.status()).toBe(200);
+
+    const loginBody = (await loginResponse.json()) as LoginResponse;
+    expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
+    authorizationHeader = `Bearer ${loginBody.data.token}`;
+  });
+
+  test('LOY_TC-001 - one valid row', async ({ request }) => {
+    let mediaUuid = '';
+
+    await test.step('1 - Upload LOY_TC-001_valid_one_row.csv and get media uuid', async () => {
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
           Accept: 'application/json',
@@ -111,7 +109,7 @@ test.describe('API-001 - Loyalty Import', () => {
       }
     });
 
-    await test.step('3 - Import loyalty numbers and validate one valid row', async () => {
+    await test.step('2 - Import loyalty numbers and validate one valid row', async () => {
       const importResponse = await request.post(IMPORT_LOYALTY_URL, {
         headers: {
           Accept: 'application/json',
@@ -136,29 +134,9 @@ test.describe('API-001 - Loyalty Import', () => {
   });
 
   test('LOY_TC-002 - multiple valid rows', async ({ request }) => {
-    let authorizationHeader = '';
     let mediaUuid = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('LOY_TC-002-login', loginBody, error);
-      }
-    });
-
-    await test.step('2 - Upload LOY_TC-002_valid_multiple_rows.csv and get media uuid', async () => {
+    await test.step('1 - Upload LOY_TC-002_valid_multiple_rows.csv and get media uuid', async () => {
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
           Accept: 'application/json',
@@ -184,7 +162,7 @@ test.describe('API-001 - Loyalty Import', () => {
       }
     });
 
-    await test.step('3 - Import loyalty numbers and validate multiple valid rows', async () => {
+    await test.step('2 - Import loyalty numbers and validate multiple valid rows', async () => {
       const importResponse = await request.post(IMPORT_LOYALTY_URL, {
         headers: {
           Accept: 'application/json',
@@ -209,29 +187,9 @@ test.describe('API-001 - Loyalty Import', () => {
   });
 
   test('LOY_TC-003 - missing client.identity header', async ({ request }) => {
-    let authorizationHeader = '';
     let mediaUuid = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('LOY_TC-003-login', loginBody, error);
-      }
-    });
-
-    await test.step('2 - Upload LOY_TC-003_missing_client_identity_header.csv and get media uuid', async () => {
+    await test.step('1 - Upload LOY_TC-003_missing_client_identity_header.csv and get media uuid', async () => {
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
           Accept: 'application/json',
@@ -257,7 +215,7 @@ test.describe('API-001 - Loyalty Import', () => {
       }
     });
 
-    await test.step('3 - Import loyalty numbers and validate missing identity error', async () => {
+    await test.step('2 - Import loyalty numbers and validate missing identity error', async () => {
       const importResponse = await request.post(IMPORT_LOYALTY_URL, {
         headers: {
           Accept: 'application/json',
@@ -287,29 +245,9 @@ test.describe('API-001 - Loyalty Import', () => {
   });
 
   test('LOY_TC-004 - missing number header', async ({ request }) => {
-    let authorizationHeader = '';
     let mediaUuid = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('LOY_TC-004-login', loginBody, error);
-      }
-    });
-
-    await test.step('2 - Upload LOY_TC-004_missing_number_header.csv and get media uuid', async () => {
+    await test.step('1 - Upload LOY_TC-004_missing_number_header.csv and get media uuid', async () => {
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
           Accept: 'application/json',
@@ -335,7 +273,7 @@ test.describe('API-001 - Loyalty Import', () => {
       }
     });
 
-    await test.step('3 - Import loyalty numbers and validate missing number error', async () => {
+    await test.step('2 - Import loyalty numbers and validate missing number error', async () => {
       const importResponse = await request.post(IMPORT_LOYALTY_URL, {
         headers: {
           Accept: 'application/json',
@@ -362,29 +300,9 @@ test.describe('API-001 - Loyalty Import', () => {
   });
 
   test('LOY_TC-005 - invalid loyalty program slug', async ({ request }) => {
-    let authorizationHeader = '';
     let mediaUuid = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('LOY_TC-005-login', loginBody, error);
-      }
-    });
-
-    await test.step('2 - Upload LOY_TC-005_invalid_loyalty_program_slug.csv and get media uuid', async () => {
+    await test.step('1 - Upload LOY_TC-005_invalid_loyalty_program_slug.csv and get media uuid', async () => {
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
           Accept: 'application/json',
@@ -410,7 +328,7 @@ test.describe('API-001 - Loyalty Import', () => {
       }
     });
 
-    await test.step('3 - Import loyalty numbers and validate slug error', async () => {
+    await test.step('2 - Import loyalty numbers and validate slug error', async () => {
       const importResponse = await request.post(IMPORT_LOYALTY_URL, {
         headers: {
           Accept: 'application/json',
@@ -439,29 +357,9 @@ test.describe('API-001 - Loyalty Import', () => {
   });
 
   test('LOY_TC-006 - mixed valid + invalid', async ({ request }) => {
-    let authorizationHeader = '';
     let mediaUuid = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('LOY_TC-006-login', loginBody, error);
-      }
-    });
-
-    await test.step('2 - Upload LOY_TC-006_mixed_valid_invalid.csv and get media uuid', async () => {
+    await test.step('1 - Upload LOY_TC-006_mixed_valid_invalid.csv and get media uuid', async () => {
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
           Accept: 'application/json',
@@ -487,7 +385,7 @@ test.describe('API-001 - Loyalty Import', () => {
       }
     });
 
-    await test.step('3 - Import loyalty numbers and validate mixed counts', async () => {
+    await test.step('2 - Import loyalty numbers and validate mixed counts', async () => {
       const importResponse = await request.post(IMPORT_LOYALTY_URL, {
         headers: {
           Accept: 'application/json',
@@ -512,29 +410,9 @@ test.describe('API-001 - Loyalty Import', () => {
   });
 
   test('LOY_TC-007 - client.identity not found', async ({ request }) => {
-    let authorizationHeader = '';
     let mediaUuid = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('LOY_TC-007-login', loginBody, error);
-      }
-    });
-
-    await test.step('2 - Upload LOY_TC-007_client_identity_not_found.csv and get media uuid', async () => {
+    await test.step('1 - Upload LOY_TC-007_client_identity_not_found.csv and get media uuid', async () => {
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
           Accept: 'application/json',
@@ -560,7 +438,7 @@ test.describe('API-001 - Loyalty Import', () => {
       }
     });
 
-    await test.step('3 - Import loyalty numbers and validate identity not found error', async () => {
+    await test.step('2 - Import loyalty numbers and validate identity not found error', async () => {
       const importResponse = await request.post(IMPORT_LOYALTY_URL, {
         headers: {
           Accept: 'application/json',

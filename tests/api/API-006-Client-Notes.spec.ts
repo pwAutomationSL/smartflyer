@@ -1,6 +1,7 @@
 import type { APIRequestContext } from '@playwright/test';
 
 import { test, expect } from '../../fixtures/PlaywrightFixtures';
+import { USERS } from '../../fixtures/users';
 
 const env = process.env.ENVIRONMENT ?? 'qa2';
 const API_BASE_URL = `https://api.${env}.smartflyer.com/api`;
@@ -62,8 +63,8 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const login = async (request: APIRequestContext) => {
   const response = await request.post(LOGIN_URL, {
     data: {
-      email: 'rodrigo.santone@scrumlaunch.com',
-      password: 'Testing33!',
+      email: USERS.ADMIN_MAIN.username,
+      password: USERS.ADMIN_MAIN.password,
     },
   });
 

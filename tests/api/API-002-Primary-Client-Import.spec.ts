@@ -3,9 +3,10 @@ import os from 'node:os';
 import path from 'node:path';
 
 import { test, expect } from '../../fixtures/PlaywrightFixtures';
+import { USERS } from '../../fixtures/users';
 import { uniqueId } from '../../page-objects';
 
-const env = process.env.ENVIRONMENT ?? 'qa2';
+const env = 'qa2';
 
 const API_BASE_URL = `https://api.${env}.smartflyer.com/api`;
 const LOGIN_URL = `${API_BASE_URL}/login`;
@@ -80,30 +81,27 @@ const createCsvWithUniqueEmails = (fileName: string): string => {
 };
 
 test.describe('API-001 - Primary Client Import', () => {
-  test('PRI_TC-001 - one valid row', async ({ request }) => {
-    let authorizationHeader = '';
-    let mediaUuid = '';
+  let authorizationHeader = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('PRI_TC-001-login', loginBody, error);
-      }
+  test.beforeAll(async ({ request }) => {
+    const loginResponse = await request.post(LOGIN_URL, {
+      data: {
+        email: USERS.ADMIN_MAIN.username,
+        password: USERS.ADMIN_MAIN.password,
+      },
     });
 
-    await test.step('2 - Upload PRI_TC-001_valid_one_row.csv and get media uuid', async () => {
+    expect(loginResponse.status()).toBe(200);
+
+    const loginBody = (await loginResponse.json()) as LoginResponse;
+    expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
+    authorizationHeader = `Bearer ${loginBody.data.token}`;
+  });
+
+  test('PRI_TC-001 - one valid row', async ({ request }) => {
+    let mediaUuid = '';
+
+    await test.step('1 - Upload PRI_TC-001_valid_one_row.csv and get media uuid', async () => {
       const filePath = createCsvWithUniqueEmails('PRI_TC-001_valid_one_row.csv');
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
@@ -128,7 +126,7 @@ test.describe('API-001 - Primary Client Import', () => {
       }
     });
 
-    await test.step('3 - Import primary clients and validate success counts', async () => {
+    await test.step('2 - Import primary clients and validate success counts', async () => {
       const importResponse = await request.post(IMPORT_PRIMARY_URL, {
         headers: {
           Accept: 'application/json',
@@ -154,29 +152,9 @@ test.describe('API-001 - Primary Client Import', () => {
   });
 
   test('PRI_TC-002 - multiple valid rows', async ({ request }) => {
-    let authorizationHeader = '';
     let mediaUuid = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('PRI_TC-002-login', loginBody, error);
-      }
-    });
-
-    await test.step('2 - Upload PRI_TC-002_valid_multiple_rows.csv and get media uuid', async () => {
+    await test.step('1 - Upload PRI_TC-002_valid_multiple_rows.csv and get media uuid', async () => {
       const filePath = createCsvWithUniqueEmails('PRI_TC-002_valid_multiple_rows.csv');
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
@@ -201,7 +179,7 @@ test.describe('API-001 - Primary Client Import', () => {
       }
     });
 
-    await test.step('3 - Import primary clients and validate success counts', async () => {
+    await test.step('2 - Import primary clients and validate success counts', async () => {
       const importResponse = await request.post(IMPORT_PRIMARY_URL, {
         headers: {
           Accept: 'application/json',
@@ -227,29 +205,9 @@ test.describe('API-001 - Primary Client Import', () => {
   });
 
   test('PRI_TC-003 - missing first_name', async ({ request }) => {
-    let authorizationHeader = '';
     let mediaUuid = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('PRI_TC-003-login', loginBody, error);
-      }
-    });
-
-    await test.step('2 - Upload PRI_TC-003_missing_client_first_name.csv and get media uuid', async () => {
+    await test.step('1 - Upload PRI_TC-003_missing_client_first_name.csv and get media uuid', async () => {
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
           Accept: 'application/json',
@@ -275,7 +233,7 @@ test.describe('API-001 - Primary Client Import', () => {
       }
     });
 
-    await test.step('3 - Import primary clients and validate missing first_name error', async () => {
+    await test.step('2 - Import primary clients and validate missing first_name error', async () => {
       const importResponse = await request.post(IMPORT_PRIMARY_URL, {
         headers: {
           Accept: 'application/json',
@@ -303,29 +261,9 @@ test.describe('API-001 - Primary Client Import', () => {
   });
 
   test('PRI_TC-004 - missing last_name', async ({ request }) => {
-    let authorizationHeader = '';
     let mediaUuid = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('PRI_TC-004-login', loginBody, error);
-      }
-    });
-
-    await test.step('2 - Upload PRI_TC-004_missing_client_last_name.csv and get media uuid', async () => {
+    await test.step('1 - Upload PRI_TC-004_missing_client_last_name.csv and get media uuid', async () => {
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
           Accept: 'application/json',
@@ -351,7 +289,7 @@ test.describe('API-001 - Primary Client Import', () => {
       }
     });
 
-    await test.step('3 - Import primary clients and validate missing last_name error', async () => {
+    await test.step('2 - Import primary clients and validate missing last_name error', async () => {
       const importResponse = await request.post(IMPORT_PRIMARY_URL, {
         headers: {
           Accept: 'application/json',
@@ -379,29 +317,9 @@ test.describe('API-001 - Primary Client Import', () => {
   });
 
   test('PRI_TC-005 - missing email', async ({ request }) => {
-    let authorizationHeader = '';
     let mediaUuid = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('PRI_TC-005-login', loginBody, error);
-      }
-    });
-
-    await test.step('2 - Upload PRI_TC-005_missing_email.csv and get media uuid', async () => {
+    await test.step('1 - Upload PRI_TC-005_missing_email.csv and get media uuid', async () => {
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
           Accept: 'application/json',
@@ -427,7 +345,7 @@ test.describe('API-001 - Primary Client Import', () => {
       }
     });
 
-    await test.step('3 - Import primary clients and validate missing email error', async () => {
+    await test.step('2 - Import primary clients and validate missing email error', async () => {
       const importResponse = await request.post(IMPORT_PRIMARY_URL, {
         headers: {
           Accept: 'application/json',
@@ -453,29 +371,9 @@ test.describe('API-001 - Primary Client Import', () => {
   });
 
   test('PRI_TC-006 - missing agent_id', async ({ request }) => {
-    let authorizationHeader = '';
     let mediaUuid = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('PRI_TC-006-login', loginBody, error);
-      }
-    });
-
-    await test.step('2 - Upload PRI_TC-006_missing_agent_id.csv and get media uuid', async () => {
+    await test.step('1 - Upload PRI_TC-006_missing_agent_id.csv and get media uuid', async () => {
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
           Accept: 'application/json',
@@ -501,7 +399,7 @@ test.describe('API-001 - Primary Client Import', () => {
       }
     });
 
-    await test.step('3 - Import primary clients and validate missing agent_id error', async () => {
+    await test.step('2 - Import primary clients and validate missing agent_id error', async () => {
       const importResponse = await request.post(IMPORT_PRIMARY_URL, {
         headers: {
           Accept: 'application/json',
@@ -527,29 +425,9 @@ test.describe('API-001 - Primary Client Import', () => {
   });
 
   test('PRI_TC-007 - mixed valid + invalid rows', async ({ request }) => {
-    let authorizationHeader = '';
     let mediaUuid = '';
 
-    await test.step('1 - Login and get token', async () => {
-      const loginResponse = await request.post(LOGIN_URL, {
-        data: {
-          email: 'rodrigo.santone@scrumlaunch.com',
-          password: 'Testing33!',
-        },
-      });
-
-      expect(loginResponse.status()).toBe(200);
-
-      const loginBody = (await loginResponse.json()) as LoginResponse;
-      try {
-        expect(loginBody.data.token.startsWith('ey')).toBeTruthy();
-        authorizationHeader = `Bearer ${loginBody.data.token}`;
-      } catch (error) {
-        await dumpResponseOnFailure('PRI_TC-007-login', loginBody, error);
-      }
-    });
-
-    await test.step('2 - Upload PRI_TC-007_mixed_invalid_valid.csv and get media uuid', async () => {
+    await test.step('1 - Upload PRI_TC-007_mixed_invalid_valid.csv and get media uuid', async () => {
       const filePath = createCsvWithUniqueEmails('PRI_TC-007_mixed_invalid_valid.csv');
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {

@@ -1,6 +1,7 @@
 import type { APIRequestContext } from '@playwright/test';
 
 import { test, expect } from '../../fixtures/PlaywrightFixtures';
+import { USERS } from '../../fixtures/users';
 
 const env = process.env.ENVIRONMENT ?? 'qa2';
 
@@ -101,8 +102,8 @@ const dumpResponseOnFailure = async (
 const loginAndGetAuthorizationHeader = async (request: APIRequestContext): Promise<string> => {
   const loginResponse = await request.post(LOGIN_URL, {
     data: {
-      email: 'rodrigo.santone@scrumlaunch.com',
-      password: 'Testing33!',
+      email: USERS.ADMIN_MAIN.username,
+      password: USERS.ADMIN_MAIN.password,
     },
   });
 
@@ -122,8 +123,8 @@ const loginAndGetAuthorizationHeader = async (request: APIRequestContext): Promi
 
 const getLoyaltyPrograms = async (
   request: APIRequestContext,
+  authorizationHeader: string,
 ): Promise<{ status: number; body: LoyaltyProgramSlugResponse }> => {
-  const authorizationHeader = await loginAndGetAuthorizationHeader(request);
   const response = await request.get(LOYALTY_PROGRAM_SLUG_URL, {
     headers: {
       Accept: 'application/json',
@@ -154,9 +155,15 @@ const getLoyaltyPrograms = async (
 };
 
 test.describe('API-004 - Loyalty Program Slug', () => {
+  let authorizationHeader = '';
+
+  test.beforeAll(async ({ request }) => {
+    authorizationHeader = await loginAndGetAuthorizationHeader(request);
+  });
+
   test('LOY_SLUG_TC-001 - endpoint returns successful response', async ({ request }) => {
     await test.step('1 - Login and request loyalty program slugs', async () => {
-      const response = await getLoyaltyPrograms(request);
+      const response = await getLoyaltyPrograms(request, authorizationHeader);
 
       expect(response.status).toBe(200);
     });
@@ -164,7 +171,7 @@ test.describe('API-004 - Loyalty Program Slug', () => {
 
   test('LOY_SLUG_TC-002 - response returns loyalty programs as a list', async ({ request }) => {
     await test.step('1 - Request loyalty program slugs and validate response array', async () => {
-      const response = await getLoyaltyPrograms(request);
+      const response = await getLoyaltyPrograms(request, authorizationHeader);
 
       try {
         expect(typeof response.body).toBe('object');
@@ -183,7 +190,7 @@ test.describe('API-004 - Loyalty Program Slug', () => {
 
   test('LOY_SLUG_TC-003 - each object contains only title and slug', async ({ request }) => {
     await test.step('1 - Request loyalty program slugs and validate object shape', async () => {
-      const response = await getLoyaltyPrograms(request);
+      const response = await getLoyaltyPrograms(request, authorizationHeader);
 
       try {
         expect(Object.keys(response.body).sort()).toEqual(['data', 'message', 'success']);
@@ -203,7 +210,7 @@ test.describe('API-004 - Loyalty Program Slug', () => {
 
   test('LOY_SLUG_TC-004 - slug values are correct', async ({ request }) => {
     await test.step('1 - Request loyalty program slugs and validate known slug mappings', async () => {
-      const response = await getLoyaltyPrograms(request);
+      const response = await getLoyaltyPrograms(request, authorizationHeader);
 
       try {
         const programsBySlug = new Map(
@@ -223,7 +230,7 @@ test.describe('API-004 - Loyalty Program Slug', () => {
     request,
   }) => {
     await test.step('1 - Request loyalty program slugs and validate expected programs are included', async () => {
-      const response = await getLoyaltyPrograms(request);
+      const response = await getLoyaltyPrograms(request, authorizationHeader);
 
       try {
         for (const expectedProgram of EXPECTED_LOYALTY_PROGRAMS) {

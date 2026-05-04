@@ -1,0 +1,25 @@
+- generic [ref=e2]:
+  - banner:
+    - link [ref=e5] [cursor=pointer]:
+      - /url: "#"
+  - generic [ref=e7]:
+    - generic [ref=e9]:
+      - heading "Welcome!" [level=1] [ref=e10]
+      - list [ref=e12]:
+        - listitem [ref=e13]:
+          - generic [ref=e15]: Email
+          - textbox "Enter your email" [ref=e16]
+        - listitem [ref=e17]:
+          - generic [ref=e18]:
+            - generic [ref=e19]: Password
+            - link "Forgot my password" [ref=e21] [cursor=pointer]:
+              - /url: https://crm.test.smartflyer.com/forgot-password
+          - generic [ref=e22]:
+            - textbox "Enter your password" [ref=e23]
+            - generic [ref=e24] [cursor=pointer]: 
+        - listitem [ref=e25]:
+          - button "login" [ref=e26] [cursor=pointer]
+          - generic [ref=e27]: or
+          - link "create account" [ref=e28] [cursor=pointer]:
+            - /url: https://crm.test.smartflyer.com/register
+    - img [ref=e30]

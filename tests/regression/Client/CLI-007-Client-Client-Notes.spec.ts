@@ -15,7 +15,7 @@ test.use({
   launchOptions: { slowMo: 500 },
 });
 
-test.describe.serial('CLI-006 - Client - Client Notes', () => {
+test.describe.serial('CLI-007 - Client - Client Notes', () => {
   test('Admin can see Notes empty state, open Add Note modal, and create a note successfully', async ({
     loginPage,
     page,

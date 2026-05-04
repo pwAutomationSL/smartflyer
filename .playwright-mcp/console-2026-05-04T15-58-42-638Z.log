@@ -1,0 +1,13 @@
+[   11700ms] [LOG] defaultTimezone Europe/London @ https://crm.qa2.smartflyer.com/dashboard:160
+[   12150ms] [WARNING] Failed to decode downloaded font: https://crm.qa2.smartflyer.com/assets/fonts/TradeGothicLTPro-Light_1.woff2 @ https://crm.qa2.smartflyer.com/dashboard:0
+[   12150ms] [WARNING] OTS parsing error: Size of decompressed WOFF 2.0 font exceeds 300MB @ https://crm.qa2.smartflyer.com/dashboard:0
+[   12150ms] [WARNING] Failed to decode downloaded font: https://crm.qa2.smartflyer.com/assets/fonts/TradeGothicLTPro-Light_1.woff2 @ https://crm.qa2.smartflyer.com/dashboard:0
+[   12150ms] [WARNING] OTS parsing error: Size of decompressed WOFF 2.0 font exceeds 300MB @ https://crm.qa2.smartflyer.com/dashboard:0
+[   12150ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://crm.qa2.smartflyer.com/storage/gallery/thumbnail/2025/05/_1c6af235_fe8e_4b34_98e4_97ddf91f5fc8_20250519_071850.jpg:0
+[   12150ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://crm.qa2.smartflyer.com/storage/gallery/thumbnail/2025/05/poppy_5199556_1280_20250519_072413.jpg:0
+[   12220ms] [WARNING] Google Maps JavaScript API has been loaded directly without loading=async. This can result in suboptimal performance. For best-practice loading patterns please see https://goo.gle/js-api-loading @ https://maps.googleapis.com/maps/api/js?key=AIzaSyCOaGRlpFIpMJ6loh8PA9vIWNThNq-fRwY&libraries=places:1512
+[   12469ms] [WARNING] Failed to decode downloaded font: https://crm.qa2.smartflyer.com/assets/fonts/TradeGothicLTPro-Light_1.woff2 @ https://crm.qa2.smartflyer.com/assets/js/jquery.min.js:1
+[   12469ms] [WARNING] OTS parsing error: Size of decompressed WOFF 2.0 font exceeds 300MB @ https://crm.qa2.smartflyer.com/assets/js/jquery.min.js:1
+[   12469ms] [WARNING] Failed to decode downloaded font: https://crm.qa2.smartflyer.com/assets/fonts/TradeGothicLTPro-Light_1.woff2 @ https://crm.qa2.smartflyer.com/assets/js/jquery.min.js:1
+[   12469ms] [WARNING] OTS parsing error: Size of decompressed WOFF 2.0 font exceeds 300MB @ https://crm.qa2.smartflyer.com/assets/js/jquery.min.js:1
+[   12657ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://crm.qa2.smartflyer.com/assets/css/ajax-loader.gif:0

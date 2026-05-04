@@ -1,0 +1,525 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - button [ref=e5] [cursor=pointer]:
+        - img [ref=e6]
+      - link "Logo" [ref=e9] [cursor=pointer]:
+        - /url: https://crm.qa2.smartflyer.com/dashboard/
+        - img "Logo" [ref=e10]
+      - list [ref=e11]:
+        - listitem [ref=e12]:
+          - link "Search" [ref=e13] [cursor=pointer]:
+            - /url: /search/
+            - generic [ref=e14]:
+              - img [ref=e15]
+              - paragraph [ref=e17]: Search
+        - listitem [ref=e20]:
+          - link "Home" [ref=e21] [cursor=pointer]:
+            - /url: https://crm.qa2.smartflyer.com/dashboard/
+            - generic [ref=e22]:
+              - img [ref=e23]
+              - paragraph [ref=e25]: Home
+        - listitem [ref=e26]:
+          - link "Clients" [ref=e27] [cursor=pointer]:
+            - /url: https://crm.qa2.smartflyer.com/all-clients/
+            - generic [ref=e28]:
+              - img [ref=e29]
+              - paragraph [ref=e31]: Clients
+        - listitem [ref=e32]:
+          - link "Partners" [ref=e33] [cursor=pointer]:
+            - /url: https://crm.qa2.smartflyer.com/partners/
+            - generic [ref=e34]:
+              - img [ref=e35]
+              - paragraph [ref=e37]: Partners
+        - listitem [ref=e38]:
+          - link "Forum" [ref=e39] [cursor=pointer]:
+            - /url: https://crm.qa2.smartflyer.com/forum/
+            - generic [ref=e40]:
+              - img [ref=e41]
+              - paragraph [ref=e43]: Forum
+        - listitem [ref=e44]:
+          - link "Directories" [ref=e45] [cursor=pointer]:
+            - /url: https://crm.qa2.smartflyer.com/agents/
+            - generic [ref=e46]:
+              - img [ref=e47]
+              - paragraph [ref=e49]: Directories
+        - generic [ref=e50]:
+          - listitem [ref=e51]:
+            - button "Inquires" [ref=e52]:
+              - generic [ref=e53]:
+                - img [ref=e54]
+                - paragraph [ref=e56]: Inquires
+          - list:
+            - listitem [ref=e57]:
+              - link "-Air Requests" [ref=e58] [cursor=pointer]:
+                - /url: https://crm.qa2.smartflyer.com/air_requests_list/
+        - listitem [ref=e59]:
+          - link "Toolkits" [ref=e60] [cursor=pointer]:
+            - /url: https://crm.qa2.smartflyer.com/toolkit/show/
+            - generic [ref=e61]:
+              - img [ref=e62]
+              - paragraph [ref=e64]: Toolkits
+        - listitem [ref=e65]:
+          - link "Tasks" [ref=e66] [cursor=pointer]:
+            - /url: https://crm.qa2.smartflyer.com/to-do/
+            - generic [ref=e67]:
+              - img [ref=e68]
+              - paragraph [ref=e70]: Tasks
+        - listitem [ref=e71]:
+          - link "Trainings" [ref=e72] [cursor=pointer]:
+            - /url: https://crm.qa2.smartflyer.com/trainings/
+            - generic [ref=e73]:
+              - img [ref=e74]
+              - paragraph [ref=e76]: Trainings
+        - listitem [ref=e77]:
+          - link "FAQs" [ref=e78] [cursor=pointer]:
+            - /url: https://crm.qa2.smartflyer.com/faqs/
+            - generic [ref=e79]:
+              - img [ref=e80]
+              - paragraph [ref=e82]: FAQs
+        - listitem [ref=e83]:
+          - link "Settings" [ref=e84] [cursor=pointer]:
+            - /url: https://crm.qa2.smartflyer.com/settings/
+            - generic [ref=e85]:
+              - img [ref=e86]
+              - paragraph [ref=e88]: Settings
+        - generic [ref=e89]:
+          - listitem [ref=e90]:
+            - button "Content" [ref=e91]:
+              - generic [ref=e92]:
+                - img [ref=e93]
+                - paragraph [ref=e95]: Content
+          - list:
+            - listitem [ref=e96]:
+              - button "-society crm" [ref=e98]:
+                - paragraph [ref=e99]: "-society crm"
+            - listitem [ref=e100]:
+              - button "-smartflyer" [ref=e102]:
+                - paragraph [ref=e103]: "-smartflyer"
+        - generic [ref=e104]:
+          - listitem [ref=e105]:
+            - button "Configurations" [ref=e106]:
+              - generic [ref=e107]:
+                - img [ref=e108]
+                - paragraph [ref=e110]: Configurations
+          - list:
+            - listitem [ref=e111]:
+              - link "-Role" [ref=e112] [cursor=pointer]:
+                - /url: /user-management/
+        - generic [ref=e113]:
+          - listitem [ref=e114]:
+            - button "Marketing" [ref=e115]:
+              - generic [ref=e116]:
+                - img [ref=e117]
+                - paragraph [ref=e120]: Marketing
+          - list:
+            - listitem [ref=e121]:
+              - link "-Request a change queue" [ref=e122] [cursor=pointer]:
+                - /url: https://crm.qa2.smartflyer.com/user-settings-request/
+            - listitem [ref=e123]:
+              - link "-Website" [ref=e124] [cursor=pointer]:
+                - /url: /marketing/website/
+      - paragraph [ref=e125]: v0.9.42
+    - generic [ref=e126]:
+      - generic [ref=e128]:
+        - generic [ref=e129]:
+          - img [ref=e131]
+          - img [ref=e134]
+        - generic [ref=e137] [cursor=pointer]:
+          - generic [ref=e138]:
+            - img "Rodrigo Santone" [ref=e140]
+            - generic [ref=e141]:
+              - paragraph [ref=e142]: Rodrigo Santone
+              - paragraph [ref=e143]: rodrigo.santone@scrumlaunch.com
+          - img [ref=e144]
+      - generic [ref=e148]:
+        - generic [ref=e149]:
+          - generic [ref=e150]:
+            - heading "Clients (79,240)" [level=1] [ref=e481]
+            - generic [ref=e152]:
+              - img [ref=e153]
+              - generic [ref=e155]: SmartFlyer Society
+          - generic [ref=e156]:
+            - button "Add Client" [ref=e158]:
+              - button "Add Client" [ref=e159] [cursor=pointer]:
+                - img [ref=e160]
+                - text: Add Client
+                - img [ref=e164]
+            - button "Air Request" [ref=e166] [cursor=pointer]:
+              - img [ref=e167]
+              - text: Air Request
+        - generic [ref=e169]:
+          - generic [ref=e170]:
+            - generic [ref=e173]:
+              - img [ref=e175]
+              - textbox "Search clients" [ref=e178]
+            - generic [ref=e180]:
+              - log [ref=e182]
+              - generic [ref=e183] [cursor=pointer]:
+                - generic [ref=e184]:
+                  - generic [ref=e185]: All Statuses
+                  - combobox [ref=e186]
+                - img [ref=e1027]
+          - generic [ref=e191]:
+            - button "Send Forms" [ref=e192] [cursor=pointer]:
+              - img [ref=e193]
+              - text: Send Forms
+            - button "Export" [ref=e196] [cursor=pointer]:
+              - img [ref=e197]
+              - text: Export
+        - table [ref=e501] [cursor=pointer]:
+          - rowgroup [ref=e502]:
+            - row "Name Email Phone Address Agent Status Actions" [ref=e503]:
+              - columnheader "Name" [ref=e504]:
+                - generic [ref=e506]:
+                  - text: Name
+                  - button [ref=e507]:
+                    - img [ref=e508]
+              - columnheader "Email" [ref=e510]:
+                - generic [ref=e512]:
+                  - text: Email
+                  - button [ref=e513]:
+                    - img [ref=e514]
+              - columnheader "Phone" [ref=e516]:
+                - generic [ref=e518]:
+                  - text: Phone
+                  - button [ref=e519]:
+                    - img [ref=e520]
+              - columnheader "Address" [ref=e522]:
+                - generic [ref=e524]:
+                  - text: Address
+                  - button [ref=e525]:
+                    - img [ref=e526]
+              - columnheader "Agent" [ref=e528]:
+                - generic [ref=e530]:
+                  - text: Agent
+                  - button [ref=e531]:
+                    - img [ref=e532]
+              - columnheader "Status" [ref=e534]:
+                - generic [ref=e536]:
+                  - text: Status
+                  - button [ref=e537]:
+                    - img [ref=e538]
+              - columnheader "Actions" [ref=e540]:
+                - generic [ref=e542]: Actions
+          - rowgroup [ref=e543]:
+            - row "LT Lianna TEST fake_client@smartflyer.com (833) 333-3333 — Vlad QA Status for Lianna TEST" [ref=e544]:
+              - cell "LT Lianna TEST" [ref=e545]:
+                - link "LT Lianna TEST" [ref=e549]:
+                  - /url: /client-detail/?client_id=1&tab=main&version=v3
+                  - generic [ref=e550]:
+                    - generic [ref=e551]: LT
+                    - generic [ref=e553]: Lianna TEST
+              - cell "fake_client@smartflyer.com" [ref=e555]:
+                - generic [ref=e558]: fake_client@smartflyer.com
+              - cell "(833) 333-3333" [ref=e559]:
+                - generic [ref=e562]: (833) 333-3333
+              - cell "—" [ref=e563]:
+                - generic [ref=e566]: —
+              - cell "Vlad QA" [ref=e567]:
+                - generic [ref=e570]: Vlad QA
+              - cell "Status for Lianna TEST" [ref=e571]:
+                - button "Status for Lianna TEST" [ref=e577]:
+                  - generic "Status for Lianna TEST" [ref=e578]:
+                    - generic [ref=e579]: Pending
+                    - img [ref=e580]
+              - cell [ref=e582]:
+                - button [ref=e586]:
+                  - button [ref=e587]
+            - row "SA Sabz Ali fake_d092c98b@5d8185.dev (117) 087-2707 194 Mill Ln, 54362 Status for Sabz Ali" [ref=e591]:
+              - cell "SA Sabz Ali" [ref=e592]:
+                - link "SA Sabz Ali" [ref=e596]:
+                  - /url: /client-detail/?client_id=2&tab=main&version=v3
+                  - generic [ref=e597]:
+                    - generic [ref=e598]: SA
+                    - generic [ref=e600]: Sabz Ali
+              - cell "fake_d092c98b@5d8185.dev" [ref=e602]:
+                - generic [ref=e605]: fake_d092c98b@5d8185.dev
+              - cell "(117) 087-2707" [ref=e606]:
+                - generic [ref=e609]: (117) 087-2707
+              - cell "194 Mill Ln, 54362" [ref=e610]:
+                - generic [ref=e613]: 194 Mill Ln, 54362
+              - cell [ref=e614]
+              - cell "Status for Sabz Ali" [ref=e616]:
+                - button "Status for Sabz Ali" [ref=e622]:
+                  - generic "Status for Sabz Ali" [ref=e623]:
+                    - generic [ref=e624]: Active
+                    - img [ref=e625]
+              - cell [ref=e627]:
+                - button [ref=e631]:
+                  - button [ref=e632]
+            - row "CL Casey LastName fake_54a1ee69@17e2e2.dev (140) 853-3711 990 High St, 52315 Status for Casey LastName" [ref=e636]:
+              - cell "CL Casey LastName" [ref=e637]:
+                - link "CL Casey LastName" [ref=e641]:
+                  - /url: /client-detail/?client_id=3&tab=main&version=v3
+                  - generic [ref=e642]:
+                    - generic [ref=e643]: CL
+                    - generic [ref=e645]: Casey LastName
+              - cell "fake_54a1ee69@17e2e2.dev" [ref=e647]:
+                - generic [ref=e650]: fake_54a1ee69@17e2e2.dev
+              - cell "(140) 853-3711" [ref=e651]:
+                - generic [ref=e654]: (140) 853-3711
+              - cell "990 High St, 52315" [ref=e655]:
+                - generic [ref=e658]: 990 High St, 52315
+              - cell [ref=e659]
+              - cell "Status for Casey LastName" [ref=e661]:
+                - button "Status for Casey LastName" [ref=e667]:
+                  - generic "Status for Casey LastName" [ref=e668]:
+                    - generic [ref=e669]: Pending
+                    - img [ref=e670]
+              - cell [ref=e672]:
+                - button [ref=e676]:
+                  - button [ref=e677]
+            - row "MC1 Michael Cleint 1 fake_0e60c31f@c439c6.dev (153) 005-0459 — SmartFlyer Advisor Status for Michael Cleint 1" [ref=e681]:
+              - cell "MC1 Michael Cleint 1" [ref=e682]:
+                - link "MC1 Michael Cleint 1" [ref=e686]:
+                  - /url: /client-detail/?client_id=4&tab=main&version=v3
+                  - generic [ref=e687]:
+                    - generic [ref=e688]: MC1
+                    - generic [ref=e690]: Michael Cleint 1
+              - cell "fake_0e60c31f@c439c6.dev" [ref=e692]:
+                - generic [ref=e695]: fake_0e60c31f@c439c6.dev
+              - cell "(153) 005-0459" [ref=e696]:
+                - generic [ref=e699]: (153) 005-0459
+              - cell "—" [ref=e700]:
+                - generic [ref=e703]: —
+              - cell "SmartFlyer Advisor" [ref=e704]:
+                - generic [ref=e707]: SmartFlyer Advisor
+              - cell "Status for Michael Cleint 1" [ref=e708]:
+                - button "Status for Michael Cleint 1" [ref=e714]:
+                  - generic "Status for Michael Cleint 1" [ref=e715]:
+                    - generic [ref=e716]: Pending
+                    - img [ref=e717]
+              - cell [ref=e719]:
+                - button [ref=e723]:
+                  - button [ref=e724]
+            - row "S2A2 Sabz 2 Ali 2 fake_2bb525dd@1dcb85.dev (142) 465-1193 — Status for Sabz 2 Ali 2" [ref=e728]:
+              - cell "S2A2 Sabz 2 Ali 2" [ref=e729]:
+                - link "S2A2 Sabz 2 Ali 2" [ref=e733]:
+                  - /url: /client-detail/?client_id=5&tab=main&version=v3
+                  - generic [ref=e734]:
+                    - generic [ref=e735]: S2A2
+                    - generic [ref=e737]: Sabz 2 Ali 2
+              - cell "fake_2bb525dd@1dcb85.dev" [ref=e739]:
+                - generic [ref=e742]: fake_2bb525dd@1dcb85.dev
+              - cell "(142) 465-1193" [ref=e743]:
+                - generic [ref=e746]: (142) 465-1193
+              - cell "—" [ref=e747]:
+                - generic [ref=e750]: —
+              - cell [ref=e751]
+              - cell "Status for Sabz 2 Ali 2" [ref=e753]:
+                - button "Status for Sabz 2 Ali 2" [ref=e759]:
+                  - generic "Status for Sabz 2 Ali 2" [ref=e760]:
+                    - generic [ref=e761]: Pending
+                    - img [ref=e762]
+              - cell [ref=e764]:
+                - button [ref=e768]:
+                  - button [ref=e769]
+            - row "JD John Doe fake_146719b3@f95e73.dev (143) 310-4614 630 Mill Ln, 70838 Status for John Doe" [ref=e773]:
+              - cell "JD John Doe" [ref=e774]:
+                - link "JD John Doe" [ref=e778]:
+                  - /url: /client-detail/?client_id=7&tab=main&version=v3
+                  - generic [ref=e779]:
+                    - generic [ref=e780]: JD
+                    - generic [ref=e782]: John Doe
+              - cell "fake_146719b3@f95e73.dev" [ref=e784]:
+                - generic [ref=e787]: fake_146719b3@f95e73.dev
+              - cell "(143) 310-4614" [ref=e788]:
+                - generic [ref=e791]: (143) 310-4614
+              - cell "630 Mill Ln, 70838" [ref=e792]:
+                - generic [ref=e795]: 630 Mill Ln, 70838
+              - cell [ref=e796]
+              - cell "Status for John Doe" [ref=e798]:
+                - button "Status for John Doe" [ref=e804]:
+                  - generic "Status for John Doe" [ref=e805]:
+                    - generic [ref=e806]: Pending
+                    - img [ref=e807]
+              - cell [ref=e809]:
+                - button [ref=e813]:
+                  - button [ref=e814]
+            - row "STCL Support's Test Client Last fake_ef96a661@5a62fd.dev (175) 853-3778 — Status for Support's Test Client Last" [ref=e818]:
+              - cell "STCL Support's Test Client Last" [ref=e819]:
+                - link "STCL Support's Test Client Last" [ref=e823]:
+                  - /url: /client-detail/?client_id=791&tab=main&version=v3
+                  - generic [ref=e824]:
+                    - generic [ref=e825]: STCL
+                    - generic [ref=e827]: Support's Test Client Last
+              - cell "fake_ef96a661@5a62fd.dev" [ref=e829]:
+                - generic [ref=e832]: fake_ef96a661@5a62fd.dev
+              - cell "(175) 853-3778" [ref=e833]:
+                - generic [ref=e836]: (175) 853-3778
+              - cell "—" [ref=e837]:
+                - generic [ref=e840]: —
+              - cell [ref=e841]
+              - cell "Status for Support's Test Client Last" [ref=e843]:
+                - button "Status for Support's Test Client Last" [ref=e849]:
+                  - generic "Status for Support's Test Client Last" [ref=e850]:
+                    - generic [ref=e851]: Pending
+                    - img [ref=e852]
+              - cell [ref=e854]:
+                - button [ref=e858]:
+                  - button [ref=e859]
+            - row "SSTL Support Sub-Client TEST LastName fake_e267ee2d@c71853.dev (141) 796-0364 — Status for Support Sub-Client TEST LastName" [ref=e863]:
+              - cell "SSTL Support Sub-Client TEST LastName" [ref=e864]:
+                - link "SSTL Support Sub-Client TEST LastName" [ref=e868]:
+                  - /url: /client-detail/?client_id=792&tab=main&version=v3
+                  - generic [ref=e869]:
+                    - generic [ref=e870]: SSTL
+                    - generic [ref=e872]: Support Sub-Client TEST LastName
+              - cell "fake_e267ee2d@c71853.dev" [ref=e874]:
+                - generic [ref=e877]: fake_e267ee2d@c71853.dev
+              - cell "(141) 796-0364" [ref=e878]:
+                - generic [ref=e881]: (141) 796-0364
+              - cell "—" [ref=e882]:
+                - generic [ref=e885]: —
+              - cell [ref=e886]
+              - cell "Status for Support Sub-Client TEST LastName" [ref=e888]:
+                - button "Status for Support Sub-Client TEST LastName" [ref=e894]:
+                  - generic "Status for Support Sub-Client TEST LastName" [ref=e895]:
+                    - generic [ref=e896]: Pending
+                    - img [ref=e897]
+              - cell [ref=e899]:
+                - button [ref=e903]:
+                  - button [ref=e904]
+            - row "CSL Casey Sub-Cleint LastName fake_76fa465e@0c0f44.dev (161) 420-0516 — Status for Casey Sub-Cleint LastName" [ref=e908]:
+              - cell "CSL Casey Sub-Cleint LastName" [ref=e909]:
+                - link "CSL Casey Sub-Cleint LastName" [ref=e913]:
+                  - /url: /client-detail/?client_id=793&tab=main&version=v3
+                  - generic [ref=e914]:
+                    - generic [ref=e915]: CSL
+                    - generic [ref=e917]: Casey Sub-Cleint LastName
+              - cell "fake_76fa465e@0c0f44.dev" [ref=e919]:
+                - generic [ref=e922]: fake_76fa465e@0c0f44.dev
+              - cell "(161) 420-0516" [ref=e923]:
+                - generic [ref=e926]: (161) 420-0516
+              - cell "—" [ref=e927]:
+                - generic [ref=e930]: —
+              - cell [ref=e931]
+              - cell "Status for Casey Sub-Cleint LastName" [ref=e933]:
+                - button "Status for Casey Sub-Cleint LastName" [ref=e939]:
+                  - generic "Status for Casey Sub-Cleint LastName" [ref=e940]:
+                    - generic [ref=e941]: Pending
+                    - img [ref=e942]
+              - cell [ref=e944]:
+                - button [ref=e948]:
+                  - button [ref=e949]
+            - row "TL Testing Lastname fake_075f6ec1@cf485a.dev (181) 712-1514 — Status for Testing Lastname" [ref=e953]:
+              - cell "TL Testing Lastname" [ref=e954]:
+                - link "TL Testing Lastname" [ref=e958]:
+                  - /url: /client-detail/?client_id=794&tab=main&version=v3
+                  - generic [ref=e959]:
+                    - generic [ref=e960]: TL
+                    - generic [ref=e962]: Testing Lastname
+              - cell "fake_075f6ec1@cf485a.dev" [ref=e964]:
+                - generic [ref=e967]: fake_075f6ec1@cf485a.dev
+              - cell "(181) 712-1514" [ref=e968]:
+                - generic [ref=e971]: (181) 712-1514
+              - cell "—" [ref=e972]:
+                - generic [ref=e975]: —
+              - cell [ref=e976]
+              - cell "Status for Testing Lastname" [ref=e978]:
+                - button "Status for Testing Lastname" [ref=e984]:
+                  - generic "Status for Testing Lastname" [ref=e985]:
+                    - generic [ref=e986]: Pending
+                    - img [ref=e987]
+              - cell [ref=e989]:
+                - button [ref=e993]:
+                  - button [ref=e994]
+          - rowgroup:
+            - row:
+              - columnheader
+              - columnheader
+              - columnheader
+              - columnheader
+              - columnheader
+              - columnheader
+              - columnheader
+        - navigation [ref=e999]:
+          - generic [ref=e1000]:
+            - generic [ref=e1001]: 1–10 of 79240
+            - generic [ref=e1002]: "|"
+            - generic [ref=e1003]:
+              - generic [ref=e1004]: Items per page
+              - combobox [ref=e1005] [cursor=pointer]:
+                - option "10" [selected]
+                - option "20"
+                - option "30"
+                - option "50"
+          - generic [ref=e1006]:
+            - img [ref=e1008]
+            - img [ref=e1012]
+            - generic [ref=e1014] [cursor=pointer]: "1"
+            - generic [ref=e1015] [cursor=pointer]: "2"
+            - generic [ref=e1016] [cursor=pointer]: "3"
+            - generic [ref=e1017] [cursor=pointer]: "4"
+            - generic [ref=e1018]: ...
+            - generic [ref=e1019] [cursor=pointer]: "7924"
+            - img [ref=e1021] [cursor=pointer]
+            - img [ref=e1024] [cursor=pointer]
+        - button [ref=e480]
+  - region "Notifications Alt+T"
+  - alert [ref=e2]
+  - dialog [ref=e1029]:
+    - generic [ref=e1030]:
+      - banner [ref=e1031]:
+        - button [ref=e1032] [cursor=pointer]:
+          - img [ref=e1034]
+      - generic [ref=e1038]:
+        - generic [ref=e1039]:
+          - heading "Quick add client" [level=2] [ref=e1040]
+          - paragraph [ref=e1041]: Create a new client profile with essential information to get started.
+        - generic [ref=e1042]:
+          - generic [ref=e1044] [cursor=pointer]:
+            - checkbox "I certify the information below matches the information that appears on the passenger’s government-issued ID" [checked] [active]
+            - img [ref=e1114]
+            - generic [ref=e1046]: I certify the information below matches the information that appears on the passenger’s government-issued ID
+          - generic [ref=e1047]:
+            - generic [ref=e1048]:
+              - generic [ref=e1049]: First name*
+              - textbox "Enter first name" [ref=e1051]
+            - generic [ref=e1052]:
+              - generic [ref=e1053]: Last name*
+              - textbox "Enter last name" [ref=e1055]
+            - generic [ref=e1056]:
+              - generic [ref=e1057]: Middle name
+              - textbox "Enter middle name" [ref=e1059]
+            - generic [ref=e1060]:
+              - generic [ref=e1061]: Preferred name
+              - textbox "Enter preferred name" [ref=e1063]
+            - generic [ref=e1064]:
+              - generic [ref=e1065]: Primary email*
+              - textbox "example@smartflyer.com" [ref=e1067]
+            - generic [ref=e1068]:
+              - generic [ref=e1069]: Primary phone number
+              - generic [ref=e1070]:
+                - button "United States" [ref=e1071]:
+                  - img "United States flag" [ref=e1074]
+                  - img [ref=e1076]
+                - textbox "+1 (XXX) XXX-XXXX" [ref=e1078]
+            - generic [ref=e1079]:
+              - generic [ref=e1080]: Date of birth
+              - generic [ref=e1081]:
+                - textbox "MM/DD/YYYY" [ref=e1084]
+                - generic:
+                  - img
+            - generic [ref=e1085]:
+              - paragraph [ref=e1086]: Gender
+              - generic [ref=e1087]:
+                - log [ref=e1089]
+                - generic [ref=e1090] [cursor=pointer]:
+                  - generic [ref=e1091]:
+                    - generic [ref=e1092]: Select gender
+                    - combobox [ref=e1094]
+                  - img [ref=e1116]
+            - generic [ref=e1098]:
+              - paragraph [ref=e1099]: Source
+              - generic [ref=e1100]:
+                - log [ref=e1102]
+                - generic [ref=e1103] [cursor=pointer]:
+                  - generic [ref=e1104]:
+                    - generic [ref=e1105]: Select source
+                    - combobox [ref=e1107]
+                  - img [ref=e1118]
+        - generic [ref=e1111]:
+          - button "Cancel" [ref=e1112] [cursor=pointer]
+          - button "Save" [disabled] [ref=e1113]

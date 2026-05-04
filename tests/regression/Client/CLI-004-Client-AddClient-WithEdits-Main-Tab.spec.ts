@@ -39,7 +39,7 @@ test.use({
   launchOptions: { slowMo: 700 },
 });
 
-test.describe('CLI-001 - Client - Add Client - Edits by section and Finally check Logs', () => {
+test.describe('CLI-004 - Client - Add Client - Edits by section and Finally check Logs', () => {
   test('Login at Society (env) as an Admin and add a client ', async ({
     loginPage,
     username,
