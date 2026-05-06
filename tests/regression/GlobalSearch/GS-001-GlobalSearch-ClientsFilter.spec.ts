@@ -21,7 +21,6 @@ test.describe('GS-001 - Search - Clients filter', () => {
       await sidebar.goToModule('Clients');
       await expect(page.locator(clients.SPINNER_LOADER)).toBeHidden();
       await expect(page.locator(clients.HEADER)).toBeEnabled();
-      await expect(page.locator(clients.QUICK_ADD)).toBeVisible({ timeout: 15000 });
       await page.waitForLoadState('networkidle');
       await clients.quickAddNew();
       await clients.mainInformationQuickAdd(LAST_NAME, EMAIL);

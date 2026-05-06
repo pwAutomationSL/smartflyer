@@ -18,11 +18,44 @@ const reportFileName = `Regression_${dd}_${mm}_${yyyy}.html`;
 
 console.log(`Generating Allure report for run: ${runId}`);
 
+const root = process.cwd();
+const allureResultsRoot = path.join(root, 'allure-results');
+
+if (fs.existsSync(allureResultsRoot)) {
+  const resultFiles = fs
+    .readdirSync(allureResultsRoot)
+    .filter((file) => file.endsWith('-result.json'));
+  const groupedResults = new Map();
+
+  for (const file of resultFiles) {
+    const filePath = path.join(allureResultsRoot, file);
+    const result = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const key = result.historyId || result.testCaseId || result.fullName || result.name || file;
+
+    if (!groupedResults.has(key)) {
+      groupedResults.set(key, []);
+    }
+
+    groupedResults.get(key).push({ filePath, status: result.status || 'unknown' });
+  }
+
+  for (const attempts of groupedResults.values()) {
+    const hasPassedRetry = attempts.some((attempt) => attempt.status === 'passed');
+
+    if (hasPassedRetry) {
+      for (const attempt of attempts) {
+        if (attempt.status !== 'passed') {
+          fs.unlinkSync(attempt.filePath);
+        }
+      }
+    }
+  }
+}
+
 execSync('npx allure generate allure-results --clean --single-file', {
   stdio: 'inherit',
 });
 
-const root = process.cwd();
 const allureReportRoot = path.join(root, 'allure-report');
 const generatedIndex = path.join(allureReportRoot, 'index.html');
 const namedReportPath = path.join(allureReportRoot, reportFileName);

@@ -1,6 +1,10 @@
 const { spawn } = require('child_process');
+const fs = require('fs');
+const path = require('path');
 
 process.env.ENVIRONMENT = 'stage';
+
+fs.rmSync(path.join(process.cwd(), 'allure-results'), { recursive: true, force: true });
 
 const commands = [
   ['chromium-air-request', ['playwright', 'test', '--project=chromium-air-request', '--workers=1']],

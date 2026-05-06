@@ -207,16 +207,21 @@ export class Clients {
   public readonly CLIENT_TAB = (tabName: string) =>
     `//button[@role='tab' and normalize-space(.)='${tabName}']`;
   public readonly CLIENT_ROW = (clientName: string) =>
-    `//table[@id='ClientTable']//tr[td[contains(normalize-space(.),'${clientName}')]]`;
+    `//table//tr[td[contains(normalize-space(.),'${clientName}')]]`;
   public readonly CLIENT_STATUS_BUTTON = (clientName: string) =>
     `${this.CLIENT_ROW(clientName)}//td[6]//span`;
   public readonly CLIENT_ACTIONS_BUTTON = (clientName: string) =>
     `${this.CLIENT_ROW(clientName)}//td[7]//button`;
   public readonly CLIENT_ACTION_OPTION = (option: string) =>
     `//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//*[normalize-space(.)='${option}']`;
+  public readonly CLIENT_NOT_FOUND = `//p[contains(text(),'No results found')]`;
+  public readonly CLIENT_DELETE_OPTION = `//div/button[contains(.,'Delete')]`;
   public readonly CLIENT_STATUS_CONFIRM_POPUP = `//*[contains(@class,'swal2-popup')]`;
   public readonly CLIENT_STATUS_CONFIRM_YES = `//button[normalize-space(.)='Yes']`;
   public readonly CLIENT_ARCHIVE_CONFIRM_BUTTON = `//button[normalize-space(.)='Yes, archive it!']`;
+  public readonly CLIENT_STATUS_PENDING = `//div[@role="listbox"]/button[contains(.,'Pending')]`;
+  public readonly CLIENT_STATUS_ARCHIVED = `//div[@role="listbox"]/button[contains(.,'Archived')]`;
+  public readonly CLIENT_STATUS_ACTIVE = `//div[@role="listbox"]/button[contains(.,'Active')]`;
   public readonly CLIENT_DELETE_CONFIRM_BUTTON = `//button[contains(normalize-space(.),'Yes, move to Deleted')]`;
   public readonly CLIENT_V3_STATUS_ICON = (clientName: string) =>
     `//h1[contains(.,'${clientName}')]/following-sibling::span`;
