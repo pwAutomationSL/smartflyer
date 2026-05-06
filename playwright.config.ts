@@ -15,7 +15,7 @@ import type { MyOptions } from './fixtures/PlaywrightFixtures';
 const chromiumBase = {
   actionTimeout: 10_000,
   launchOptions: {
-    slowMo: 380,
+    slowMo: 450,
   },
   ...devices['Desktop Chrome'],
   viewport: { width: 1280, height: 800 },
