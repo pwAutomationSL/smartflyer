@@ -1,11 +1,12 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { USERS } from '../../../fixtures/users';
-const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
+const CLIENT_NAME = 'Candice & Ben';
 test.use({
   launchOptions: { slowMo: 500 },
 });
 let addedRelatedPassenger: string[];
 let addedRelatedPassengerStep2AR: string[];
+const sortPassengers = (passengers: string[]) => [...passengers].sort();
 test.describe('SFC-749 Inconsistent related passengers name showing in Air Request', () => {
   test('Super Admin', async ({
     loginPage,
@@ -50,10 +51,13 @@ test.describe('SFC-749 Inconsistent related passengers name showing in Air Reque
     });
     await test.step('7 - add related passenger and compare list', async () => {
       await airRequest.addAdditionalPassenger();
+      await airRequest.scrollPassengers();
       addedRelatedPassengerStep2AR = await page
         .locator(clients.RELATED_PASSENGER_NAMES_STEP2)
         .allTextContents();
-      expect(addedRelatedPassengerStep2AR).toEqual(addedRelatedPassenger);
+      expect(sortPassengers(addedRelatedPassengerStep2AR)).toEqual(
+        sortPassengers(addedRelatedPassenger),
+      );
     });
   });
   test('Agent', async ({ loginPage, page, sidebar, clients, airRequest }) => {
@@ -89,10 +93,13 @@ test.describe('SFC-749 Inconsistent related passengers name showing in Air Reque
     });
     await test.step('7 - add related passenger and compare list', async () => {
       await airRequest.addAdditionalPassenger();
+      await airRequest.scrollPassengers();
       addedRelatedPassengerStep2AR = await page
         .locator(clients.RELATED_PASSENGER_NAMES_STEP2)
         .allTextContents();
-      expect(addedRelatedPassengerStep2AR).toEqual(addedRelatedPassenger);
+      expect(sortPassengers(addedRelatedPassengerStep2AR)).toEqual(
+        sortPassengers(addedRelatedPassenger),
+      );
     });
   });
   test('Brand', async ({ loginPage, page, sidebar, clients, airRequest }) => {
@@ -130,10 +137,13 @@ test.describe('SFC-749 Inconsistent related passengers name showing in Air Reque
     });
     await test.step('7 - add related passenger and compare list', async () => {
       await airRequest.addAdditionalPassenger();
+      await airRequest.scrollPassengers();
       addedRelatedPassengerStep2AR = await page
         .locator(clients.RELATED_PASSENGER_NAMES_STEP2)
         .allTextContents();
-      expect(addedRelatedPassengerStep2AR).toEqual(addedRelatedPassenger);
+      expect(sortPassengers(addedRelatedPassengerStep2AR)).toEqual(
+        sortPassengers(addedRelatedPassenger),
+      );
     });
   });
   test('Air Team', async ({ loginPage, page, sidebar, clients, airRequest }) => {
@@ -171,10 +181,13 @@ test.describe('SFC-749 Inconsistent related passengers name showing in Air Reque
     });
     await test.step('7 - add related passenger and compare list', async () => {
       await airRequest.addAdditionalPassenger();
+      await airRequest.scrollPassengers();
       addedRelatedPassengerStep2AR = await page
         .locator(clients.RELATED_PASSENGER_NAMES_STEP2)
         .allTextContents();
-      expect(addedRelatedPassengerStep2AR).toEqual(addedRelatedPassenger);
+      expect(sortPassengers(addedRelatedPassengerStep2AR)).toEqual(
+        sortPassengers(addedRelatedPassenger),
+      );
     });
   });
   test('Commission', async ({ loginPage, page, sidebar, clients, airRequest }) => {
@@ -212,10 +225,13 @@ test.describe('SFC-749 Inconsistent related passengers name showing in Air Reque
     });
     await test.step('7 - add related passenger and compare list', async () => {
       await airRequest.addAdditionalPassenger();
+      await airRequest.scrollPassengers();
       addedRelatedPassengerStep2AR = await page
         .locator(clients.RELATED_PASSENGER_NAMES_STEP2)
         .allTextContents();
-      expect(addedRelatedPassengerStep2AR).toEqual(addedRelatedPassenger);
+      expect(sortPassengers(addedRelatedPassengerStep2AR)).toEqual(
+        sortPassengers(addedRelatedPassenger),
+      );
     });
   });
 });

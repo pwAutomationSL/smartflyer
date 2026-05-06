@@ -7,7 +7,7 @@ function getDate(): string {
   const presentTime = getPresentTime({ hour: 'numeric', minute: '2-digit' });
   return `${presentDate} ${presentTime}`;
 }
-const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
+const CLIENT_NAME = 'Candice & Ben';
 test.describe('AR-002 - Air Request - Step 1', () => {
   test('Scenario 5 - Delete draft', async ({
     loginPage,
@@ -26,7 +26,7 @@ test.describe('AR-002 - Air Request - Step 1', () => {
     });
 
     await test.step('Search the client and go to the client page, create data to delete', async () => {
-      await clients.searchClient(CLIENT_NAME);
+      await clients.searchClientAndClick(CLIENT_NAME);
       await page.waitForLoadState('networkidle');
       await airRequest.clickAirRequest();
       await airRequest.startFromScrath();

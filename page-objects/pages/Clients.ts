@@ -136,7 +136,7 @@ export class Clients {
   public readonly COMFORT_RELATED_DETAILS_HEIGHT_SECTION = `//span[text()='Height']/following-sibling::span`;
   public readonly COMFORT_RELATED_DETAILS_WHEIGHT_SECTION = `//span[text()='Weight']/following-sibling::span`;
   public readonly COMFORT_RELATED_DETAILS_SECTION = `//span[text()='Weight']/../../../following-sibling::div`;
-  public readonly RELATED_PASSENGER_NAMES = `//a[contains(@href,'client-detail')]`;
+  public readonly RELATED_PASSENGER_NAMES = `//div[not(contains(.,'Primary'))]/preceding-sibling::div/a[contains(@href,'client-detail')]`;
   public readonly RELATED_PASSENGER_NAMES_STEP2 = `//div[@id="modal-content"]//label/span[2]`;
   public readonly CLIENT_LOGS = `(//span[text()='Client profile form updated by '])[1]`;
   public readonly AUDIT_LOGS = `//span[contains(.,'Audit Logs')]`;

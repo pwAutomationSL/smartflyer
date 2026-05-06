@@ -1,7 +1,7 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 
 const PHONE = '123123123';
-const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
+const CLIENT_NAME = 'Candice & Ben';
 test.describe('AR-003 - Air Request - Step #22 ', () => {
   test.setTimeout(200_000);
   test('Air Request - Step 2 - 22# Scenario - Add Frequent Flyer', async ({

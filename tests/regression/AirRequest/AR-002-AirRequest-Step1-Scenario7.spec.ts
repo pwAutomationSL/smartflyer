@@ -1,6 +1,6 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 
-const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
+const CLIENT_NAME = 'Candice & Ben';
 test.describe('AR-002 - Air Request - Step 1', () => {
   test('Scenario 7 - Search draft by ID', async ({
     loginPage,

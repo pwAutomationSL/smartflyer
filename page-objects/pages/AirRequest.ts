@@ -50,6 +50,7 @@ export class AirRequest {
   public readonly ADD_PASSPORT_INFORMATION = (index: number = 1) =>
     `(//label[contains(.,'Add passport information')]//..//button)[${index}]`;
   public readonly ADD_ADDITIONAL_PASSENGER = `//button[contains(.,'Add Additional Passenger')]`;
+  public readonly ADDITIONAL_PASSENGERS_LIST = `//dialog//label[contains(@for,'checkbox')][1]/parent::div`;
   public readonly CERTIFY_CHECKBOX = `//span[contains(.,'I certify the information')]//..//span`;
   public readonly DELETE_TRAVELER_BUTTON = `//button[contains(.,'Delete traveler')]`;
   public readonly KNOW_TRAVELER_LABEL = `//label[contains(.,'Known traveler number')]`;
@@ -224,7 +225,7 @@ export class AirRequest {
     return { responseData };
   }
   public async startFromDraft() {
-    await this.page.getByRole('button', { name: 'Choose from Draft' }).click({ delay: 400 });
+    await this.page.getByRole('button', { name: 'Choose from Draft' }).click();
   }
   public async returnFirstDraftTime() {
     return await this.page.locator(this.DRAFTS_ELEMENTS_TIME_ONLY).first().textContent();
@@ -335,6 +336,11 @@ export class AirRequest {
   public async addAdditionalPassenger() {
     await this.page.locator(this.ADD_ADDITIONAL_PASSENGER).click();
     await this.page.waitForTimeout(2000);
+  }
+  public async scrollPassengers() {
+    await this.page.locator(this.ADDITIONAL_PASSENGERS_LIST).hover();
+    await this.page.mouse.wheel(0, 3000);
+    await this.page.waitForTimeout(800);
   }
   public async addIncorrectFile() {
     await this.page.locator(this.INPUT_FILE).setInputFiles('./data/docs/testDoc.txt');

@@ -10,7 +10,7 @@ test.use({
   launchOptions: { slowMo: 800 },
 });
 let passengerName: string;
-const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
+const CLIENT_NAME = 'Candice & Ben';
 test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,#16 ,#17 ,#18 ', () => {
   test.setTimeout(200_000);
   test('Air Request - Step 2 - 9# and #10 Scenario - Add Additional Passenger', async ({
@@ -29,7 +29,7 @@ test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
     });
 
     await test.step('2 - Search the client and go to the client page', async () => {
-      await clients.searchClient(CLIENT_NAME);
+      await clients.searchClientAndClick(CLIENT_NAME);
       await page.waitForLoadState('networkidle');
     });
 

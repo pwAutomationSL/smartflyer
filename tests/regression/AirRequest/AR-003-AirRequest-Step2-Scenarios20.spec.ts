@@ -2,7 +2,7 @@ import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 
 let allNamesBefore: string[];
 let allNames: string[];
-const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
+const CLIENT_NAME = 'Candice & Ben';
 const USERNAME_NOT_SEARCHED = 'Nico Le Breton';
 const LASTNAME_NOT_SEARCHED = 'Le Breton';
 test.describe('AR-003 - Air Request - Step #20 ', () => {

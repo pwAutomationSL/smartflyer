@@ -23,7 +23,7 @@ test.describe('GS-001 - Search - Clients filter', () => {
       await expect(page.locator(clients.HEADER)).toBeEnabled();
       await expect(page.locator(clients.QUICK_ADD)).toBeVisible({ timeout: 15000 });
       await page.waitForLoadState('networkidle');
-      await clients.quickAdd();
+      await clients.quickAddNew();
       await clients.mainInformationQuickAdd(LAST_NAME, EMAIL);
       await clients.saveQuickAdd();
     });

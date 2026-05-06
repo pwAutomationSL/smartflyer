@@ -1,5 +1,5 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
-const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
+const CLIENT_NAME = 'Candice & Ben';
 const EMAIL = 'fake_candiceconway84@gmail.com';
 const PHONE = '18333333333';
 const DEPARTURESHORT = 'JFK';
@@ -28,7 +28,7 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await sidebar.goToModule('Clients');
     });
     await test.step('2 - Search the client and go to the client page', async () => {
-      await clients.searchClient(CLIENT_NAME);
+      await clients.searchClientAndClick(CLIENT_NAME);
       await page.waitForLoadState('networkidle');
     });
     await test.step('3 - 4 - Go to the New credit card tab and Click on Air request button', async () => {

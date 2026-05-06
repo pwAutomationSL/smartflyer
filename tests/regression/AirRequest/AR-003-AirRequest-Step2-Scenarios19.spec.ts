@@ -2,7 +2,7 @@ import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { uniqueId } from '../../../page-objects';
 const PASSENGER_FIRST_NAME = 'firstNameNT';
 const PASSENGER_LAST_NAME = 'LastNameNT' + uniqueId();
-const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
+const CLIENT_NAME = 'Candice & Ben';
 const MONTH = 'June';
 const DAY = '7';
 const YEAR = '1993';

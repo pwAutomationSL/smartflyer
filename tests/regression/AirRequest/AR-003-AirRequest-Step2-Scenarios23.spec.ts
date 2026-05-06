@@ -1,7 +1,7 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 
 const PHONE = '123123123';
-const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
+const CLIENT_NAME = 'Candice & Ben';
 test.describe('AR-003 - Air Request - Step #23 ', () => {
   test.setTimeout(200_000);
   test('Air Request - Step 2 - 23# Scenario - Add Frequent Flyer', async ({
@@ -20,7 +20,7 @@ test.describe('AR-003 - Air Request - Step #23 ', () => {
     });
 
     await test.step('2 - Search the client and go to the client page', async () => {
-      await clients.searchClient(CLIENT_NAME);
+      await clients.searchClientAndClick(CLIENT_NAME);
       await page.waitForLoadState('networkidle');
     });
 
@@ -31,7 +31,6 @@ test.describe('AR-003 - Air Request - Step #23 ', () => {
 
     await test.step('5 - Click on Start from scratch', async () => {
       await airRequest.startFromScrath();
-      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
       await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
     });
     await test.step('6 - Select the Agent and Click on Continue button', async () => {

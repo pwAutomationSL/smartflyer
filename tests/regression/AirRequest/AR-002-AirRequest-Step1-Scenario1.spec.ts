@@ -1,6 +1,6 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { getPresentDate, getPresentTime, convertToUiDateFormat } from '../../../utils/helpers';
-const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
+const CLIENT_NAME = 'Candice & Ben';
 function getDate(): string {
   const presentDate = getPresentDate({ month: '2-digit', day: '2-digit' });
   const presentTime = getPresentTime({ hour: 'numeric', minute: '2-digit' });

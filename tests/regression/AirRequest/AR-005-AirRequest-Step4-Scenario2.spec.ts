@@ -1,5 +1,5 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
-const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
+const CLIENT_NAME = 'Candice & Ben';
 const EMAIL = 'fake_candiceconway84@gmail.com';
 const PHONE = '18333333333';
 const DEPARTURESHORT = 'JFK';
