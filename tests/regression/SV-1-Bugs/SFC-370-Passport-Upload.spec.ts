@@ -5,7 +5,7 @@ test.use({
   launchOptions: { slowMo: 350 },
 });
 const PASSPORT = uniqueId();
-const expected = PASSPORT.toString();
+const passPortName = `testImage.jpg`;
 test.describe('SFC-370 -  upload a passport file', () => {
   test('As an admin, when I try to upload a passport file, it should not return server error.', async ({
     loginPage,
@@ -19,12 +19,13 @@ test.describe('SFC-370 -  upload a passport file', () => {
       await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
-      await clients.searchClientAndClick(CLIENT_NAME);
+      await clients.searchClientByName(CLIENT_NAME);
+      await clients.clickFirstResult();
     });
     await test.step('Click on Start from scratch', async () => {
       await page.waitForLoadState('networkidle');
       await page.waitForLoadState('load');
-      await clients.clickDatesAndNumbers();
+      await clients.goToPreferencesTab();
       await page.waitForLoadState('networkidle');
       await page.waitForLoadState('load');
       await clients.addDocument();
@@ -36,7 +37,18 @@ test.describe('SFC-370 -  upload a passport file', () => {
       await page.waitForLoadState('networkidle');
       await page.waitForLoadState('load');
       const values = await page.locator(clients.DATES_NUMNBERS_PASSPORT_NUMBER).allTextContents();
-      expect(values.some((v) => v.includes(expected))).toBeTruthy();
+      expect(values.some((v) => v.includes(passPortName))).toBeTruthy();
+    });
+    await test.step('Verify it was uploaded correctly', async () => {
+      await clients.editPassport(passPortName);
+      await expect(page.locator(clients.POPUP_HEADER_H2)).toContainText('Document information');
+      await expect(page.locator(clients.PASSPORT_NAME)).toHaveValue(passPortName);
+      await expect(page.locator(clients.PASSPORT_NUMBER)).toHaveValue(PASSPORT.toString());
+      await expect(page.locator(clients.PASSPORT_IMAGE)).toBeVisible();
+      await clients.cancelPopUp();
+    });
+    await test.step('Delete added passport', async () => {
+      await clients.deletePassport(passPortName);
     });
   });
 });

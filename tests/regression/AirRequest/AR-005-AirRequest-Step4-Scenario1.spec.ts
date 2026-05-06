@@ -31,7 +31,7 @@ test.describe('AR-005 - Air Request - Step 4', () => {
       await expect(page.locator(airRequest.POP_UP_HEADER)).toBeVisible();
     });
     await test.step('5 - Click on Start from scratch', async () => {
-      await airRequest.startFromScratch();
+      await clients.startFromScratch();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
       await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
     });

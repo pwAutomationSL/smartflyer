@@ -55,6 +55,7 @@ export class Clients {
   public readonly PASSPORT_DATE_OF_ISSUE = `//*[contains(.,'Date of Issue')]/following-sibling::div/div/div/input`;
   public readonly PASSPORT_DATE_OF_EXPIRY = `//*[contains(.,'Date of Expiration')]/following-sibling::div/div/div/input`;
   public readonly PASSENGER_DOB = `//form//input[@id="passport_dob"]`;
+  public readonly PASSPORT_IMAGE = `//dialog//img`;
   public readonly SUCCESS_MODAL = `//h2[contains(.,'Success')]`;
   public readonly PRIMARY_PASSENGER = `//button[contains(.,'Primary Passenger')]`;
   public readonly RELATED_PASSENGERS = `//button[contains(.,'Related Passengers')]`;
@@ -80,7 +81,7 @@ export class Clients {
   public readonly CONFIRM_UPLOAD = `//button[contains(.,'Upload Files')]`;
   public readonly PASSPORT_ISSUE_COUNTRY = `//p[text()='Passport issuing country']/following-sibling::div/div/div[2]`;
   public readonly DATES_NUMNBERS_PASSPORT_NAME = `(//h5[text()="Passport Details"]/following-sibling::div/div[2]/div/div)[1]`;
-  public readonly DATES_NUMNBERS_PASSPORT_NUMBER = `(//h5[text()="Uploads"]/../following-sibling::div//tbody/tr/td[3])`;
+  public readonly DATES_NUMNBERS_PASSPORT_NUMBER = `(//p[text()="Passport and Travel Document Uploads"]/../../following-sibling::div//tbody/tr/td[1])`;
   public readonly PRIMARY_PASSENGER_FIRST_NAME = `//input[@name="primary_passenger.client.first_name"]`;
   public readonly PRIMARY_PASSENGER_LAST_NAME = `//input[@name="primary_passenger.client.last_name"]`;
   public readonly PRIMARY_PASSENGER_DATE_OF_BIRTH = `//*[contains(@for,'primary_passenger.client.date_of_birth')]/following-sibling::div//input`;
@@ -1033,6 +1034,26 @@ export class Clients {
   }
   public async editNameEvent(name: string) {
     await this.page.locator(this.NAME_EVENT).fill(name);
+  }
+  public async deletePassport(value: string) {
+    await this.page
+      .locator(
+        `//p[text()='${value}']/../../following-sibling::td//button[@aria-label="Delete document"]`,
+      )
+      .first()
+      .click();
+    await this.page.locator(this.CONFIRM_DELETE_PASSPORT).click();
+  }
+  public async editPassport(value: string) {
+    await this.page
+      .locator(
+        `//p[text()='${value}']/../../following-sibling::td//button[@aria-label="Edit document"]`,
+      )
+      .first()
+      .click();
+  }
+  public async cancelPopUp() {
+    await this.page.getByRole('button', { name: 'Cancel' }).click();
   }
   public async addDate() {
     await this.page.getByRole('textbox', { name: 'MM/DD/YYYY' }).press('Enter');
