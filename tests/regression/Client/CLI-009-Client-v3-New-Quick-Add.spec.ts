@@ -21,8 +21,7 @@ test.describe('CLI-009 - Client v3 - New Quick Add', () => {
         host: HOST,
       });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
-      await sidebar.goToModule('Search');
-      await page.goto(`https://app.${env}.smartflyer.com/clients/`);
+      await sidebar.goToModule('Clients');
       await expect(page.locator(clients.SPINNER_LOADER)).toBeHidden();
       await expect(page.locator(clients.HEADER)).toBeEnabled();
       await expect(page.locator(clients.ADD_CLIENT)).toBeVisible({ timeout: 15000 });
@@ -30,6 +29,9 @@ test.describe('CLI-009 - Client v3 - New Quick Add', () => {
       await clients.quickAddNew();
       await clients.mainInformationQuickAdd(LAST_NAME, EMAIL);
       await clients.saveQuickAdd();
+      await expect(page.locator(clients.HEADER).first()).toContainText(LAST_NAME, {
+        timeout: 25000,
+      });
     });
   });
 });

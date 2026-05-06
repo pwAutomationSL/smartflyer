@@ -29,19 +29,16 @@ test.describe.serial('CLI-007 - Client - Client Notes', () => {
       });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
-      await expect(page.locator(clients.QUICK_ADD)).toBeVisible({ timeout: 15000 });
       await page.waitForLoadState('networkidle');
-      await clients.quickAdd();
-      await clients.oldMainInformationQuickAdd(LAST_NAME, EMAIL);
-      await clients.oldSaveQuickAdd();
+      await clients.quickAddNew();
+      await clients.mainInformationQuickAdd(LAST_NAME, EMAIL);
+      await clients.saveQuickAdd();
       await expect(page.locator(clients.HEADER).first()).toContainText(LAST_NAME, {
         timeout: 25000,
       });
     });
 
     await test.step('2 - Open Notes tab in v3 and verify empty state with Add Note CTA', async () => {
-      await clients.openClientProfileTab('NOTES');
-      await page.goto(`${page.url()}&version=v3`);
       await page.waitForLoadState('networkidle');
       await clients.openClientProfileTab('Notes');
       await expect(page.locator(clients.CLIENT_PROFILE_TAB('Notes'))).toBeVisible();
@@ -100,10 +97,9 @@ test.describe.serial('CLI-007 - Client - Client Notes', () => {
       });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
-      await clients.searchClientByName(LAST_NAME);
+      await clients.searchClientByName('FirstName ' + LAST_NAME);
       await clients.clickFirstResult();
       await expect(page.locator(clients.HEADER)).toContainText(LAST_NAME, { timeout: 25000 });
-      await page.goto(`${page.url()}&version=v3`);
       await page.waitForLoadState('networkidle');
       await clients.openClientProfileTab('Notes');
     });
@@ -166,10 +162,11 @@ test.describe.serial('CLI-007 - Client - Client Notes', () => {
       });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
-      await clients.searchClientByName(LAST_NAME);
+      await clients.searchClientByName('FirstName ' + LAST_NAME);
       await clients.clickFirstResult();
-      await expect(page.locator(clients.HEADER)).toContainText(LAST_NAME, { timeout: 25000 });
-      await page.goto(`${page.url()}&version=v3`);
+      await expect(page.locator(clients.HEADER)).toContainText('FirstName ' + LAST_NAME, {
+        timeout: 25000,
+      });
       await page.waitForLoadState('networkidle');
       await clients.openClientProfileTab('Notes');
     });

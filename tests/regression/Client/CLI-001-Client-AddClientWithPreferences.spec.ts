@@ -108,18 +108,20 @@ test.describe('CLI-001 - Client - Add Client', () => {
       await expect(page.locator(clients.ALLERGIES_RESTRICTIONS)).toContainText(
         'Peanut allergy, tree nut allergy, lactose intolerance, gluten intolerance, shellfish allergy, sesame allergy, soy allergy, egg allergy, dairy-free, gluten-free, vegetarian, vegan.',
       );
+      await clients.clickLifeStyle();
       await expect(page.locator(clients.BEVERAGE_PREFERENCES_SECTION)).toContainText('Red Wine');
       await expect(page.locator(clients.PILLOW_PREFERENCES_SECTION)).toContainText('Foam Pillows');
       await expect(page.locator(clients.ROOM_CONFIGURATION_SECTION)).toContainText('King Beds');
-      await expect(page.locator(clients.SPA_PREFERENCES_SECTION).first()).toContainText(
+      await expect(page.locator(clients.SPA_PREFERENCES_SECTION).last()).toContainText(
         'Female Therapist',
       );
-      await expect(page.locator(clients.SPA_PREFERENCES_SECTION).last()).toContainText(
+      await expect(page.locator(clients.SPA_PREFERENCES_SECTION).first()).toContainText(
         'Ad litora torquent per conubia nostra inceptos himenaeos.',
       );
       await expect(page.locator(clients.GENERAL_LIKES_DISLIKES_SECTION)).toContainText(
         'Ad litora torquent per conubia nostra inceptos himenaeos.',
       );
+      await clients.clickPersonal();
       await expect(page.locator(clients.COMFORT_RELATED_DETAILS_HEIGHT_SECTION)).toContainText(
         '180 cm',
       );
@@ -132,7 +134,7 @@ test.describe('CLI-001 - Client - Add Client', () => {
     });
     await test.step('8 -Go to clients tab and search for new client and verify is was added', async () => {
       await sidebar.goToModuleAPP('Clients');
-      await clients.searchClientByName(MAIN_PASSENGER_LAST_NAME);
+      await clients.searchClientByName(MAIN_PASSENGER_NAME + ' ' + MAIN_PASSENGER_LAST_NAME);
       await expect(page.locator(clients.CLIENT_NAME_SEARCH_RESULT)).toContainText(
         MAIN_PASSENGER_LAST_NAME,
       );

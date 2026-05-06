@@ -36,7 +36,7 @@ const normalizePhoneNumber = (str: string | null | undefined): string => {
 };
 
 test.use({
-  launchOptions: { slowMo: 700 },
+  launchOptions: { slowMo: 800 },
 });
 
 test.describe('CLI-004 - Client - Add Client - Edits by section and Finally check Logs', () => {
@@ -116,7 +116,7 @@ test.describe('CLI-004 - Client - Add Client - Edits by section and Finally chec
       await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
-      await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME);
+      await clients.searchClientAndClick(MAIN_PASSENGER_NAME + ' ' + MAIN_PASSENGER_LAST_NAME);
     });
     await test.step('2 -Go to clients tab and search for new client and verify is was added correctly', async () => {
       await expect(page.locator(clients.HEADER)).toContainText(MAIN_PASSENGER_NAME);
@@ -173,7 +173,9 @@ test.describe('CLI-004 - Client - Add Client - Edits by section and Finally chec
       await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
-      await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
+      await clients.searchClientAndClick(
+        MAIN_PASSENGER_NAME_EDITED + ' ' + MAIN_PASSENGER_LAST_NAME_EDITED,
+      );
     });
     await test.step('2 -Edit Address', async () => {
       await clients.editClientBySection(section);
@@ -217,9 +219,12 @@ test.describe('CLI-004 - Client - Add Client - Edits by section and Finally chec
       await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
-      await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
+      await clients.searchClientAndClick(
+        MAIN_PASSENGER_NAME_EDITED + ' ' + MAIN_PASSENGER_LAST_NAME_EDITED,
+      );
     });
     await test.step('2 -Edit Address', async () => {
+      await clients.goToPreferencesTab();
       await clients.editClientBySection(section);
       await expect(page.locator(clients.POPUP_EDIT_HEADER)).toContainText('Emergency contact');
       await expect(page.locator(clients.POPUP_EDIT_HEADER_INFO)).toContainText(
@@ -256,11 +261,13 @@ test.describe('CLI-004 - Client - Add Client - Edits by section and Finally chec
       await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
-      await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
+      await clients.searchClientAndClick(
+        MAIN_PASSENGER_NAME_EDITED + ' ' + MAIN_PASSENGER_LAST_NAME_EDITED,
+      );
     });
     await test.step('2 -Edit Important Dates', async () => {
-      await clients.clickDatesAndNumbers();
-      await clients.editClientBySection(section);
+      await clients.goToPreferencesTab();
+      await clients.editClientBySection2(section);
       await expect(page.locator(clients.SAVE_CHANGES)).toBeDisabled();
       await expect(page.locator(clients.POPUP_EDIT_HEADER)).toContainText('Important dates');
       await expect(page.locator(clients.POPUP_EDIT_HEADER_INFO)).toContainText(
@@ -294,11 +301,13 @@ test.describe('CLI-004 - Client - Add Client - Edits by section and Finally chec
       await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
-      await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
+      await clients.searchClientAndClick(
+        MAIN_PASSENGER_NAME_EDITED + ' ' + MAIN_PASSENGER_LAST_NAME_EDITED,
+      );
     });
     await test.step('2 -Edit Loyalty Programs', async () => {
-      await clients.clickDatesAndNumbers();
-      await clients.editClientBySection(section);
+      await clients.goToPreferencesTab();
+      await clients.editClientBySection2(section);
       await expect(page.locator(clients.SAVE_CHANGES)).toBeEnabled();
       await expect(page.locator(clients.POPUP_EDIT_HEADER)).toContainText('Loyalty programs');
       await expect(page.locator(clients.POPUP_EDIT_HEADER_INFO)).toContainText(
@@ -335,11 +344,13 @@ test.describe('CLI-004 - Client - Add Client - Edits by section and Finally chec
       await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
-      await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
+      await clients.searchClientAndClick(
+        MAIN_PASSENGER_NAME_EDITED + ' ' + MAIN_PASSENGER_LAST_NAME_EDITED,
+      );
     });
     await test.step('2 -Edit Loyalty Programs', async () => {
-      await clients.clickDatesAndNumbers();
-      await clients.editClientBySection(section);
+      await clients.goToPreferencesTab();
+      await clients.editClientBySection2(section);
       await expect(page.locator(clients.SAVE_CHANGES)).toBeEnabled();
       await expect(page.locator(clients.POPUP_EDIT_HEADER)).toContainText('Important travel data');
       await expect(page.locator(clients.POPUP_EDIT_HEADER_INFO)).toContainText(
@@ -388,7 +399,9 @@ test.describe('CLI-004 - Client - Add Client - Edits by section and Finally chec
       await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
-      await clients.searchClientAndClick(MAIN_PASSENGER_LAST_NAME_EDITED);
+      await clients.searchClientAndClick(
+        MAIN_PASSENGER_NAME_EDITED + ' ' + MAIN_PASSENGER_LAST_NAME_EDITED,
+      );
     });
     await test.step('2 -Review Logs', async () => {
       await clients.clickAuditLogs();

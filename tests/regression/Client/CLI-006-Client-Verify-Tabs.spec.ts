@@ -1,7 +1,7 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { USERS } from '../../../fixtures/users';
-
-test.describe('CLI-006 - Client - Verify tabs', () => {
+('// This test is skipped as the tabs are no longer present in new design being redesigned');
+test.skip('CLI-006 - Client - Verify tabs', () => {
   test('Login as an Admin and verify client tabs are visible', async ({
     loginPage,
     page,

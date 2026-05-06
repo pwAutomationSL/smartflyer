@@ -1,6 +1,6 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 
-const CLIENT_NAME = 'LastName';
+const CLIENT_NAME = 'Test';
 const message = `Lorem ipsum dolor sit amet consectetur adipiscing elit.`;
 test.describe('CLI-003 - Client - Validate new share form', () => {
   test('Login as an Admin and verify Share Form Pop Up is updated ', async ({

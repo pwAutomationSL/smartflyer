@@ -80,7 +80,8 @@ test.describe('CLI-001 - Client - Add Client', () => {
     });
     await test.step('6 -Go to clients tab and search for new client and verify is was added', async () => {
       await sidebar.goToModuleAPP('Clients');
-      await clients.searchClientByName(MAIN_PASSENGER_LAST_NAME);
+      await clients.searchClientByName(MAIN_PASSENGER_NAME + ' ' + MAIN_PASSENGER_LAST_NAME);
+      await clients.searchClientByName(MAIN_PASSENGER_NAME + ' ' + MAIN_PASSENGER_LAST_NAME);
       await expect(page.locator(clients.CLIENT_NAME_SEARCH_RESULT)).toContainText(
         MAIN_PASSENGER_LAST_NAME,
       );

@@ -30,7 +30,7 @@ export class Clients {
   public readonly QUICK_ADD_SAVE = `${this.QUICK_ADD_FORM}//button[@type='submit' and normalize-space(.)='Save']`;
   public readonly SPINNER_LOADER = `//div[@id="ClientTable_processing"]`;
   public readonly USERNAME_HEADER = `//div[contains(@class,'user-data')]//h4`;
-  public readonly ALL_ACTIVE_CLIENTS = `//tbody/tr//p`;
+  public readonly ALL_ACTIVE_CLIENTS = `//tbody/tr//a`;
   public readonly ALL_RELATED_TRAVELERS = `//tbody[@id="related_travellers_list"]/tr/td[2]/span`;
   public readonly ALL_RELATED_TRAVELERS_APP = `//div[@aria-label="Expand"]//a`;
   public readonly CONFIRM_DELETE = `//dialog//button[contains(.,'Delete')]`;
@@ -42,7 +42,7 @@ export class Clients {
   public readonly DELETE_PASSPORT_BUTTONS = `//div[contains(.,'Passport and Travel Document Uploads')]//td/button[2]`;
   public readonly PASSPORTS_ADDED_DROPDOWN = `//tbody/tr[contains(@id,'passport')]//button`;
   public readonly ADD_NEW_PASSPORT = `//p[contains(.,'Passport and Travel Document Uploads')]/following-sibling::button`;
-  public readonly ADDED_RELATED_PASSENGER_NAME = `//div[@role="button" and @aria-label="Expand"]/div[1]`;
+  public readonly ADDED_RELATED_PASSENGER_NAME = `(//div//button//div//a)[2]`;
   public readonly EDIT_PASSPORT = `//ul[contains(@class,'show')]//a[contains(.,'Edit')]`;
   public readonly PASSPORT_MODAL = `//div[@id="modal-content"]`;
   public readonly PASSPORT_NAME = `//input[contains(@name,"document_name")]`;
@@ -58,8 +58,8 @@ export class Clients {
   public readonly SUCCESS_MODAL = `//h2[contains(.,'Success')]`;
   public readonly PRIMARY_PASSENGER = `//button[contains(.,'Primary Passenger')]`;
   public readonly RELATED_PASSENGERS = `//button[contains(.,'Related Passengers')]`;
-  public readonly RELATED_PASSENGERS_TAB = `//button[text()="RELATED TRAVELERS"]`;
-  public readonly PREFERENCES_TAB = `//button[text()="PREFERENCES"]`;
+  public readonly RELATED_PASSENGERS_TAB = `//button[text()="Related passengers"]`;
+  public readonly PREFERENCES_TAB = `//h3[text()='Travel Profile & Preferences']/following-sibling::div`;
   public readonly SHARE_BUTTON = `//button[text()="Share"]`;
   public readonly SEND_FORMS = `//button[text()="Send Forms"]`;
   public readonly PROFILE_FORM_CARD = `//button/h5[text()="Profile Form"]`;
@@ -97,49 +97,51 @@ export class Clients {
     `(//h4[text()='${index}']/../following-sibling::div/*/*[@width="24"])[1]`;
   public readonly CONFIRM_SUBMISSION = `//button[text()="Confirm Submission"]`;
   public readonly CREATE_CLIENT = `//button[text()="Create Client"]`;
-  public readonly CLIENT_PROFILE_DOB = `(//h1/../following-sibling::div//span)[1]`;
-  public readonly CLIENT_PROFILE_PHONE = `(//h1/../following-sibling::div//span)[2]`;
-  public readonly CLIENT_PROFILE_EMAIL = `(//h1/../following-sibling::div//span)[3]`;
-  public readonly CLIENT_PROFILE_NAME_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//p)[1]`;
-  public readonly CLIENT_PROFILE_DOB_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//p)[3]`;
-  public readonly CLIENT_PROFILE_GENDER_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//p)[4]`;
-  public readonly CLIENT_PROFILE_EMAIL_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//p)[5]`;
-  public readonly CLIENT_PROFILE_PHONE_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//p)[6]`;
+  public readonly CLIENT_PROFILE_DOB = `(//p[text()='Basic Information']/../../following-sibling::div//p)[3]`;
+  public readonly CLIENT_PROFILE_PHONE = `(//h1/../../../../following-sibling::div//span)[1]`;
+  public readonly CLIENT_PROFILE_EMAIL = `(//h1/../../../../following-sibling::div//span)[2]`;
+  public readonly CLIENT_PROFILE_NAME_BI = `(//p[text()='Basic Information']/../../following-sibling::div//p)[1]`;
+  public readonly CLIENT_PROFILE_DOB_BI = `(//p[text()='Basic Information']/../../following-sibling::div//p)[3]`;
+  public readonly CLIENT_PROFILE_GENDER_BI = `(//p[text()='Basic Information']/../../following-sibling::div//p)[4]`;
+  public readonly CLIENT_PROFILE_EMAIL_BI = `(//p[text()='Basic Information']/../../following-sibling::div//p)[5]`;
+  public readonly CLIENT_PROFILE_PHONE_BI = `(//p[text()='Basic Information']/../../following-sibling::div//p)[6]`;
   public readonly RELATED_PASSENGER_NAME_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//span)[1]`;
   public readonly RELATED_PASSENGER_DOB_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//span)[2]`;
-  public readonly RELATED_PASSENGER_GENDER_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//span)[3]`;
-  public readonly RELATED_PASSENGER_EMAIL_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//span)[5]`;
-  public readonly RELATED_PASSENGER_PHONE_BI = `(//h5[text()="Basic Information"]/../following-sibling::div//span)[8]`;
-  public readonly CLIENT_PROFILE_STREET_ADRESS = `(//h5[text()="Address"]/../following-sibling::div//p)[2]`;
-  public readonly CLIENT_PROFILE_ZIP_CODE_ADRESS = `(//h5[text()="Address"]/../following-sibling::div//p)[3]`;
-  public readonly CLIENT_PROFILE_COUNTRY_CITY_ADRESS = `(//h5[text()="Address"]/../following-sibling::div//p)[4]`;
-  public readonly CLIENT_PROFILE_EMERGENCY_CONTACT_NAME = `(//h5[text()="Emergency Contact"]/../following-sibling::div//p)[1]`;
-  public readonly CLIENT_PROFILE_EMERGENCY_CONTACT_EMAIL = `(//h5[text()="Emergency Contact"]/../following-sibling::div//p)[2]`;
-  public readonly CLIENT_PROFILE_EMERGENCY_CONTACT_PHONE = `(//h5[text()="Emergency Contact"]/../following-sibling::div//p)[3]`;
-  public readonly CLIENT_NAME_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[1]`;
-  public readonly CLIENT_EMAIL_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[2]`;
-  public readonly CLIENT_PHONE_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[3]`;
-  public readonly CLIENT_STATUS_SEARCH_RESULT = `(//table[@id="ClientTable"]//tr[1]/td)[6]`;
+  public readonly RELATED_PASSENGER_GENDER_BI = `(//p[text()='Basic Information']/../../following-sibling::div//p)[4]`;
+  public readonly RELATED_PASSENGER_EMAIL_BI = `(//p[text()='Basic Information']/../../following-sibling::div//p)[5]`;
+  public readonly RELATED_PASSENGER_PHONE_BI = `(//p[text()='Basic Information']/../../following-sibling::div//p)[6]`;
+  public readonly CLIENT_PROFILE_STREET_ADRESS = `(//p[text()="Address"]/../../following-sibling::div//p)[2]`;
+  public readonly CLIENT_PROFILE_ZIP_CODE_ADRESS = `(//p[text()="Address"]/../../following-sibling::div//p)[3]`;
+  public readonly CLIENT_PROFILE_COUNTRY_CITY_ADRESS = `(//p[text()="Address"]/../../following-sibling::div//p)[4]`;
+  public readonly CLIENT_PROFILE_EMERGENCY_CONTACT_NAME = `(//p[text()="Emergency Contact"]/../../following-sibling::div//p)[1]`;
+  public readonly CLIENT_PROFILE_EMERGENCY_CONTACT_EMAIL = `(//p[text()="Emergency Contact"]/../../following-sibling::div//p)[2]`;
+  public readonly CLIENT_PROFILE_EMERGENCY_CONTACT_PHONE = `(//p[text()="Emergency Contact"]/../../following-sibling::div//p)[3]`;
+  public readonly CLIENT_NAME_SEARCH_RESULT = `(//table//tr[1]/td)[1]`;
+  public readonly CLIENT_EMAIL_SEARCH_RESULT = `(//table//tr[1]/td)[2]`;
+  public readonly CLIENT_PHONE_SEARCH_RESULT = `(//table//tr[1]/td)[3]`;
+  public readonly CLIENT_STATUS_SEARCH_RESULT = `(//table//tr[1]/td)[6]`;
   public readonly ADD_PASSENGER = `//button[text()="Add Passenger"]`;
   public readonly RELATED_PASSENGER_EXPAND = `(//button[contains(.,'Related Passengers')]/following-sibling::div//button)[1]`;
-  public readonly RELATED_PASSENGER_EXPAND_FROM_TAB = `//div[@role="button" and @aria-label="Expand"]`;
+  public readonly RELATED_PASSENGER_EXPAND_FROM_TAB = `(//div//button//div//a)[2]/parent::div/../..`;
   public readonly RELATED_PASSENGERS_EXPAND = `(//button[contains(.,'Related Passengers')])[1]`;
   public readonly TRASH_ICON_LOYALTY = `//h5[text()='Loyalty Program']/../../following-sibling::div//button[contains(@class,'text-red-500')]`;
   public readonly GENERAL_INTEREST_SECTION = `//h5[text()='General Interests']/following-sibling::div/div`;
-  public readonly FLIGHT_PREFERENCES = `//h5[text()='Flight Preferences']/../../following-sibling::div`;
-  public readonly ALLERGIES_RESTRICTIONS = `//h5[text()='Allergies & Dietary Restrictions']/../../following-sibling::div`;
-  public readonly BEVERAGE_PREFERENCES_SECTION = `//h5[text()='Beverage Preferences']/following-sibling::div/div`;
+  public readonly FLIGHT_PREFERENCES = `//p[text()='Flight Preferences']/../../following-sibling::div`;
+  public readonly ALLERGIES_RESTRICTIONS = `//p[text()='Allergies & Dietary Restrictions']/../../following-sibling::div`;
+  public readonly BEVERAGE_PREFERENCES_SECTION = `//h5[text()='Beverage Preferences']/following-sibling::div`;
   public readonly PILLOW_PREFERENCES_SECTION = `//h5[text()='Pillow Preferences']/following-sibling::div/div`;
   public readonly ROOM_CONFIGURATION_SECTION = `//h5[text()='Room Configuration Preferences']/following-sibling::div/div`;
   public readonly SPA_PREFERENCES_SECTION = `//h5[text()='Spa Preferences']/following-sibling::div/div`;
   public readonly GENERAL_LIKES_DISLIKES_SECTION = `//h5[text()='General Likes & Dislikes']/following-sibling::div/div`;
-  public readonly COMFORT_RELATED_DETAILS_HEIGHT_SECTION = `//h5[text()='Comfort-related Details']/../../following-sibling::div/div/div[1]/div[2]`;
-  public readonly COMFORT_RELATED_DETAILS_WHEIGHT_SECTION = `//h5[text()='Comfort-related Details']/../../following-sibling::div/div/div[2]/div[2]`;
-  public readonly COMFORT_RELATED_DETAILS_SECTION = `//h5[text()='Comfort-related Details']/../../following-sibling::div/div[2]`;
+  public readonly COMFORT_RELATED_DETAILS_HEIGHT_SECTION = `//span[text()='Height']/following-sibling::span`;
+  public readonly COMFORT_RELATED_DETAILS_WHEIGHT_SECTION = `//span[text()='Weight']/following-sibling::span`;
+  public readonly COMFORT_RELATED_DETAILS_SECTION = `//span[text()='Weight']/../../../following-sibling::div`;
   public readonly RELATED_PASSENGER_NAMES = `//a[contains(@href,'client-detail')]`;
   public readonly RELATED_PASSENGER_NAMES_STEP2 = `//div[@id="modal-content"]//label/span[2]`;
   public readonly CLIENT_LOGS = `(//span[text()='Client profile form updated by '])[1]`;
   public readonly AUDIT_LOGS = `//span[contains(.,'Audit Logs')]`;
+  public readonly LIFESTYLE_TAB = `//span[contains(.,'Lifestyle')]`;
+  public readonly PERSONAL_TAB = `//span[contains(.,'Personal')]`;
   public readonly PASSPORT_ISSUE_COUNTRY_OPTION = (country: string) =>
     `//div[@role="listbox"]//p[text()='${country}']`;
   public readonly MAIN_PASSENGER_TAB = `(//div[contains(@class,"Layout_content")]//button[@aria-expanded="false"])[1]`;
@@ -187,10 +189,10 @@ export class Clients {
   public readonly SAVE_CHANGES = `//button[text()="Save changes"]`;
   public readonly NAME_EVENT = `//input[@name="important_dates.0.name"]`;
   public readonly IMPORTANT_DATES = (index: number) =>
-    `//h5[text()="Important Dates"]/../following-sibling::div//tbody//td[${index}]`;
+    `//p[text()="Important Dates"]/../following-sibling::div//tbody//td[${index}]`;
 
   public readonly LOYALTY_PROGRAM = (index: number) =>
-    `//h5[text()="Loyalty Programs"]/../following-sibling::div//tbody//td[${index}]`;
+    `//p[text()="Loyalty Programs"]/../following-sibling::div//tbody//td[${index}]`;
 
   public readonly TRAVEL_DATA_NUMBER_BY_PROGRAM = (text: string) =>
     `//table//tr[contains(.,'${text}')]/td[2]//p`;
@@ -219,7 +221,7 @@ export class Clients {
     `//h1[contains(.,'${clientName}')]/following-sibling::span`;
   public readonly CLIENT_V3_HOVER_STATUS = (clientName: string) =>
     `//h1[contains(.,'${clientName}')]/following-sibling::span/following-sibling::*//span`;
-  public readonly CLIENT_MENU = `//button[text()='Share']/following-sibling::div`;
+  public readonly CLIENT_MENU = `//button[text()='Send Forms']/following-sibling::div`;
   public readonly CHANGE_AGENT = `//button[contains(.,'Change the agent')]`;
   public readonly CLIENT_V3_MENU = `//button[text()='Send Forms']/following-sibling::div`;
   public readonly CLIENT_V3_CHANGE_STATUS = `//button[normalize-space(.)='Change status']`;
@@ -271,7 +273,8 @@ export class Clients {
     await this.page.locator(this.CLIENT_PROFILE_TAB(tabName)).click();
   }
   public async clickAddClient() {
-    await this.page.getByRole('link', { name: 'Add Client' }).click();
+    await this.page.getByText('Add Client').first().click();
+    await this.page.getByRole('button', { name: 'Add client', exact: true }).click();
   }
   public async quickAdd() {
     await this.page.locator(this.QUICK_ADD).click({ force: true });
@@ -768,8 +771,14 @@ export class Clients {
   public async clickShare() {
     await this.page.locator(this.SHARE_BUTTON).click();
   }
+  public async clickLifeStyle() {
+    await this.page.locator(this.LIFESTYLE_TAB).click();
+  }
+  public async clickPersonal() {
+    await this.page.locator(this.PERSONAL_TAB).click();
+  }
   public async clickSendForms() {
-    await this.page.locator(this.SHARE_BUTTON).click();
+    await this.page.locator(this.SEND_FORMS).click();
   }
   public async checkCCForm() {
     await this.page.locator(this.CREDIT_CARD_FORM_RADIO).click();
@@ -950,7 +959,10 @@ export class Clients {
   }
 
   public async editClientBySection(section: string) {
-    await this.page.locator(`//h5[text()='${section}']/following-sibling::button`).click();
+    await this.page.locator(`//p[text()='${section}']/../following-sibling::button`).click();
+  }
+  public async editClientBySection2(section: string) {
+    await this.page.locator(`//p[text()='${section}']/following-sibling::button`).click();
   }
   public async editBasicInfoFirstName(value: string) {
     await this.page.locator(this.PRIMARY_PASSENGER_FIRST_NAME).fill(value);
@@ -1035,6 +1047,7 @@ export class Clients {
     await this.page
       .locator(`//p[text()='Loyalty program']/following-sibling::div/div/div[2]`)
       .click();
+    await this.page.waitForTimeout(1000);
     await this.page.locator(`//div[@role="option"]//p[text()='${name}']`).click();
   }
   public async editLoyaltyProgramNumber(number: string) {
