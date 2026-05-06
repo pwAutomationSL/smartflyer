@@ -10,7 +10,7 @@ const ARRIVAL_SHORT = 'LAX';
 const ARRIVAL_SHORT_2LETTERS = 'LA';
 const ARRIVAL = 'Los Angeles International Airport';
 test.use({
-  launchOptions: { slowMo: 300 },
+  launchOptions: { slowMo: 800 },
 });
 test.describe('AR-004 - Air Request - Step 3', () => {
   test('Air Request - Step 3 - 1# Scenario', async ({

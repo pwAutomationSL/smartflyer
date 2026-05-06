@@ -7,7 +7,7 @@ function getDate(): string {
   return `${presentDate} ${presentTime}`;
 }
 test.use({
-  launchOptions: { slowMo: 350 },
+  launchOptions: { slowMo: 500 },
 });
 test.describe('AR-002 - Air Request - Step 1', () => {
   test('Scenario 1 - Admin - Start From Scratch and Continue', async ({

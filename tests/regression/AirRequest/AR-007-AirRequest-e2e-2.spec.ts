@@ -17,7 +17,7 @@ const CABIN_CLASS = 'Business';
 const DATE_OF_BIRTH = 'Jan 15, 1990';
 const GENDER = 'Male';
 test.use({
-  launchOptions: { slowMo: 650 },
+  launchOptions: { slowMo: 800 },
 });
 test.describe('AR-007 - Air Request - E2E - 2 - One Passenger, Round Trip flight', () => {
   test('Air Request - 2 -One Passenger, Round Trip flight', async ({

@@ -2,7 +2,7 @@ import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { USERS } from '../../../fixtures/users';
 const CLIENT_NAME = 'Candice & Ben';
 test.use({
-  launchOptions: { slowMo: 500 },
+  launchOptions: { slowMo: 800 },
 });
 let addedRelatedPassenger: string[];
 let addedRelatedPassengerStep2AR: string[];
