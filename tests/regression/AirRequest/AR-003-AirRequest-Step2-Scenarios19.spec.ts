@@ -114,7 +114,7 @@ test.describe('AR-003 - Air Request - Step #19 ', () => {
         await airRequest.clickCancelAndWait();
         await page.waitForLoadState('domcontentloaded');
         await page.waitForLoadState('networkidle');
-        await expect(page.getByRole('button', { name: 'Related Travelers' })).toBeVisible({
+        await expect(page.getByRole('button', { name: 'Related passengers' })).toBeVisible({
           timeout: 10000,
         });
         await clients.goToRelatedTravelersTab();
