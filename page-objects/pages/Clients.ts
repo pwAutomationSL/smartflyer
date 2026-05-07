@@ -286,6 +286,7 @@ export class Clients {
     await this.page.locator(this.QUICK_ADD).click({ force: true });
   }
   public async quickAddNew() {
+    await this.page.locator(this.ADD_CLIENT).waitFor({ state: 'visible', timeout: 15000 });
     await this.page.locator(this.ADD_CLIENT).click({ force: true });
     await this.page.locator(this.QUICK_ADD).click({ force: true });
   }
@@ -475,6 +476,7 @@ export class Clients {
     await this.page.getByRole('textbox', { name: 'Search' }).fill(client);
     await this.page.getByRole('textbox', { name: 'Search' }).press('Enter');
     await this.page.getByText(client).click();
+    await this.page.waitForTimeout(1500);
   }
   public async searchClientByName(client: string) {
     await this.page.getByRole('textbox', { name: 'Search' }).waitFor({ state: 'visible' });

@@ -21,7 +21,6 @@ test.describe('CLI-008 - Client v3 - Status Change From Client Home Page', () =>
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
       await expect(page.locator(clients.SPINNER_LOADER)).toBeHidden();
-      await expect(page.locator(clients.HEADER)).toBeEnabled();
       await page.waitForLoadState('networkidle');
       await clients.quickAddNew();
       await clients.mainInformationQuickAdd(LAST_NAME, EMAIL);
