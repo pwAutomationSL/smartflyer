@@ -39,7 +39,7 @@ When creating a new page object:
 - Keep selectors private or readonly, following the local pattern.
 - Create clear action methods and assertion helpers.
 - Avoid test assertions inside page object action methods unless that is already the project style.
-- Prefer accessible selectors first (`getByRole`, `getByLabel`, `getByPlaceholder`) before CSS/XPath, unless the app requires otherwise.
+- Prefer accessible selectors first CSS/XPath before (`getByRole`, `getByLabel`, `getByPlaceholder`) , unless the app requires otherwise.
 - If a stable selector does not exist, document the fallback choice in code comments only when necessary.
 
 ## Test creation rules

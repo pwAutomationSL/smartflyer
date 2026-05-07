@@ -271,6 +271,40 @@ export class Clients {
   public readonly NOTE_DELETE_CONFIRMATION_TITLE = `//h2[contains(normalize-space(.),'Are you sure you want to delete this note?')]`;
   public readonly NOTE_DELETE_CONFIRMATION_DESCRIPTION = `//p[contains(normalize-space(.),'This action cannot be undone.')]`;
   public readonly NOTE_DELETE_CONFIRM = `//dialog//button[normalize-space(.)='Delete']`;
+  public readonly TASKS_HEADER = `//button[normalize-space(.)='Tasks']`;
+  public readonly TASKS_EMPTY_STATE_TITLE = `//p[normalize-space(.)='No tasks yet']`;
+  public readonly TASKS_EMPTY_STATE_DESCRIPTION = `//p[contains(normalize-space(.),'Create a task to track follow-ups')]`;
+  public readonly ADD_TASK_BUTTON = `//button[contains(normalize-space(.),'Add Task')]`;
+  public readonly TASK_MODAL_TITLE = (title: string) => `//h2[normalize-space(.)='${title}']`;
+  public readonly TASK_NAME_INPUT = `//dialog//input[@placeholder='Enter task title here'] | //form[@id='myForm']//input[@name='name' or @placeholder='Name']`;
+  public readonly TASK_DEADLINE_INPUT = `//dialog//input[@placeholder='MM/DD/YYYY'] | //form[@id='myForm']//input[@placeholder='Deadline' or @name='deadline']`;
+  public readonly TASK_REMINDER = `//dialog//p[normalize-space(.)='Reminder']/following-sibling::div | //span[contains(@title,'Select Remind')]/following-sibling::span/b`;
+  public readonly TASK_REMINDER_OPTION = (option: string) =>
+    `//div[@role='option' and normalize-space(.)='${option}'] | //ul[@role='tree']//li[contains(normalize-space(.),'${option}')]`;
+  public readonly TASK_DETAILS_INPUT = `//dialog//textarea[@placeholder='Add context, notes, or specific instructions'] | //form[@id='myForm']//textarea[@name='details' or @name='description' or @placeholder='Enter task details']`;
+  public readonly TASK_ASSIGNED_TO = `//dialog//p[normalize-space(.)='Task assignee']/following-sibling::div | //span[contains(@title,'Select Team Member')]/following-sibling::span/b`;
+  public readonly TASK_ASSIGNED_TO_OPTIONS = `//div[@role='option'] | //ul[@id='select2-agent_id-results']/li[not(contains(@class,'loading'))]`;
+  public readonly TASK_STATUS = `//dialog//p[normalize-space(.)='Status']/following-sibling::div | //label[contains(normalize-space(.),'Status')]/following-sibling::span//b`;
+  public readonly TASK_STATUS_OPTION = (status: string) =>
+    `//div[@role='option' and normalize-space(.)='${status}'] | //ul[@role='tree']//li[contains(normalize-space(.),'${status}')]`;
+  public readonly TASK_SAVE = `//dialog//button[normalize-space(.)='Save'] | //form[@id='myForm']//button[normalize-space(.)='Save']`;
+  public readonly TASK_SAVE_CHANGES = `//dialog//button[normalize-space(.)='Save Changes'] | //form[@id='myForm']//button[normalize-space(.)='Save']`;
+  public readonly TASK_SUCCESS_TITLE = `//h2[contains(normalize-space(.),'Success')]`;
+  public readonly TASK_SUCCESS_OK = `//button[normalize-space(.)='OK']`;
+  public readonly TASK_TABLE_HEADER = (header: string) =>
+    `//th[normalize-space(.)='${header}' or contains(normalize-space(.),'${header}:')] | //td[normalize-space(.)='${header}' or contains(normalize-space(.),'${header}:')]`;
+  public readonly TASK_ROW = (name: string) =>
+    `//tbody//tr[td//*[normalize-space(.)='${name}'] or td[contains(normalize-space(.),'${name}')]]`;
+  public readonly TASK_ROW_ASSIGNED_TO = (name: string) => `${this.TASK_ROW(name)}//td[2]`;
+  public readonly TASK_ROW_DEADLINE = (name: string) => `${this.TASK_ROW(name)}//td[3]`;
+  public readonly TASK_ROW_STATUS = (name: string) => `${this.TASK_ROW(name)}//td[4]`;
+  public readonly TASK_EDIT_BUTTON = (name: string) =>
+    `${this.TASK_ROW(name)}//td[last()]//button[1] | ${this.TASK_ROW(name)}//td[last()]//a[contains(normalize-space(.),'Edit')]`;
+  public readonly TASK_DELETE_BUTTON = (name: string) =>
+    `${this.TASK_ROW(name)}//td[last()]//button[2] | ${this.TASK_ROW(name)}//td[last()]//a[contains(normalize-space(.),'Delete')]`;
+  public readonly TASK_DELETE_CONFIRMATION_TITLE = `//h2[contains(normalize-space(.),'Are you sure') and contains(normalize-space(.),'delete')]`;
+  public readonly TASK_DELETE_CONFIRMATION_DESCRIPTION = `//p[contains(normalize-space(.),'This action cannot be undone.')]`;
+  public readonly TASK_DELETE_CONFIRM = `//dialog//button[normalize-space(.)='Delete'] | //button[contains(normalize-space(.),'Yes, delete it!')]`;
 
   public async clickCreate() {
     await this.page.locator(this.HEADER).click();
@@ -577,6 +611,84 @@ export class Clients {
     await this.fillNoteDescription(description);
     await this.page.locator(this.NOTE_SAVE).click();
     return taggedAgents;
+  }
+  public async openAddTaskModal() {
+    await this.page.locator(this.ADD_TASK_BUTTON).click();
+  }
+  public async fillTaskName(name: string) {
+    await this.page.locator(this.TASK_NAME_INPUT).fill(name);
+  }
+  public async fillTaskDeadline(deadline: string) {
+    await this.page.locator(this.TASK_DEADLINE_INPUT).fill(deadline);
+  }
+  public async fillTaskDetails(details: string) {
+    await this.page.locator(this.TASK_DETAILS_INPUT).fill(details);
+  }
+  public async selectTaskReminder(reminder: string) {
+    await this.page.locator(this.TASK_REMINDER).click();
+    await this.page.locator(this.TASK_REMINDER_OPTION(reminder)).click();
+  }
+  public async selectFirstTaskAssignee() {
+    await this.page.locator(this.TASK_ASSIGNED_TO).first().click();
+    await this.page.locator(this.TASK_ASSIGNED_TO_OPTIONS).first().waitFor({ state: 'visible' });
+    const assignee = (await this.page.locator(this.TASK_ASSIGNED_TO_OPTIONS).first().textContent())
+      ?.trim()
+      .replace(/\s+/g, ' ');
+    await this.page.locator(this.TASK_ASSIGNED_TO_OPTIONS).first().click();
+    return assignee ?? '';
+  }
+  public async selectTaskStatus(status: string) {
+    await this.page.locator(this.TASK_STATUS).click();
+    await this.page.locator(this.TASK_STATUS_OPTION(status)).click();
+  }
+  public async saveTask() {
+    await Promise.all([
+      this.page.waitForResponse(
+        (response) =>
+          response.request().method() === 'POST' &&
+          response.url().toLowerCase().includes('task') &&
+          response.ok(),
+      ),
+      this.page.locator(this.TASK_SAVE).click(),
+    ]);
+  }
+  public async saveTaskChanges() {
+    await Promise.all([
+      this.page.waitForResponse(
+        (response) =>
+          ['POST', 'PUT', 'PATCH'].includes(response.request().method()) &&
+          response.url().toLowerCase().includes('task') &&
+          response.ok(),
+      ),
+      this.page.locator(this.TASK_SAVE_CHANGES).click(),
+    ]);
+  }
+  public async clickTaskSuccessOk() {
+    await this.page.locator(this.TASK_SUCCESS_OK).click();
+  }
+  public async createClientTask(name: string, deadline: string, details: string, status: string) {
+    await this.fillTaskName(name);
+    await this.fillTaskDeadline(deadline);
+    await this.fillTaskDetails(details);
+    await this.selectTaskStatus(status);
+    await this.saveTask();
+  }
+  public async clickTaskEditButton(name: string) {
+    await this.page.locator(this.TASK_EDIT_BUTTON(name)).click();
+  }
+  public async clickTaskDeleteButton(name: string) {
+    await this.page.locator(this.TASK_DELETE_BUTTON(name)).click();
+  }
+  public async confirmTaskDelete() {
+    await Promise.all([
+      this.page.waitForResponse(
+        (response) =>
+          response.request().method() === 'DELETE' &&
+          response.url().toLowerCase().includes('task') &&
+          response.ok(),
+      ),
+      this.page.locator(this.TASK_DELETE_CONFIRM).click(),
+    ]);
   }
   public async addPassportIfNotFull(passport_name: string) {
     const passportsAdded = await this.page.locator(this.PASSPORTS_ADDED).count();
