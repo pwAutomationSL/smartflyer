@@ -68,8 +68,8 @@ test.describe('API-001 - Loyalty Import', () => {
   test.beforeAll(async ({ request }) => {
     const loginResponse = await request.post(LOGIN_URL, {
       data: {
-        email: USERS.ADMIN_MAIN.username,
-        password: USERS.ADMIN_MAIN.password,
+        email: USERS.ADMIN_TERTIARY.username,
+        password: USERS.ADMIN_TERTIARY.password,
       },
     });
 

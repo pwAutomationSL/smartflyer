@@ -102,8 +102,8 @@ const dumpResponseOnFailure = async (
 const loginAndGetAuthorizationHeader = async (request: APIRequestContext): Promise<string> => {
   const loginResponse = await request.post(LOGIN_URL, {
     data: {
-      email: USERS.ADMIN_MAIN.username,
-      password: USERS.ADMIN_MAIN.password,
+      email: USERS.ADMIN_TERTIARY.username,
+      password: USERS.ADMIN_TERTIARY.password,
     },
   });
 

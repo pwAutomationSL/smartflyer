@@ -63,8 +63,8 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const login = async (request: APIRequestContext) => {
   const response = await request.post(LOGIN_URL, {
     data: {
-      email: USERS.ADMIN_MAIN.username,
-      password: USERS.ADMIN_MAIN.password,
+      email: USERS.ADMIN_TERTIARY.username,
+      password: USERS.ADMIN_TERTIARY.password,
     },
   });
 
