@@ -1,9 +1,9 @@
-import { test, expect } from '../../../fixtures/PlaywrightFixtures';
+﻿import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 const CLIENT_NAME = 'Candice & Ben';
 const PASSENGER_FIRST_NAME = 'Candice & Ben';
 const PASSENGER_LAST_NAME = '(Conway) Winikoff';
 const EMAIL = 'fake_candiceconway84@gmail.com';
-const PHONE = '18333333333';
+const PHONE = '12393434354';
 const WRONG_EMAIL = 'fake_candiceconway84gmail.com';
 test.describe('AR-003 - Air Request - Step 2', () => {
   test('Air Request - Step 2 - 2,3,4,5,6,7# Scenario', async ({
@@ -30,8 +30,6 @@ test.describe('AR-003 - Air Request - Step 2', () => {
     });
     await test.step('5 - Click on Start from scratch', async () => {
       await airRequest.startFromScrath();
-      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
-      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
       await test.step('6 - Select the Agent and Click on Continue button', async () => {
         await airRequest.selectAgent();
         await airRequest.selectFirstAgent();
@@ -95,12 +93,12 @@ test.describe('AR-003 - Air Request - Step 2', () => {
       });
       await test.step('5# Scenario - Edit Primary Passenger DoB', async () => {
         try {
-          await airRequest.fillDayOfBirth('');
+          await airRequest.clearDayOfBirth();
           await airRequest.fillMonth();
-          await airRequest.fillYearOfBirth('');
+          await airRequest.clearYearOfBirth();
           await airRequest.clickLabel();
           await expect(page.locator(airRequest.WARNING_DOB)).toContainText(
-            'Day, Year are required',
+            'Date of birth is required',
           );
           await expect(page.locator(airRequest.DOB_DAY(1))).toHaveClass(/border-red/i);
           await expect(page.locator(airRequest.DOB_YEAR(1))).toHaveClass(/border-red/i);

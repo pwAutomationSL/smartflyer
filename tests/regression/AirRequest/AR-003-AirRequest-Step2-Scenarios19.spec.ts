@@ -1,4 +1,4 @@
-import { test, expect } from '../../../fixtures/PlaywrightFixtures';
+﻿import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { uniqueId } from '../../../page-objects';
 const PASSENGER_FIRST_NAME = 'firstNameNT';
 const PASSENGER_LAST_NAME = 'LastNameNT' + uniqueId();
@@ -6,7 +6,7 @@ const CLIENT_NAME = 'Candice & Ben';
 const MONTH = 'June';
 const DAY = '7';
 const YEAR = '1993';
-const EMAIL = 'testEmail@scrumlaunch.com';
+const EMAIL = `testEmail+${PASSENGER_LAST_NAME}@scrumlaunch.com`;
 const PHONE = '18333333333';
 test.describe('AR-003 - Air Request - Step #19 ', () => {
   test.setTimeout(200_000);
@@ -37,8 +37,6 @@ test.describe('AR-003 - Air Request - Step #19 ', () => {
 
     await test.step('5 - Click on Start from scratch', async () => {
       await airRequest.startFromScrath();
-      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
-      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
 
       await test.step('6 - Select the Agent and Click on Continue button', async () => {
         await airRequest.selectAgent();

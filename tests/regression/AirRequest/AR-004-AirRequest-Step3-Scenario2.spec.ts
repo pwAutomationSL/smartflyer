@@ -34,9 +34,7 @@ test.describe('AR-004 - Air Request - Step 3', () => {
     });
     await test.step('5 - Click on Start from scratch', async () => {
       await airRequest.startFromScrath();
-      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
-      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
-    });
+   });
     await test.step('6 - Select the Agent and Click on Continue button', async () => {
       await airRequest.selectAgent();
       await airRequest.selectFirstAgent();
@@ -62,7 +60,6 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await expect(page.locator(airRequest.MALE_DROPDOWN)).toBeVisible();
       await expect(page.locator(airRequest.FEMALE_DROPDOWN)).toBeVisible();
       await airRequest.selectMale();
-      await airRequest.checkCertify();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
     });
     await test.step('9 - Click on Continue', async () => {

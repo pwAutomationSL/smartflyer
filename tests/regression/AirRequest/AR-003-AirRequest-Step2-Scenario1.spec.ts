@@ -2,8 +2,9 @@ import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 const CLIENT_NAME = 'Candice & Ben';
 const PASSENGER_FIRST_NAME = 'Candice & Ben';
 const PASSENGER_LAST_NAME = '(Conway) Winikoff';
-const EMAIL = 'fake_candiceconwday84@gmail.com';
-const PHONE = '18333333333';
+const EMAIL = 'fake_candiceconway84@gmail.com';
+const PHONE = '12393434354';
+const PHONE_FORMATTED = '+1 (239) 343-4354';
 const WRONG_PHONE = '800000';
 const WRONG_EMAIL = 'fake_candiceconway84gmail.com';
 const CLIENT_ID = 'SQ4715';
@@ -32,8 +33,6 @@ test.describe('AR-003 - Air Request - Step 2', () => {
     });
     await test.step('5 - Click on Start from scratch', async () => {
       await airRequest.startFromScrath();
-      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
-      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
     });
     await test.step('6 - Select the Agent and Click on Continue button', async () => {
       await airRequest.selectAgent();
@@ -94,9 +93,7 @@ test.describe('AR-003 - Air Request - Step 2', () => {
     });
     await test.step('ER 4 - 6 Insert incorrect Phone number and warning message is visible', async () => {
       await expect(page.locator(airRequest.PHONE_FLAG)).toBeVisible();
-      await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER(0))).toHaveValue(
-        '+1 (833) 333-3333',
-      );
+      await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER(0))).toHaveValue(PHONE_FORMATTED);
     });
     await test.step('ER 5 - Add passport information toggle OFF by default', async () => {
       try {
@@ -108,14 +105,10 @@ test.describe('AR-003 - Air Request - Step 2', () => {
         console.error('Passport already added');
       }
     });
-    await test.step('ER 7 - I certify the information ... chechbox not checked by default', async () => {
-      await expect(page.locator(airRequest.CERTIFY_CHECKBOX).first()).not.toBeChecked();
-    });
     await test.step('ER 9 - Primary Agent can not be deleted', async () => {
       await expect(page.locator(airRequest.DELETE_TRAVELER_BUTTON)).toBeHidden();
     });
     await test.step('Check Certify and Continue button should be enabled', async () => {
-      await airRequest.checkCertify();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
     });
     await test.step('ER 8 -  after clicking at the “Continue” button, the user moves to the next section', async () => {

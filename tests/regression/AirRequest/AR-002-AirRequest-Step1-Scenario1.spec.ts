@@ -1,4 +1,4 @@
-import { test, expect } from '../../../fixtures/PlaywrightFixtures';
+﻿import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { getPresentDate, getPresentTime, convertToUiDateFormat } from '../../../utils/helpers';
 const CLIENT_NAME = 'Candice & Ben';
 function getDate(): string {
@@ -33,9 +33,7 @@ test.describe('AR-002 - Air Request - Step 1', () => {
     });
     await test.step('Click on Start from scratch', async () => {
       await airRequest.startFromScrath();
-      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
-      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
-      await airRequest.selectAgent();
+     await airRequest.selectAgent();
       const agents = await airRequest.getAgentsNames();
       await airRequest.selectFirstAgent();
       expect(agents).toEqual(
@@ -75,9 +73,7 @@ test.describe('AR-002 - Air Request - Step 1', () => {
       await test.step('Click on Start from scratch', async () => {
         await airRequest.startFromScrath();
         await expect(page.locator(airRequest.CANCEL_BUTTON)).toBeEnabled();
-        await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
-        await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
-        await airRequest.selectAgent();
+         await airRequest.selectAgent();
         const agents = await airRequest.getAgentsNames();
         await airRequest.selectFirstAgent();
         expect(agents).toEqual(

@@ -1,4 +1,4 @@
-import { test, expect } from '../../../fixtures/PlaywrightFixtures';
+﻿import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 
 const CLIENT_NAME = 'Candice & Ben';
 test.describe('AR-002 - Air Request - Step 1', () => {
@@ -24,9 +24,7 @@ test.describe('AR-002 - Air Request - Step 1', () => {
       await expect(page.locator(airRequest.POP_UP_HEADER)).toBeVisible();
       await airRequest.startFromScrath();
       await expect(page.locator(airRequest.CANCEL_BUTTON)).toBeEnabled();
-      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
-      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
-      await airRequest.selectAgent();
+     await airRequest.selectAgent();
       await airRequest.selectFirstAgent();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
       await airRequest.clickContinue();

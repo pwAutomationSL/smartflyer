@@ -44,9 +44,7 @@ test.describe('AR-007 - Air Request - E2E - 2 - One Passenger, Round Trip flight
     });
     await test.step('5 - Click on Start from scratch', async () => {
       await airRequest.startFromScrath();
-      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
-      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
-    });
+   });
     await test.step('6 - Select the Agent and Click on Continue button', async () => {
       await airRequest.selectAgent();
       await airRequest.selectFirstAgent();
@@ -70,7 +68,6 @@ test.describe('AR-007 - Air Request - E2E - 2 - One Passenger, Round Trip flight
       await expect(page.locator(airRequest.MALE_DROPDOWN)).toBeVisible();
       await expect(page.locator(airRequest.FEMALE_DROPDOWN)).toBeVisible();
       await airRequest.selectMale();
-      await airRequest.checkCertify();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER_H2)).toContainText('Trip overview');

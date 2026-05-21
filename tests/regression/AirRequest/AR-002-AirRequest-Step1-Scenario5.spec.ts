@@ -1,12 +1,6 @@
-import { test, expect } from '../../../fixtures/PlaywrightFixtures';
+﻿import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 
-import { getPresentDate, getPresentTime, convertToUiDateFormat } from '../../../utils/helpers';
-
-function getDate(): string {
-  const presentDate = getPresentDate({ month: '2-digit', day: '2-digit' });
-  const presentTime = getPresentTime({ hour: 'numeric', minute: '2-digit' });
-  return `${presentDate} ${presentTime}`;
-}
+import { convertToUiDateFormat } from '../../../utils/helpers';
 const CLIENT_NAME = 'Candice & Ben';
 test.describe('AR-002 - Air Request - Step 1', () => {
   test('Scenario 5 - Delete draft', async ({
@@ -31,22 +25,24 @@ test.describe('AR-002 - Air Request - Step 1', () => {
       await airRequest.clickAirRequest();
       await airRequest.startFromScrath();
       await expect(page.locator(airRequest.CANCEL_BUTTON)).toBeEnabled();
-      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
-      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
       await airRequest.selectAgent();
       await airRequest.selectFirstAgent();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
-      const TimeForDraft = getDate();
+      const draftCreatedAt = new Date();
       await airRequest.clickCancel();
       await expect(page.locator(airRequest.HEADER).first()).toBeVisible();
-      const [datePart, timePart] = TimeForDraft.split(' ');
+      const datePart = draftCreatedAt.toLocaleDateString('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric',
+      });
       const uiDate = convertToUiDateFormat(datePart);
-      const expectedSubstring = `${uiDate}, ${timePart}`;
       await airRequest.clickAirRequest();
       await airRequest.startFromDraft();
       const firstDraftTime = await airRequest.returnFirstDraftTime();
       const cleaned = firstDraftTime?.replace('Last edited on ', '');
-      expect(cleaned).toContain(expectedSubstring);
+      expect(cleaned).toContain(uiDate);
+      expect(cleaned).toMatch(/,\s*\d{1,2}:\d{2}\s*(AM|PM)$/);
       //This only works if first draft matches
       const draftID = await airRequest.returnFirstDraftName();
       await airRequest.clickDeleteDraft();

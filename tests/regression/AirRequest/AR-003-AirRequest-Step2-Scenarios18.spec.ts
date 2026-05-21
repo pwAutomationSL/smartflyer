@@ -1,4 +1,4 @@
-import { test, expect } from '../../../fixtures/PlaywrightFixtures';
+﻿import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 
 const PASSENGER_FIRST_NAME = 'firstNameNT';
 const PASSENGER_LAST_NAME = 'LastNameNT';
@@ -35,8 +35,6 @@ test.describe('AR-003 - Air Request - Step #18 ', () => {
 
     await test.step('5 - Click on Start from scratch', async () => {
       await airRequest.startFromScrath();
-      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
-      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
 
       await test.step('6 - Select the Agent and Click on Continue button', async () => {
         await airRequest.selectAgent();

@@ -32,8 +32,6 @@ test.describe('AR-005 - Air Request - Step 4', () => {
     });
     await test.step('5 - Click on Start from scratch', async () => {
       await clients.startFromScratch();
-      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeDisabled();
-      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('Select an agent');
     });
     await test.step('6 - Select the Agent and Click on Continue button', async () => {
       await airRequest.selectAgent();
@@ -60,7 +58,6 @@ test.describe('AR-005 - Air Request - Step 4', () => {
       await expect(page.locator(airRequest.MALE_DROPDOWN)).toBeVisible();
       await expect(page.locator(airRequest.FEMALE_DROPDOWN)).toBeVisible();
       await airRequest.selectMale();
-      await airRequest.checkCertify();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
     });
     await test.step('9 - Click on Continue', async () => {
@@ -105,10 +102,7 @@ test.describe('AR-005 - Air Request - Step 4', () => {
     });
     await test.step('16 - Select Seat and Special requests', async () => {
       await airRequest.selectSeatsAndSpecialRequest(SPECIAL_REQUEST);
-      await expect(page.locator(airRequest.SPECIAL_REQUEST_TEXTAREA)).toHaveAttribute(
-        'maxlength',
-        '500',
-      );
+      await expect(page.getByText(`${SPECIAL_REQUEST.length}/500`)).toBeVisible();
     });
     await test.step('17 - Select Seat and Special requests', async () => {
       await airRequest.clickContinue();

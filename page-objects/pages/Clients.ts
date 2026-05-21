@@ -32,7 +32,7 @@ export class Clients {
   public readonly USERNAME_HEADER = `//div[contains(@class,'user-data')]//h4`;
   public readonly ALL_ACTIVE_CLIENTS = `//tbody/tr//a`;
   public readonly ALL_RELATED_TRAVELERS = `//tbody[@id="related_travellers_list"]/tr/td[2]/span`;
-  public readonly ALL_RELATED_TRAVELERS_APP = `//div[@aria-label="Expand"]//a`;
+  public readonly ALL_RELATED_TRAVELERS_APP = `//button//a[contains(@href,'client-detail')]`;
   public readonly CONFIRM_DELETE = `//dialog//button[contains(.,'Delete')]`;
   public readonly CONFIRM_DELETE_FF = `//button[contains(.,'Yes, delete it!')]`;
   public readonly CONFIRM_DELETE_PASSPORT = `//div[@id="modal-content"]//button[contains(.,'Delete')]`;
@@ -137,7 +137,7 @@ export class Clients {
   public readonly COMFORT_RELATED_DETAILS_HEIGHT_SECTION = `//span[text()='Height']/following-sibling::span`;
   public readonly COMFORT_RELATED_DETAILS_WHEIGHT_SECTION = `//span[text()='Weight']/following-sibling::span`;
   public readonly COMFORT_RELATED_DETAILS_SECTION = `//span[text()='Weight']/../../../following-sibling::div`;
-  public readonly RELATED_PASSENGER_NAMES = `//div[not(contains(.,'Primary'))]/preceding-sibling::div/a[contains(@href,'client-detail')]`;
+  public readonly RELATED_PASSENGER_NAMES = `//*[contains(normalize-space(.),'Delete Passenger')]/preceding-sibling::*[1]//a[contains(@href,'client-detail')]`;
   public readonly RELATED_PASSENGER_NAMES_STEP2 = `//div[@id="modal-content"]//label/span[2]`;
   public readonly CLIENT_LOGS = `(//span[text()='Client profile form updated by '])[1]`;
   public readonly AUDIT_LOGS = `//span[contains(.,'Audit Logs')]`;
@@ -149,7 +149,7 @@ export class Clients {
   public readonly TRAVELER_ADDED = (traveler: string) =>
     `//tbody[@id="related_travellers_list"]/tr/td[2]/span[contains(.,'${traveler}')]//../../td//button[contains(@id,'dropdown')]`;
   public readonly REMOVE_TRAVELER_BY_NAME = (traveler: string) =>
-    `//div[@aria-label="Expand"]//a[contains(.,'${traveler}')]/../../following-sibling::button`;
+    `//button[contains(.,'Delete') and preceding-sibling::button//a[contains(.,'${traveler}')]]`;
   public readonly RELATED_PASSENGER_FIRST_NAME = (index: number) =>
     `//input[@name="related_passengers.${index}.client.first_name"]`;
 
@@ -520,7 +520,13 @@ export class Clients {
   }
 
   public async deleteAddedTraveler(traveler: string) {
-    await this.page.locator(this.REMOVE_TRAVELER_BY_NAME(traveler)).first().click();
+    const travelerCard = this.page.getByRole('button', { name: new RegExp(traveler) }).first();
+    await travelerCard.waitFor({ state: 'visible' });
+    const travelerRow = travelerCard.locator('xpath=..');
+    const deleteButton = travelerRow.getByRole('button', { name: 'Delete Passenger' });
+    await deleteButton.scrollIntoViewIfNeeded();
+    await deleteButton.waitFor({ state: 'visible' });
+    await deleteButton.click();
   }
   public async confirmDelete() {
     await this.page.locator(this.CONFIRM_DELETE).click();
@@ -882,7 +888,9 @@ export class Clients {
     await this.page.locator(this.RELATED_PASSENGER_PASSPORT(index)).fill(value);
   }
   public async goToRelatedTravelersTab() {
-    await this.page.locator(this.RELATED_PASSENGERS_TAB).click({ force: true });
+    const tab = this.page.getByRole('button', { name: 'Related passengers' });
+    await tab.waitFor({ state: 'visible' });
+    await tab.click();
     await this.page.waitForLoadState('networkidle');
   }
   public async goToPreferencesTab() {

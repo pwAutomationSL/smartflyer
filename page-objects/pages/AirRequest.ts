@@ -1,4 +1,6 @@
 import { Page } from '@playwright/test';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export class AirRequest {
   public readonly page: Page;
@@ -51,16 +53,16 @@ export class AirRequest {
     `(//label[contains(.,'Add passport information')]//..//button)[${index}]`;
   public readonly ADD_ADDITIONAL_PASSENGER = `//button[contains(.,'Add Additional Passenger')]`;
   public readonly ADDITIONAL_PASSENGERS_LIST = `//dialog//label[contains(@for,'checkbox')][1]/parent::div`;
-  public readonly CERTIFY_CHECKBOX = `//span[contains(.,'I certify the information')]//..//span`;
+  public readonly CERTIFY_CHECKBOX = `//label[contains(.,'I certify the information')]//input[@type='checkbox']`;
   public readonly DELETE_TRAVELER_BUTTON = `//button[contains(.,'Delete traveler')]`;
   public readonly KNOW_TRAVELER_LABEL = `//label[contains(.,'Known traveler number')]`;
   public readonly WARNING_EMAIL = `//label[contains(.,'Email')]//../p`;
   public readonly WARNING_EMAIL_INPUT = `//label[contains(.,'Email')]//..//input`;
-  public readonly WARNING_PHONE = `//label[contains(.,'Phone')]//../p`;
+  public readonly WARNING_PHONE = `(//*[normalize-space(.)='Invalid phone number'])[last()]`;
   public readonly WARNING_NAME = `//label[contains(@for,'first_name')]//../p`;
   public readonly WARNING_MIDDLE_NAME = `//label[contains(@for,'middle_name')]//../p`;
   public readonly WARNING_LAST_NAME = `//label[contains(@for,'last_name')]//../p`;
-  public readonly WARNING_DOB = `//label[contains(@for,'date-day')]//../p`;
+  public readonly WARNING_DOB = `(//p[normalize-space(.)='Date of birth is required' or normalize-space(.)='Date of birth must be before today.'])[last()]`;
   public readonly PHONE_FLAG = `//button//img[contains(@src,'/icons/flags')]`;
   public readonly PHONE_INPUT_PASSENGER = (index: number = 0) =>
     `//input[contains(@name,'${index}.phone')]`;
@@ -107,7 +109,7 @@ export class AirRequest {
   public readonly P_BY_TEXT = (text: string) => `//p[contains(.,'${text}')]`;
   public readonly LABEL_BY_TEXT = (text: string) => `//label[contains(.,'${text}')]`;
   public readonly PROGRAM_NUMBER = (index: number = 1) =>
-    `(//input[contains(@name,'0.program_number')])[${index}]`;
+    `(//input[contains(@name,'program_number')])[${index}]`;
   public readonly SEARCH_TRAVELERS = `//dialog//input[@placeholder="Search travelers"]`;
   public readonly FREQUENT_FLYER_PROGRAM = `//button[contains(.,'Add Frequent Flyer Program')]`;
   public readonly FREQUENT_FLYER_PROGRAM_SELECT = `(//p[contains(.,'Airline program')]/../div/div/div[2])`;
@@ -199,11 +201,7 @@ export class AirRequest {
     return username ? username : 'not found';
   }
   public async selectAgent() {
-    await this.page
-      .locator('div')
-      .filter({ hasText: /^Select an agent$/ })
-      .nth(1)
-      .click();
+    await this.page.locator(`(//p[contains(.,'Agent name')]//..//div[@data-value])[1]`).click();
   }
   public async selectFirstAgent() {
     await this.page.locator(`(//div[contains(@id,'listbox')]/div/p)[2]`).click();
@@ -239,7 +237,19 @@ export class AirRequest {
     await this.page.locator(this.DRAFTS_ELEMENTS_TIME_ONLY).first().click();
   }
   public async clickAirRequest() {
-    await this.page.locator(`//button[contains(.,'Air Request')]`).click();
+    const airRequestButton = this.page.getByRole('button', { name: 'Air Request' }).first();
+    const popUpHeader = this.page.locator(this.POP_UP_HEADER);
+
+    await airRequestButton.waitFor({ state: 'visible' });
+    await airRequestButton.scrollIntoViewIfNeeded();
+    await airRequestButton.click();
+
+    try {
+      await popUpHeader.waitFor({ state: 'visible', timeout: 5000 });
+    } catch {
+      await airRequestButton.click();
+      await popUpHeader.waitFor({ state: 'visible' });
+    }
   }
   public async goToCreditCard() {
     await this.page.getByRole('tab', { name: 'credit card' }).click();
@@ -293,13 +303,10 @@ export class AirRequest {
     await this.page.waitForTimeout(1000);
   }
   public async checkCertify() {
-    await this.page.locator(this.CERTIFY_CHECKBOX).first().click();
+    await this.page.locator(`//label[contains(.,'I certify the information')]`).first().click();
   }
   public async checkCertifySecondPassenger() {
-    await this.page
-      .locator("(//span[contains(.,'I certify the information')]//..//span)[4]")
-      .first()
-      .click();
+    await this.page.locator(`//label[contains(.,'I certify the information')]`).last().click();
   }
   public async fillDateOfBirth(index: number = 1) {
     await this.page.locator(this.DOB_DAY(index)).fill('15');
@@ -346,13 +353,13 @@ export class AirRequest {
     await this.page.locator(this.INPUT_FILE).setInputFiles('./data/docs/testDoc.txt');
   }
   public async addLargeSizeFile() {
-    const largeBuffer = Buffer.alloc(55 * 1024 * 1024); // 26 MB
+    const filePath = path.join(process.cwd(), 'test-results', 'fake-large.pdf');
+    fs.mkdirSync(path.dirname(filePath), { recursive: true });
+    if (!fs.existsSync(filePath) || fs.statSync(filePath).size <= 50 * 1024 * 1024) {
+      fs.writeFileSync(filePath, Buffer.alloc(51 * 1024 * 1024));
+    }
 
-    await this.page.setInputFiles(this.INPUT_FILE, {
-      name: 'fake-large.pdf',
-      mimeType: 'application/pdf',
-      buffer: largeBuffer,
-    });
+    await this.page.locator(this.INPUT_FILE).setInputFiles(filePath);
   }
   public async addFilePassport(image: string) {
     await this.page.locator(this.INPUT_FILE).setInputFiles(`./data/images/${image}`);
@@ -458,7 +465,9 @@ export class AirRequest {
     await this.page.locator(this.DELETE_FF_PROGRAM).last().click();
   }
   public async selectoptionGGProgram(option: string) {
-    await this.page.locator(this.AIRLINE_PROGRAM_BY_NAME(option)).last().click({ delay: 400 });
+    const programOption = this.page.locator(this.AIRLINE_PROGRAM_BY_NAME(option)).last();
+    await programOption.waitFor({ state: 'visible' });
+    await programOption.click();
   }
   public async fillProgramNumber(number: string, index: number = 1) {
     await this.page.waitForTimeout(400);
@@ -494,14 +503,11 @@ export class AirRequest {
     await this.page.waitForTimeout(400);
   }
   public async selectSpecificFlight() {
-    await this.page
-      .locator(`//label[text()='Client requested a specific flight?']/preceding-sibling::button`)
-      .first()
-      .click();
+    await this.page.getByRole('radio', { name: 'Specific flight requested' }).first().click();
     await this.page.waitForTimeout(800);
   }
   public async selectSpecificFlightPassenger2() {
-    await this.page.getByRole('switch', { name: 'Client requested a specific' }).last().click();
+    await this.page.getByRole('radio', { name: 'Specific flight requested' }).last().click();
     await this.page.waitForTimeout(400);
   }
   public async enterFlightDetails(flightDetails: string) {
