@@ -82,6 +82,8 @@ export class Clients {
   public readonly PASSPORT_ISSUE_COUNTRY = `//p[text()='Passport issuing country']/following-sibling::div/div/div[2]`;
   public readonly DATES_NUMNBERS_PASSPORT_NAME = `(//h5[text()="Passport Details"]/following-sibling::div/div[2]/div/div)[1]`;
   public readonly DATES_NUMNBERS_PASSPORT_NUMBER = `(//p[text()="Passport and Travel Document Uploads"]/../../following-sibling::div//tbody/tr/td[1])`;
+  public readonly PASSPORT_DOCUMENT_ROW = (value: string) =>
+    `//table[@aria-label='Client travel documents']//tr[.//*[normalize-space(.)='${value}']]`;
   public readonly PRIMARY_PASSENGER_FIRST_NAME = `//input[@name="primary_passenger.client.first_name"]`;
   public readonly PRIMARY_PASSENGER_LAST_NAME = `//input[@name="primary_passenger.client.last_name"]`;
   public readonly PRIMARY_PASSENGER_DATE_OF_BIRTH = `//*[contains(@for,'primary_passenger.client.date_of_birth')]/following-sibling::div//input`;
@@ -117,10 +119,10 @@ export class Clients {
   public readonly CLIENT_PROFILE_EMERGENCY_CONTACT_NAME = `(//p[text()="Emergency Contact"]/../../following-sibling::div//p)[1]`;
   public readonly CLIENT_PROFILE_EMERGENCY_CONTACT_EMAIL = `(//p[text()="Emergency Contact"]/../../following-sibling::div//p)[2]`;
   public readonly CLIENT_PROFILE_EMERGENCY_CONTACT_PHONE = `(//p[text()="Emergency Contact"]/../../following-sibling::div//p)[3]`;
-  public readonly CLIENT_NAME_SEARCH_RESULT = `(//table//tr[1]/td)[1]`;
-  public readonly CLIENT_EMAIL_SEARCH_RESULT = `(//table//tr[1]/td)[2]`;
-  public readonly CLIENT_PHONE_SEARCH_RESULT = `(//table//tr[1]/td)[3]`;
-  public readonly CLIENT_STATUS_SEARCH_RESULT = `(//table//tr[1]/td)[6]`;
+  public readonly CLIENT_NAME_SEARCH_RESULT = `(//table//tbody//tr[1]/td)[2]`;
+  public readonly CLIENT_EMAIL_SEARCH_RESULT = `(//table//tbody//tr[1]/td)[3]`;
+  public readonly CLIENT_PHONE_SEARCH_RESULT = `(//table//tbody//tr[1]/td)[4]`;
+  public readonly CLIENT_STATUS_SEARCH_RESULT = `(//table//tbody//tr[1]/td)[7]`;
   public readonly ADD_PASSENGER = `//button[text()="Add Passenger"]`;
   public readonly RELATED_PASSENGER_EXPAND = `(//button[contains(.,'Related Passengers')]/following-sibling::div//button)[1]`;
   public readonly RELATED_PASSENGER_EXPAND_FROM_TAB = `(//div//button//div//a)[2]/parent::div/../..`;
@@ -209,13 +211,13 @@ export class Clients {
   public readonly CLIENT_ROW = (clientName: string) =>
     `//table//tr[td[contains(normalize-space(.),'${clientName}')]]`;
   public readonly CLIENT_STATUS_BUTTON = (clientName: string) =>
-    `${this.CLIENT_ROW(clientName)}//td[6]//span`;
+    `//table//tr[.//*[contains(normalize-space(.),'${clientName}')]]//button[.//*[normalize-space(.)='Active' or normalize-space(.)='Archived' or normalize-space(.)='Pending']]`;
   public readonly CLIENT_ACTIONS_BUTTON = (clientName: string) =>
-    `${this.CLIENT_ROW(clientName)}//td[7]//button`;
+    `${this.CLIENT_ROW(clientName)}//td[last()]//button`;
   public readonly CLIENT_ACTION_OPTION = (option: string) =>
     `//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//*[normalize-space(.)='${option}']`;
   public readonly CLIENT_NOT_FOUND = `//p[contains(text(),'No results found')]`;
-  public readonly CLIENT_DELETE_OPTION = `//div/button[contains(.,'Delete')]`;
+  public readonly CLIENT_DELETE_OPTION = `//button[normalize-space(.)='Delete']`;
   public readonly CLIENT_STATUS_CONFIRM_POPUP = `//*[contains(@class,'swal2-popup')]`;
   public readonly CLIENT_STATUS_CONFIRM_YES = `//button[normalize-space(.)='Yes']`;
   public readonly CLIENT_ARCHIVE_CONFIRM_BUTTON = `//button[normalize-space(.)='Yes, archive it!']`;
@@ -253,7 +255,7 @@ export class Clients {
   public readonly NOTE_TAGGED_AGENTS_OPTION = (agentName: string) =>
     `//div[@role='option'][.//*[normalize-space(.)='${agentName}']]`;
   public readonly NOTE_DESCRIPTION_INPUT = `//textarea[@name='description']`;
-  public readonly NOTE_CHARACTER_COUNT = `//span[contains(normalize-space(.),'/300')]`;
+  public readonly NOTE_CHARACTER_COUNT = `//span[contains(normalize-space(.),'/1000')]`;
   public readonly NOTE_SAVE = `//dialog//button[normalize-space(.)='Save']`;
   public readonly NOTE_SAVE_CHANGES = `//button[normalize-space(.)='Save Changes']`;
   public readonly NOTE_ROW = (title: string) =>
@@ -1164,18 +1166,14 @@ export class Clients {
   }
   public async deletePassport(value: string) {
     await this.page
-      .locator(
-        `//p[text()='${value}']/../../following-sibling::td//button[@aria-label="Delete document"]`,
-      )
+      .locator(`${this.PASSPORT_DOCUMENT_ROW(value)}//button[@aria-label="Delete document"]`)
       .first()
       .click();
     await this.page.locator(this.CONFIRM_DELETE_PASSPORT).click();
   }
   public async editPassport(value: string) {
     await this.page
-      .locator(
-        `//p[text()='${value}']/../../following-sibling::td//button[@aria-label="Edit document"]`,
-      )
+      .locator(`${this.PASSPORT_DOCUMENT_ROW(value)}//button[@aria-label="Edit document"]`)
       .first()
       .click();
   }

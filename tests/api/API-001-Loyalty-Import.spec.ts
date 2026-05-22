@@ -235,6 +235,7 @@ test.describe('API-001 - Loyalty Import', () => {
         expect(
           Array.isArray(importBody.data?.invalid)
             ? (importBody.data.invalid[0].errors['client.identity'] ??
+                importBody.data.invalid[0].errors.client_identity ??
                 importBody.data.invalid[0].errors.client_id)
             : [],
         ).toBeTruthy();

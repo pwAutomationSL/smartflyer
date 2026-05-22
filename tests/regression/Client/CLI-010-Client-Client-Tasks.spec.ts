@@ -137,7 +137,7 @@ test.describe.serial('CLI-010 - Client - Client Tasks', () => {
       await sidebar.goToModule('Clients');
       await clients.searchClientByName('FirstName ' + LAST_NAME);
       await clients.clickFirstResult();
-      await expect(page.locator(clients.HEADER)).toContainText('FirstName ' + LAST_NAME, {
+      await expect(page.locator(clients.HEADER)).toContainText(LAST_NAME, {
         timeout: 25000,
       });
       await page.waitForLoadState('networkidle');

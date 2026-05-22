@@ -20,7 +20,7 @@ export const USERS = {
     password: 'sf_agents_01@',
   },
   AIR_USERNAME: {
-    username: 'oksana.gorodiska+6@scrumlaunch.com',
+    username: 'oksana.gorodiska+8@scrumlaunch.com',
     password: 'sf_airteam_01@',
   },
   BRAND_USERNAME: {

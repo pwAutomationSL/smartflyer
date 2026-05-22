@@ -13,6 +13,9 @@ test.describe('CLI-008 - Client v3 - Status Change From Client Home Page', () =>
     clients,
     sidebar,
   }) => {
+    const clientStatusButton = () =>
+      page.getByRole('button', { name: new RegExp(`Status for .*${LAST_NAME}`) }).first();
+
     await test.step('1 - Login at Society, go to clients and quick add a client', async () => {
       await loginPage.login({
         username: USERS.ADMIN_MAIN.username,
@@ -34,36 +37,28 @@ test.describe('CLI-008 - Client v3 - Status Change From Client Home Page', () =>
       await sidebar.goToModuleAPP('Clients');
       await clients.searchClientByName('FirstName ' + LAST_NAME);
       await expect(page.locator(clients.CLIENT_ROW(LAST_NAME))).toBeVisible();
-      await expect(page.locator(clients.CLIENT_STATUS_BUTTON(LAST_NAME)).first()).toContainText(
-        'Active',
-      );
+      await expect(clientStatusButton()).toContainText('Active');
     });
 
     await test.step('3 - Archive the client from the Active tab using the Actions column', async () => {
-      await page.locator(clients.CLIENT_STATUS_BUTTON(LAST_NAME)).last().click();
+      await clientStatusButton().click();
       await page.locator(clients.CLIENT_STATUS_ARCHIVED).click();
       await page.waitForLoadState('networkidle');
-      await expect(page.locator(clients.CLIENT_STATUS_BUTTON(LAST_NAME)).first()).toContainText(
-        'Archived',
-      );
+      await expect(clientStatusButton()).toContainText('Archived');
     });
 
     await test.step('4 -Wait for reload, activate the client from status column and verify it returns to Active', async () => {
-      await page.locator(clients.CLIENT_STATUS_BUTTON(LAST_NAME)).last().click();
+      await clientStatusButton().click();
       await page.locator(clients.CLIENT_STATUS_ACTIVE).click();
       await page.waitForLoadState('networkidle');
-      await expect(page.locator(clients.CLIENT_STATUS_BUTTON(LAST_NAME)).first()).toContainText(
-        'Active',
-      );
+      await expect(clientStatusButton()).toContainText('Active');
     });
 
     await test.step('5 - Archive the client again from Active tab', async () => {
-      await page.locator(clients.CLIENT_STATUS_BUTTON(LAST_NAME)).last().click();
+      await clientStatusButton().click();
       await page.locator(clients.CLIENT_STATUS_ARCHIVED).click();
       await page.waitForLoadState('networkidle');
-      await expect(page.locator(clients.CLIENT_STATUS_BUTTON(LAST_NAME)).first()).toContainText(
-        'Archived',
-      );
+      await expect(clientStatusButton()).toContainText('Archived');
     });
 
     await test.step('6 - Go to Archive tab and verify the available actions before deleting the client', async () => {

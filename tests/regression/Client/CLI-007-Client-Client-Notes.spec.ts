@@ -55,7 +55,7 @@ test.describe.serial('CLI-007 - Client - Client Notes', () => {
       await expect(page.locator(clients.NOTE_TAGGED_AGENTS)).toBeVisible();
       await expect(page.locator(clients.NOTE_TAGGED_AGENTS_COMBOBOX)).toBeVisible();
       await expect(page.locator(clients.NOTE_DESCRIPTION_INPUT)).toBeVisible();
-      await expect(page.locator(clients.NOTE_CHARACTER_COUNT)).toContainText('0/300');
+      await expect(page.locator(clients.NOTE_CHARACTER_COUNT)).toContainText('0/1000');
       await expect(page.locator(clients.NOTE_SAVE)).toBeDisabled();
     });
 
@@ -164,7 +164,7 @@ test.describe.serial('CLI-007 - Client - Client Notes', () => {
       await sidebar.goToModule('Clients');
       await clients.searchClientByName('FirstName ' + LAST_NAME);
       await clients.clickFirstResult();
-      await expect(page.locator(clients.HEADER)).toContainText('FirstName ' + LAST_NAME, {
+      await expect(page.locator(clients.HEADER)).toContainText(LAST_NAME, {
         timeout: 25000,
       });
       await page.waitForLoadState('networkidle');

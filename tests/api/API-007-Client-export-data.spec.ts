@@ -3,7 +3,7 @@ import type { APIRequestContext } from '@playwright/test';
 import { test, expect } from '../../fixtures/PlaywrightFixtures';
 import { USERS } from '../../fixtures/users';
 
-const env = process.env.ENVIRONMENT ?? 'qa2';
+const env = process.env.ENVIRONMENT ?? 'stage';
 
 const API_BASE_URL = `https://api.${env}.smartflyer.com/api`;
 const LOGIN_URL = `${API_BASE_URL}/login`;
@@ -91,7 +91,12 @@ type SettingsApiResponse = {
   success?: boolean;
   message?: string;
   data?: {
-    settings?: ExportSettingsResponse;
+    settings?:
+      | ExportSettingsResponse
+      | {
+          default_view?: ExportSettingsResponse;
+          group_view?: unknown[];
+        };
   };
 };
 
@@ -187,6 +192,17 @@ const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 const createRequestBody = (settings: Record<string, unknown>): ExportSettingsRequest => ({
   settings,
 });
+const getDefaultViewSettings = (
+  response: SettingsApiResponse,
+): ExportSettingsResponse | undefined => {
+  const settings = response.data?.settings;
+
+  if (settings && 'default_view' in settings) {
+    return settings.default_view;
+  }
+
+  return settings as ExportSettingsResponse | undefined;
+};
 
 test.describe.serial('API-007 - Client Export Data', () => {
   let token = '';
@@ -196,7 +212,8 @@ test.describe.serial('API-007 - Client Export Data', () => {
     token = await login(request);
 
     const response = await getSettings(request, token);
-    originalSettings = response.data?.settings ? clone(response.data.settings) : null;
+    const settings = getDefaultViewSettings(response);
+    originalSettings = settings ? clone(settings) : null;
   });
 
   test.afterAll(async ({ request }) => {
@@ -214,7 +231,7 @@ test.describe.serial('API-007 - Client Export Data', () => {
     expect(postResponse.status).toBe(200);
 
     const getResponse = await getSettings(request, token);
-    const settings = getResponse.data?.settings;
+    const settings = getDefaultViewSettings(getResponse);
 
     expect(settings?.include_basic_information.full_name).toBe(true);
     expect(settings?.include_basic_information.primary_email).toBe(true);
@@ -235,7 +252,7 @@ test.describe.serial('API-007 - Client Export Data', () => {
     expect(postResponse.status).toBe(200);
 
     const getResponse = await getSettings(request, token);
-    const settings = getResponse.data?.settings;
+    const settings = getDefaultViewSettings(getResponse);
 
     expect(settings?.include_related_contacts).toBe(true);
     expect(settings?.include_notes).toBe(false);
@@ -263,7 +280,7 @@ test.describe.serial('API-007 - Client Export Data', () => {
     await postSettings(request, token, createRequestBody(payload));
 
     const response = await getSettings(request, token);
-    const settings = response.data?.settings;
+    const settings = getDefaultViewSettings(response);
 
     expect(settings?.include_basic_information).toEqual(payload.include_basic_information);
     expect(settings?.include_address).toEqual(payload.include_address);
@@ -280,7 +297,7 @@ test.describe.serial('API-007 - Client Export Data', () => {
     await postSettings(request, token, createRequestBody(payload));
 
     const response = await getSettings(request, token);
-    const settings = response.data?.settings;
+    const settings = getDefaultViewSettings(response);
 
     expect(settings?.include_related_contacts).toBe(false);
     expect(settings?.include_notes).toBe(true);
@@ -294,7 +311,8 @@ test.describe.serial('API-007 - Client Export Data', () => {
     await postSettings(request, token, createRequestBody(payload));
 
     const response = await getSettings(request, token);
-    const travelPreferences = response.data?.settings?.include_travel_preferences_by_category;
+    const travelPreferences =
+      getDefaultViewSettings(response)?.include_travel_preferences_by_category;
 
     expect(Object.keys(travelPreferences ?? {}).sort()).toEqual(
       ['lifestyle', 'personal', 'stay', 'toggle', 'travel'].sort(),
@@ -314,7 +332,7 @@ test.describe.serial('API-007 - Client Export Data', () => {
     expect(postResponse.status).toBe(200);
 
     const getResponse = await getSettings(request, token);
-    const settings = getResponse.data?.settings;
+    const settings = getDefaultViewSettings(getResponse);
 
     expect(settings?.include_address.toggle).toBe(true);
     expect(settings?.include_address.mailing).toBe(true);

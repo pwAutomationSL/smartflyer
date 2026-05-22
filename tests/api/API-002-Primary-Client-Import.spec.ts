@@ -6,7 +6,7 @@ import { test, expect } from '../../fixtures/PlaywrightFixtures';
 import { USERS } from '../../fixtures/users';
 import { uniqueId } from '../../page-objects';
 
-const env = 'qa2';
+const env = process.env.ENVIRONMENT ?? 'stage';
 
 const API_BASE_URL = `https://api.${env}.smartflyer.com/api`;
 const LOGIN_URL = `${API_BASE_URL}/login`;
@@ -80,7 +80,7 @@ const createCsvWithUniqueEmails = (fileName: string): string => {
   return tempFilePath;
 };
 
-test.describe('API-001 - Primary Client Import', () => {
+test.describe('API-002 - Primary Client Import', () => {
   let authorizationHeader = '';
 
   test.beforeAll(async ({ request }) => {
@@ -370,10 +370,11 @@ test.describe('API-001 - Primary Client Import', () => {
     });
   });
 
-  test('PRI_TC-006 - missing agent_id', async ({ request }) => {
+  test('PRI_TC-006 - missing agent_id defaults to authenticated agent', async ({ request }) => {
     let mediaUuid = '';
 
     await test.step('1 - Upload PRI_TC-006_missing_agent_id.csv and get media uuid', async () => {
+      const filePath = createCsvWithUniqueEmails('PRI_TC-006_missing_agent_id.csv');
       const uploadResponse = await request.post(MEDIA_URL, {
         headers: {
           Accept: 'application/json',
@@ -381,9 +382,7 @@ test.describe('API-001 - Primary Client Import', () => {
           'X-Upload-Context': 'GENERAL',
         },
         multipart: {
-          'files[]': createReadStream(
-            path.resolve(process.cwd(), 'data/api/PRI_TC-006_missing_agent_id.csv'),
-          ),
+          'files[]': createReadStream(filePath),
         },
       });
 
@@ -399,7 +398,7 @@ test.describe('API-001 - Primary Client Import', () => {
       }
     });
 
-    await test.step('2 - Import primary clients and validate missing agent_id error', async () => {
+    await test.step('2 - Import primary clients and validate missing agent_id defaults to authenticated agent', async () => {
       const importResponse = await request.post(IMPORT_PRIMARY_URL, {
         headers: {
           Accept: 'application/json',
@@ -414,10 +413,9 @@ test.describe('API-001 - Primary Client Import', () => {
 
       const importBody = (await importResponse.json()) as ImportResponse;
       try {
-        expect(getNumericCount(importBody.data?.invalid_count)).toBe(1);
-        expect(
-          Array.isArray(importBody.data?.invalid) ? importBody.data.invalid[0].errors.agent_id : [],
-        ).toContain('The agent id field is required.');
+        expect(importBody.status).toBe('success');
+        expect(getNumericCount(importBody.data?.valid_count)).toBe(1);
+        expect(getNumericCount(importBody.data?.invalid_count)).toBe(0);
       } catch (error) {
         await dumpResponseOnFailure('PRI_TC-006-import', importBody, error);
       }

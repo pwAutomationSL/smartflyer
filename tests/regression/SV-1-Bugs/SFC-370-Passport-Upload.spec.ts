@@ -36,11 +36,12 @@ test.describe('SFC-370 -  upload a passport file', () => {
       await page.reload();
       await page.waitForLoadState('networkidle');
       await page.waitForLoadState('load');
-      const values = await page.locator(clients.DATES_NUMNBERS_PASSPORT_NUMBER).allTextContents();
-      expect(values.some((v) => v.includes(passPortName))).toBeTruthy();
+      await expect(page.locator(clients.PASSPORT_DOCUMENT_ROW(PASSPORT.toString()))).toContainText(
+        passPortName,
+      );
     });
     await test.step('Verify it was uploaded correctly', async () => {
-      await clients.editPassport(passPortName);
+      await clients.editPassport(PASSPORT.toString());
       await expect(page.locator(clients.POPUP_HEADER_H2)).toContainText('Document information');
       await expect(page.locator(clients.PASSPORT_NAME)).toHaveValue(passPortName);
       await expect(page.locator(clients.PASSPORT_NUMBER)).toHaveValue(PASSPORT.toString());
@@ -48,7 +49,7 @@ test.describe('SFC-370 -  upload a passport file', () => {
       await clients.cancelPopUp();
     });
     await test.step('Delete added passport', async () => {
-      await clients.deletePassport(passPortName);
+      await clients.deletePassport(PASSPORT.toString());
     });
   });
 });

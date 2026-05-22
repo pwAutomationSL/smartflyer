@@ -143,7 +143,6 @@ test.describe('SFC-749 Inconsistent related passengers name showing in Air Reque
     });
   });
   test('Air Team', async ({ loginPage, page, sidebar, clients, airRequest }) => {
-    test.fixme(true, 'Air Team stage credentials are currently rejected by the login page.');
     await test.step('1 - Go to the Client tab', async () => {
       await loginPage.login(USERS.AIR_USERNAME);
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
