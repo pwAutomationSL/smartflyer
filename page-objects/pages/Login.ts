@@ -5,6 +5,7 @@ type LoginOptions = {
   username: string;
   password: string;
   host?: string;
+  waitForSuccess?: boolean;
 };
 export class LoginPage {
   public readonly page: Page;
@@ -18,14 +19,19 @@ export class LoginPage {
   public readonly HEADER = `//h1`;
   public readonly USER_DROPDOWN_BUTTON = `//button[@id="dropdownMenuButton1"]`;
   public readonly LOGOUT = `//a[@href="/logout"]`;
-  async login({ username, password, host = getEnvConfig().BASE_URL }: LoginOptions): Promise<void> {
+  async login({
+    username,
+    password,
+    host = getEnvConfig().BASE_URL,
+    waitForSuccess = true,
+  }: LoginOptions): Promise<void> {
     await this.page.goto(host);
     await this.page.locator(this.EMAIL_INPUT).fill(username);
     await this.page.locator(this.PASSWORD_INPUT).fill(password);
-    await Promise.all([
-      this.page.locator(this.EMAIL_INPUT).waitFor({ state: 'hidden', timeout: 15000 }),
-      this.page.locator(this.LOGIN_BUTTON).click({ noWaitAfter: true }),
-    ]);
+    await this.page.locator(this.LOGIN_BUTTON).click({ noWaitAfter: true });
+    if (waitForSuccess) {
+      await this.page.locator(this.EMAIL_INPUT).waitFor({ state: 'hidden', timeout: 15000 });
+    }
   }
   async logout() {
     await this.page.locator(this.USER_DROPDOWN_BUTTON).click({ force: true });
