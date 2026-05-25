@@ -22,7 +22,10 @@ export class LoginPage {
     await this.page.goto(host);
     await this.page.locator(this.EMAIL_INPUT).fill(username);
     await this.page.locator(this.PASSWORD_INPUT).fill(password);
-    await this.page.locator(this.LOGIN_BUTTON).click();
+    await Promise.all([
+      this.page.locator(this.EMAIL_INPUT).waitFor({ state: 'hidden', timeout: 15000 }),
+      this.page.locator(this.LOGIN_BUTTON).click({ noWaitAfter: true }),
+    ]);
   }
   async logout() {
     await this.page.locator(this.USER_DROPDOWN_BUTTON).click({ force: true });

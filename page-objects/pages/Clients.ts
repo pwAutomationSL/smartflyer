@@ -531,8 +531,9 @@ export class Clients {
     await deleteButton.click();
   }
   public async confirmDelete() {
-    await this.page.locator(this.CONFIRM_DELETE).click();
-    await this.page.waitForTimeout(3000);
+    const confirmButton = this.page.locator(this.CONFIRM_DELETE);
+    await confirmButton.click();
+    await confirmButton.waitFor({ state: 'hidden' });
   }
   public async confirmDeleteFF() {
     await this.page.locator(this.CONFIRM_DELETE_FF).click();

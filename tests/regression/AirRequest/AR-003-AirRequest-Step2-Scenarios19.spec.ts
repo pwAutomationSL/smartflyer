@@ -126,13 +126,16 @@ test.describe('AR-003 - Air Request - Step #19 ', () => {
         await expect(allTravelers).toContain(`${PASSENGER_FIRST_NAME} ${PASSENGER_LAST_NAME}`);
       });
       await test.step('19# Delete added user ', async () => {
+        const addedTravelerName = `${PASSENGER_FIRST_NAME} ${PASSENGER_LAST_NAME}`;
+        const addedTravelerLink = page.getByRole('link', { name: addedTravelerName });
         await clients.deleteAddedTraveler(PASSENGER_LAST_NAME);
         await expect(page.locator(clients.HEADER_H2)).toContainText('Delete passenger?');
         await clients.confirmDelete();
+        await expect(addedTravelerLink).toHaveCount(0);
         const allTravelers = await page
           .locator(clients.ALL_RELATED_TRAVELERS_APP)
           .allTextContents();
-        await expect(allTravelers).not.toContain(`${PASSENGER_FIRST_NAME} ${PASSENGER_LAST_NAME}`);
+        expect(allTravelers).not.toContain(addedTravelerName);
       });
     });
   });
