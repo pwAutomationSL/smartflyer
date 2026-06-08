@@ -58,6 +58,7 @@ test.describe('AR-005 - Air Request - Step 4', () => {
       await expect(page.locator(airRequest.MALE_DROPDOWN)).toBeVisible();
       await expect(page.locator(airRequest.FEMALE_DROPDOWN)).toBeVisible();
       await airRequest.selectMale();
+      await airRequest.selectDomesticFlightType();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
     });
     await test.step('9 - Click on Continue', async () => {

@@ -68,6 +68,7 @@ test.describe('AR-007 - Air Request - E2E - 2 - One Passenger, Round Trip flight
       await expect(page.locator(airRequest.MALE_DROPDOWN)).toBeVisible();
       await expect(page.locator(airRequest.FEMALE_DROPDOWN)).toBeVisible();
       await airRequest.selectMale();
+      await airRequest.selectDomesticFlightType();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER_H2)).toContainText('Trip overview');

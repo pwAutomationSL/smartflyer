@@ -171,8 +171,12 @@ export class AirRequest {
   }
   public async clickContinue() {
     await this.page.waitForLoadState('networkidle');
-    await this.page.locator(this.CONTINUE_BUTTON).waitFor({ state: 'attached' });
-    await this.page.locator(this.CONTINUE_BUTTON).click({ force: true });
+    const continueButton = this.page.locator(this.CONTINUE_BUTTON);
+    await continueButton.waitFor({ state: 'visible' });
+    await continueButton.click();
+  }
+  public async selectDomesticFlightType(index: number = 0) {
+    await this.page.getByRole('radio', { name: 'Domestic' }).nth(index).check();
   }
   public async searchDraftByID(draftID: string) {
     await this.page.locator(this.SEARCH_DRAFT).fill(draftID);
@@ -536,6 +540,7 @@ export class AirRequest {
     await this.page.getByRole('textbox', { name: 'Departing from' }).last().fill(airportShort);
     await this.page.waitForTimeout(600);
     await this.page.locator(`//div[contains(.,'${airport}')]/../label/span`).first().click();
+    await this.clickGeneric();
   }
   public async selectDepartureAirportFlight1Passenger1(airport: string, airportShort: string) {
     await this.page.waitForTimeout(500);

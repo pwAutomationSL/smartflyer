@@ -50,8 +50,12 @@ test.describe('AR-003 - Air Request - Step 2', () => {
     await test.step('Fill Date of Birth', async () => {
       await airRequest.fillDateOfBirth();
     });
-    await test.step('ER 1 - Domestic checked by default, first name and last name pre filled', async () => {
-      await expect(page.locator(airRequest.DOMESTIC_RADIO)).toBeChecked();
+    await test.step('ER 1 - Domestic flight type can be selected, first name and last name pre filled', async () => {
+      const domesticRadio = page.getByRole('radio', { name: 'Domestic' });
+      await expect(domesticRadio).toBeVisible();
+      await expect(page.getByRole('radio', { name: 'International' })).toBeVisible();
+      await airRequest.selectDomesticFlightType();
+      await expect(domesticRadio).toBeChecked();
       await expect(page.locator(airRequest.FIRST_NAME_PASSENGER(0))).toHaveValue(
         PASSENGER_FIRST_NAME,
       );

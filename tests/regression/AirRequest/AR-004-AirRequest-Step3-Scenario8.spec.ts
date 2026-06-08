@@ -57,6 +57,7 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await expect(page.locator(airRequest.MALE_DROPDOWN)).toBeVisible();
       await expect(page.locator(airRequest.FEMALE_DROPDOWN)).toBeVisible();
       await airRequest.selectMale();
+      await airRequest.selectDomesticFlightType();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
     });
     await test.step('9 - Add additional passenger', async () => {
@@ -68,6 +69,7 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await expect(page.locator(airRequest.MALE_DROPDOWN)).toBeVisible();
       await expect(page.locator(airRequest.FEMALE_DROPDOWN)).toBeVisible();
       await airRequest.selectMale();
+      await airRequest.selectDomesticFlightType(1);
       await expect(page.locator(airRequest.PHONE_FLAG).last()).toBeVisible();
       await airRequest.fillPassengerPhone(PHONE, 1);
       await airRequest.clickLabel();

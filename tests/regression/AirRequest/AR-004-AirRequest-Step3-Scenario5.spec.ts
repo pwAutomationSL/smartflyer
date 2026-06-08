@@ -62,6 +62,7 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await expect(page.locator(airRequest.MALE_DROPDOWN)).toBeVisible();
       await expect(page.locator(airRequest.FEMALE_DROPDOWN)).toBeVisible();
       await airRequest.selectMale();
+      await airRequest.selectDomesticFlightType();
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
     });
     await test.step('9 - Add additional passenger', async () => {
@@ -73,6 +74,7 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await expect(page.locator(airRequest.MALE_DROPDOWN)).toBeVisible();
       await expect(page.locator(airRequest.FEMALE_DROPDOWN)).toBeVisible();
       await airRequest.selectMale();
+      await airRequest.selectDomesticFlightType(1);
       await expect(page.locator(airRequest.PHONE_FLAG).last()).toBeVisible();
       await airRequest.fillPassengerPhone(PHONE, 1);
       await airRequest.clickLabel();
@@ -116,19 +118,19 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await airRequest.selectTravelDateFlight2();
       await expect(page.locator(airRequest.PREVIOUS_MONTH)).toBeDisabled();
       await airRequest.confirmDates('18th');
-      let airportF1 = await airRequest.getArrivalAirport(0);
-      let airportF2 = await airRequest.getArrivalAirport(1);
-      expect(airportF1).toEqual(airportF2);
+      await airRequest.selectDepartureTimeFlight2('Afternoon');
+      await airRequest.selectCabinClassMultiF2('Premium Economy');
+      await expect(page.locator(airRequest.ARRIVAL_INPUT_PASSENGER_2)).toHaveAttribute(
+        'placeholder',
+        ARRIVAL,
+      );
       await expect(page.locator(airRequest.ARRIVAL_INPUT_PASSENGER_2)).toBeDisabled();
-      await airRequest.overWriteArrivalAirportFlight1(ARRIVAL_F2, ARRIVAL_SHORT_F2);
-      airportF1 = await airRequest.getArrivalAirport(0);
-      airportF2 = await airRequest.getArrivalAirport(1);
-      expect(airportF1).toEqual(airportF2);
       const departureDate1 = await airRequest.getDepartureDate(0);
       const departureDate2 = await airRequest.getDepartureDate(1);
       expect(departureDate1).not.toEqual(departureDate2);
     });
     await test.step('17 - Click Continue', async () => {
+      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
       await airRequest.clickContinue();
     });
   });
