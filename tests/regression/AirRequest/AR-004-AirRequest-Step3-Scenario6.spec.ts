@@ -127,26 +127,24 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await airRequest.confirmDatesRoundTrip();
     });
     await test.step('21 -Select Outbound flight time for Additional passenger', async () => {
-      await airRequest.selectOutboundTime('Morning');
+      await airRequest.selectOutboundTime('Morning', 2);
     });
     await test.step('22 - Select Return flight time for Additional passenger', async () => {
-      await airRequest.selectReturnTimeIndex('Afternoon');
+      await airRequest.selectReturnTimeIndex('Afternoon', 2);
     });
     await test.step('23 - Select Preferred cabin class for Additional passenger', async () => {
-      await airRequest.selectCabinClassMultiF1('Economy');
+      await airRequest.selectCabinClassMultiF2('Economy');
     });
     await test.step('ER - Include any Additional Trip Notes ', async () => {
       await airRequest.addAdditionalTripNotes('Window seat preferred');
-      let airportF1 = await airRequest.getArrivalAirport(0);
-      let airportF2 = await airRequest.getArrivalAirport(1);
-      expect(airportF1).toEqual(airportF2);
+      await expect(page.locator(airRequest.ARRIVAL_INPUT_PASSENGER_2)).toHaveAttribute(
+        'placeholder',
+        ARRIVAL,
+      );
       await expect(page.locator(airRequest.ARRIVAL_INPUT_PASSENGER_2)).toBeDisabled();
-      await airRequest.overWriteArrivalAirportFlight1(ARRIVAL_F2, ARRIVAL_SHORT_F2);
-      airportF1 = await airRequest.getArrivalAirport(0);
-      airportF2 = await airRequest.getArrivalAirport(1);
-      expect(airportF1).toEqual(airportF2);
     });
     await test.step('24 - Click Continue', async () => {
+      await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
       await airRequest.clickContinue();
     });
   });

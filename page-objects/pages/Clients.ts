@@ -6,6 +6,9 @@ export class Clients {
   constructor({ page }: { page: Page }) {
     this.page = page;
   }
+  private escapeRegExp(value: string) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
   public readonly HEADER = `//h1`;
   public readonly HEADER_H2 = `//h2`;
   public readonly POPUP_HEADER_H2 = `//dialog//h2`;
@@ -511,8 +514,11 @@ export class Clients {
   public async searchClientAndClick(client: string) {
     await this.page.getByRole('textbox', { name: 'Search' }).fill(client);
     await this.page.getByRole('textbox', { name: 'Search' }).press('Enter');
-    await this.page.getByText(client).click();
-    await this.page.waitForTimeout(1500);
+    const clientResult = this.page
+      .getByRole('link', { name: new RegExp(`^${this.escapeRegExp(client)}(?:\\s|\\()`) })
+      .first();
+    await clientResult.waitFor({ state: 'visible' });
+    await clientResult.click();
   }
   public async searchClientByName(client: string) {
     await this.page.getByRole('textbox', { name: 'Search' }).waitFor({ state: 'visible' });

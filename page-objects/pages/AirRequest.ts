@@ -762,14 +762,16 @@ export class AirRequest {
   }
   public async selectOutboundTime(time: string, index: number = 1) {
     await this.page
-      .locator(`(//input/..//div[contains(.,'Outbound flight')]/..//../div[2])[${index}]`)
+      .locator(`//p[normalize-space(.)='Outbound flight time']/following-sibling::div`)
+      .nth(index - 1)
       .click();
     await this.page.locator(`//div[contains(.,'${time}')]/../label/span`).first().click();
     await this.clickGeneric();
   }
   public async selectReturnTimeIndex(time: string, index: number = 1) {
     await this.page
-      .locator(`(//input/..//div[contains(.,'Return flight')]/..//../div[2])[${index}]`)
+      .locator(`//p[normalize-space(.)='Return flight time']/following-sibling::div`)
+      .nth(index - 1)
       .click();
     await this.page.locator(`//div[contains(.,'${time}')]/../label/span`).first().click();
     await this.clickGeneric();
