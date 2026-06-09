@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -302,9 +302,10 @@ export class AirRequest {
     await this.page.waitForTimeout(300);
   }
   public async fillPassengerPhone(phone: string, index: number = 0) {
-    await this.page.locator(this.PHONE_INPUT_PASSENGER(index)).fill(phone);
-    await this.page.locator(this.PHONE_INPUT_PASSENGER(index)).press('Tab');
-    await this.page.waitForTimeout(1000);
+    const phoneInput = this.page.locator(this.PHONE_INPUT_PASSENGER(index));
+    await phoneInput.clear();
+    await phoneInput.pressSequentially(phone);
+    await phoneInput.press('Tab');
   }
   public async checkCertify() {
     await this.page.locator(`//label[contains(.,'I certify the information')]`).first().click();
@@ -333,9 +334,12 @@ export class AirRequest {
     await this.page.locator(this.DOB_YEAR(index)).clear();
   }
   public async fillMonth(index: number = 1) {
-    await this.page.waitForTimeout(600);
-    await this.page.locator(this.DOB_MONTH(index)).click();
-    await this.page.locator(this.JANUARY_OPTION).click();
+    const monthCombobox = this.page
+      .getByRole('combobox', { name: 'Date of birth - Month' })
+      .nth(index - 1);
+    await monthCombobox.click();
+    await monthCombobox.fill('January');
+    await monthCombobox.press('Enter');
   }
   public async addPassportInformation(index: number = 1) {
     const passportButton = this.page.locator(this.ADD_PASSPORT_INFORMATION(index));
@@ -556,14 +560,32 @@ export class AirRequest {
     await this.page.locator(this.DEPARTURE_FLIGHT2).first().fill(airportShort);
     await this.page.waitForSelector(`//div[contains(.,'${airport}')]/../label/span`);
     await this.page.locator(`//div[contains(.,'${airport}')]/../label/span`).first().click();
+    await this.clickGeneric();
   }
   public async selectDepartureAirportFlight1Passenger2(airport: string, airportShort: string) {
-    await this.page.waitForTimeout(500);
-    await this.page.locator(this.DEPARTURE_FLIGHT1_PASSENGER2).last().click({ force: true });
-    await this.page.locator(this.DEPARTURE_FLIGHT1_PASSENGER2).last().fill(airportShort);
-    await this.page.waitForSelector(`//div[contains(.,'${airport}')]/../label/span`);
+    const departureInput = this.page.locator(
+      'input[name="passengerTrips.1.flights.0.departure"]',
+    );
+    await departureInput.evaluate((element) => element.scrollIntoView({ block: 'center' }));
+    await departureInput.click();
+    await departureInput.clear();
+    await departureInput.fill(airportShort);
     await this.page.locator(`//div[contains(.,'${airport}')]/../label/span`).first().click();
+    await expect(departureInput).toHaveAttribute('placeholder', airport);
     await this.clickGeneric();
+  }
+  public async selectDepartureAirportFlight2Passenger2(airport: string, airportSearch: string) {
+    const departureInput = this.page.locator(
+      'input[name="passengerTrips.1.flights.1.departure"]',
+    );
+    await departureInput.evaluate((element) => element.scrollIntoView({ block: 'center' }));
+    await departureInput.click();
+    await departureInput.clear();
+    await departureInput.pressSequentially(airportSearch, { delay: 100 });
+    await departureInput.press('ArrowDown');
+    await departureInput.press('Enter');
+    await expect(departureInput).toHaveValue(airport);
+    await departureInput.press('Tab');
   }
   public async selectDepartureAirport2Letters(airportShort: string) {
     await this.page.getByRole('textbox', { name: 'Departing from' }).click();
@@ -674,29 +696,44 @@ export class AirRequest {
     await this.page.waitForTimeout(400);
   }
   public async selectArrivalAirportFlight1(airport: string, airportShort: string) {
-    await this.page.waitForTimeout(700);
-    await this.page.getByRole('textbox', { name: 'Arriving at' }).first().click();
-    await this.page.getByRole('textbox', { name: 'Arriving at' }).first().clear();
-    await this.page.waitForTimeout(700);
-    await this.page.getByRole('textbox', { name: 'Arriving at' }).first().fill(airportShort);
-    await this.page.waitForTimeout(700);
-    await this.page.locator(`//p[contains(.,'${airport}')]`).first().click();
+    await this.selectArrivalAirportByInput(
+      'input[name="passengerTrips.0.flights.0.arrival"]',
+      airport,
+      airportShort,
+    );
   }
   public async selectArrivalAirportFlight2(airport: string, airportShort: string) {
-    await this.page.waitForTimeout(700);
-    await this.page.getByRole('textbox', { name: 'Arriving at' }).last().click();
-    await this.page.getByRole('textbox', { name: 'Arriving at' }).last().clear();
-    await this.page.waitForTimeout(500);
-    await this.page.getByRole('textbox', { name: 'Arriving at' }).last().fill(airportShort);
-    const noResultsLocator = `(//label[text()='Arrival airport']/../../following-sibling::div//b[text()='No results found.'])[1]`;
-    if (await this.page.locator(noResultsLocator).isVisible()) {
-      await this.page.getByRole('textbox', { name: 'Arriving at' }).last().click();
-      await this.page.getByRole('textbox', { name: 'Arriving at' }).last().clear();
-      await this.page.waitForTimeout(500);
-      await this.page.getByRole('textbox', { name: 'Arriving at' }).last().fill(airportShort);
-    }
-    await this.page.waitForTimeout(500);
-    await this.page.locator(`//*[contains(.,'${airport}')]`).last().click();
+    await this.selectArrivalAirportByInput(
+      'input[name="passengerTrips.0.flights.1.arrival"]',
+      airport,
+      airportShort,
+    );
+  }
+  public async selectArrivalAirportFlight1Passenger2(airport: string, airportShort: string) {
+    await this.selectArrivalAirportByInput(
+      'input[name="passengerTrips.1.flights.0.arrival"]',
+      airport,
+      airportShort,
+    );
+  }
+  private async selectArrivalAirportByInput(
+    inputSelector: string,
+    airport: string,
+    airportShort: string,
+  ) {
+    const arrivalInput = this.page.locator(inputSelector);
+    await arrivalInput.evaluate((element) => element.scrollIntoView({ block: 'center' }));
+    await arrivalInput.click();
+    await arrivalInput.clear();
+    await arrivalInput.click();
+    await arrivalInput.fill(airportShort);
+
+    const airportOption = this.page
+      .locator(`//p[contains(normalize-space(.),'${airport}')]`)
+      .first();
+    await airportOption.click();
+    await expect(arrivalInput).toHaveAttribute('placeholder', airport);
+    await this.clickGeneric();
   }
   public async selectTravelDate() {
     await this.page.getByRole('textbox', { name: 'Departure date' }).click();
@@ -758,6 +795,16 @@ export class AirRequest {
     await this.page.locator(`//input/..//div[contains(.,'Departure time')]`).last().click();
     await this.page.locator(`//div[contains(.,'${time}')]/../label/span`).first().click();
     await this.page.waitForTimeout(500);
+    await this.clickGeneric();
+  }
+  public async selectDepartureTimeByIndex(time: string, index: number) {
+    const departureTimeCombobox = this.page
+      .locator(
+        `//p[normalize-space(.)='Departure time']/following-sibling::div//*[@role='combobox']`,
+      )
+      .nth(index);
+    await departureTimeCombobox.locator('xpath=../..').click();
+    await this.page.locator(`//div[contains(.,'${time}')]/../label/span`).first().click();
     await this.clickGeneric();
   }
   public async selectOutboundTime(time: string, index: number = 1) {
@@ -830,6 +877,17 @@ export class AirRequest {
     await this.page.locator(`//div[contains(.,'${cabin}')]/../label/span`).first().click();
     await this.clickGeneric();
   }
+  public async selectCabinClassByIndex(cabin: string, index: number) {
+    const cabinClassCombobox = this.page
+      .locator(
+        `//p[normalize-space(.)='Preferred cabin class']/following-sibling::div//*[@role='combobox']`,
+      )
+      .nth(index);
+    await cabinClassCombobox.click();
+    await cabinClassCombobox.fill(cabin);
+    await cabinClassCombobox.press('Enter');
+    await expect(cabinClassCombobox.locator('xpath=../..')).toContainText(cabin);
+  }
   public async addAdditionalTripNotes(notes: string) {
     await this.page.locator(this.TRIP_NOTES).last().fill(notes);
   }
@@ -861,7 +919,7 @@ export class AirRequest {
   public async getArrivalAirportFligh2(index: number) {
     const airport = await this.page
       .locator(`//input[@name="passengerTrips.${index}.flights.1.arrival"]`)
-      .textContent();
+      .getAttribute('placeholder');
     return airport;
   }
   public async getDepartureDate(index: number) {

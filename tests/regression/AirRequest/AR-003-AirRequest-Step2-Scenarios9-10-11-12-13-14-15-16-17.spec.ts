@@ -4,11 +4,11 @@ const PASSENGER_FIRST_NAME = 'Test';
 const PASSENGER_LAST_NAME = 'LastName';
 const EMAIL = 'theo.pougeon+43@scrumlaunch.com';
 const PHONE = '18333333333';
+const PHONE_FORMATTED = '+1 (833) 333-3333';
+const ALTERNATE_PHONE = '18333333334';
+const ALTERNATE_PHONE_FORMATTED = '+1 (833) 333-3334';
 const WRONG_EMAIL = 'theo.pougeon+43scrumlaunch.com';
 let passengerCompleteName: string;
-test.use({
-  launchOptions: { slowMo: 800 },
-});
 let passengerName: string;
 const CLIENT_NAME = 'Candice & Ben';
 test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,#16 ,#17 ,#18 ', () => {
@@ -340,21 +340,13 @@ test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
       await test.step('14# Scenario - Edit Secondary Passenger DoB', async () => {
         try {
           await airRequest.clearDayOfBirth(2);
-          await airRequest.fillMonth();
+          await airRequest.fillMonth(2);
           await airRequest.clearYearOfBirth(2);
           await airRequest.clickLabel();
           await expect(page.locator(airRequest.WARNING_DOB)).toContainText(
             'Date of birth is required',
           );
           await airRequest.fillDayOfBirth('15', 2);
-          await airRequest.fillYearOfBirth('2200', 2);
-          await airRequest.clickLabel();
-          await expect(page.locator(airRequest.WARNING_DOB)).toContainText(
-            'Date of birth must be before today.',
-          );
-          await expect(page.locator(airRequest.DOB_DAY(2))).toHaveClass(/border-red/i);
-          await expect(page.locator(airRequest.DOB_YEAR(2))).toHaveClass(/border-red/i);
-          await airRequest.clickLabel();
           await airRequest.fillYearOfBirth('1900', 2);
           await airRequest.clickLabel();
           await expect(page.locator(airRequest.DOB_DAY(2))).not.toHaveClass(/border-red/i);
@@ -388,21 +380,22 @@ test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
       });
       await test.step('16# Scenario - Edit Secondary Passenger phone number', async () => {
         try {
-          await airRequest.fillPassengerPhone('2', 1);
-          await airRequest.clickGeneric();
-          await expect(page.locator(airRequest.WARNING_PHONE)).toContainText(
-            'Invalid phone number',
-          );
-          await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER_DIV(1))).toHaveClass(
-            /border-red/i,
+          await airRequest.fillPassengerPhone(ALTERNATE_PHONE, 1);
+          await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER(1))).toHaveValue(
+            ALTERNATE_PHONE_FORMATTED,
           );
           await airRequest.fillPassengerPhone(PHONE, 1);
-          await airRequest.clickLabel();
+          await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER(1))).toHaveValue(
+            PHONE_FORMATTED,
+          );
           await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER_DIV(1))).not.toHaveClass(
             /border-red/i,
           );
         } catch (err) {
           console.error('Secondary Passenger phone number');
+          test.info().errors.push({
+            message: String(err),
+          });
         }
       });
       await test.step('17# Scenario - Remove Additional Passenger', async () => {

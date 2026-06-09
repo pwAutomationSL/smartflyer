@@ -9,9 +9,6 @@ const DEPARTURE = 'John F Kennedy International';
 const ARRIVAL_SHORT = 'LAX';
 const ARRIVAL_SHORT_2LETTERS = 'LA';
 const ARRIVAL = 'Los Angeles International Airport';
-test.use({
-  launchOptions: { slowMo: 800 },
-});
 test.describe('AR-004 - Air Request - Step 3', () => {
   test('Air Request - Step 3 - 1# Scenario', async ({
     loginPage,
@@ -58,7 +55,6 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await airRequest.clickLabel();
       await airRequest.fillPassengerEmail(EMAIL);
       await airRequest.fillPassengerPhone(PHONE);
-      await airRequest.fillMonth(1);
       await airRequest.clickLabel();
       await airRequest.clickGenderDropdown();
       await expect(page.locator(airRequest.MALE_DROPDOWN)).toBeVisible();

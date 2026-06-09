@@ -8,9 +8,6 @@ const ARRIVAL_SHORT = 'LAX';
 const ARRIVAL_F2 = 'San Francisco International Airport';
 const ARRIVAL_SHORT_F2 = 'SFO';
 const ARRIVAL = 'Los Angeles International Airport';
-test.use({
-  launchOptions: { slowMo: 800 },
-});
 test.describe('AR-004 - Air Request - Step 3', () => {
   test('Air Request - Step 3 - 1# Scenario - One way trip, multiple passengers, different itineraries', async ({
     loginPage,

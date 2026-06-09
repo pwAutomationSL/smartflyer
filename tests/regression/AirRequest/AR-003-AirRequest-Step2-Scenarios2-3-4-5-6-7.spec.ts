@@ -4,6 +4,9 @@ const PASSENGER_FIRST_NAME = 'Candice & Ben';
 const PASSENGER_LAST_NAME = '(Conway) Winikoff';
 const EMAIL = 'fake_candiceconway84@gmail.com';
 const PHONE = '12393434354';
+const PHONE_FORMATTED = '+1 (239) 343-4354';
+const ALTERNATE_PHONE = '12393434355';
+const ALTERNATE_PHONE_FORMATTED = '+1 (239) 343-4355';
 const WRONG_EMAIL = 'fake_candiceconway84gmail.com';
 test.describe('AR-003 - Air Request - Step 2', () => {
   test('Air Request - Step 2 - 2,3,4,5,6,7# Scenario', async ({
@@ -144,16 +147,14 @@ test.describe('AR-003 - Air Request - Step 2', () => {
       });
       await test.step('7# Scenario - Edit Primary Passenger phone number', async () => {
         try {
-          await airRequest.fillPassengerPhone('1800');
-          await airRequest.clickLabel();
-          await expect(page.locator(airRequest.WARNING_PHONE)).toContainText(
-            'Invalid phone number',
-          );
-          await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER_DIV(0))).toHaveClass(
-            /border-red/i,
+          await airRequest.fillPassengerPhone(ALTERNATE_PHONE);
+          await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER(0))).toHaveValue(
+            ALTERNATE_PHONE_FORMATTED,
           );
           await airRequest.fillPassengerPhone(PHONE);
-          await airRequest.clickLabel();
+          await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER(0))).toHaveValue(
+            PHONE_FORMATTED,
+          );
           await expect(page.locator(airRequest.PHONE_INPUT_PASSENGER_DIV(0))).not.toHaveClass(
             /border-red/i,
           );

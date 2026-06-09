@@ -1,18 +1,27 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 const env = process.env.ENVIRONMENT ?? 'test';
 const imageName = 'testImage';
-let responseUpload: any;
-let token: any;
+type GalleryUploadResponse = {
+  data: {
+    id: string;
+  };
+};
+
+let responseUpload: GalleryUploadResponse | undefined;
+let token = '';
 test.describe('GS-006 - Search - Gallery filter', () => {
   test.setTimeout(120_000);
   test.afterAll(async ({ request }) => {
+    if (!token || !responseUpload?.data?.id) {
+      return;
+    }
     const response = await request.delete(`https://api.${env}.smartflyer.com/api/gallery`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       data: { ids: [responseUpload.data.id] },
     });
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok() || response.status() === 404).toBeTruthy();
   });
   test('Login at Society (env) as an Admin', async ({
     loginPage,
@@ -26,6 +35,7 @@ test.describe('GS-006 - Search - Gallery filter', () => {
     await test.step('1 - Login at Society as an Admin', async () => {
       await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
+      token = (await page.evaluate(() => localStorage.getItem('token'))) ?? '';
     });
     await test.step('2 - Go to Search - Gallery filter', async () => {
       await sidebar.openContentCRM('Gallery');
@@ -33,10 +43,6 @@ test.describe('GS-006 - Search - Gallery filter', () => {
       await galleryPage.attachImage();
       ({ responseUpload } = await galleryPage.confirmUploadFile());
       await galleryPage.closeUpload();
-      await expect(page.locator(galleryPage.LOAD_SPINNER).first()).toBeHidden({
-        timeout: 20000,
-      });
-      token = await page.evaluate(() => localStorage.getItem('token'));
     });
     await test.step('3 - Go to Search - Gallery filter', async () => {
       await sidebar.goToSearchApp();

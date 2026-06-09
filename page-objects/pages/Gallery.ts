@@ -54,11 +54,12 @@ export class GalleryPage {
     await this.page.locator(this.CONFIRM_UPLOAD_FILES).last().click();
     const response = await waitForCreate;
     const responseUpload = await response.json();
-    await this.page.waitForTimeout(3000);
     return { responseUpload };
   }
   public async closeUpload() {
+    const uploadDialog = this.page.getByRole('dialog');
     await this.page.locator(this.CLOSE_UPLOAD).last().click();
+    await uploadDialog.waitFor({ state: 'hidden' });
   }
   public async closePopUp() {
     await this.page.locator(this.CLOSE_POPUP).click();

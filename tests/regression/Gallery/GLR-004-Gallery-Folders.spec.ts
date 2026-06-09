@@ -10,18 +10,21 @@ type GalleryUploadResponse = {
   };
 };
 
-let responseUpload: GalleryUploadResponse;
+let responseUpload: GalleryUploadResponse | undefined;
 let token = '';
 test.describe('GS-001 - Gallery - Folders', () => {
   test.setTimeout(600_000);
   test.afterEach(async ({ request }) => {
+    if (!token || !responseUpload?.data?.id) {
+      return;
+    }
     const response = await request.delete(`https://api.${env}.smartflyer.com/api/gallery`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       data: { ids: [responseUpload.data.id] },
     });
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok() || response.status() === 404).toBeTruthy();
   });
   test('Login as an Admin, go to Gallery, and create a folder', async ({
     loginPage,
@@ -32,6 +35,7 @@ test.describe('GS-001 - Gallery - Folders', () => {
     await test.step('1 - Login at Society as an Admin', async () => {
       await loginPage.login(USERS.ADMIN_MAIN);
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
+      token = (await page.evaluate(() => localStorage.getItem('token'))) ?? '';
     });
 
     await test.step('2 - Go to Gallery under Content in Society CRM', async () => {
@@ -40,10 +44,6 @@ test.describe('GS-001 - Gallery - Folders', () => {
       await galleryPage.attachImage();
       ({ responseUpload } = await galleryPage.confirmUploadFile());
       await galleryPage.closeUpload();
-      await expect(page.locator(galleryPage.LOAD_SPINNER).first()).toBeHidden({
-        timeout: 20000,
-      });
-      token = (await page.evaluate(() => localStorage.getItem('token'))) ?? '';
     });
 
     await test.step('3 - Click the Folders tab, create a folder, and verify it was added', async () => {

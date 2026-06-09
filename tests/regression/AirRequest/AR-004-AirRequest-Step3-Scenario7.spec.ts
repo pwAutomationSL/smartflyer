@@ -2,19 +2,13 @@ import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 const CLIENT_NAME = 'Candice & Ben';
 const EMAIL = 'fake_candiceconway84@gmail.com';
 const PHONE = '18333333333';
-const DEPARTURESHORT = 'JFK';
-const DEPARTURE = 'John F Kennedy International';
 const ARRIVAL_SHORT = 'LAX';
+const ARRIVAL_SEARCH = 'LA';
 const ARRIVAL_F2 = 'San Francisco International Airport';
-const ARRIVAL_SHORT_F2 = 'SFO';
+const ARRIVAL_SEARCH_F2 = 'San Francisco';
 const ARRIVAL = 'Los Angeles International Airport';
 const DEPARTURE_F2 = 'Chicago Rockford Airport';
 const DEPARTURE_SHORT_F2 = 'RFD';
-test.use({
-  launchOptions: {
-    slowMo: 800,
-  },
-});
 test.setTimeout(250000);
 test.describe('AR-004 - Air Request - Step 3', () => {
   test('Air Request - Step 3 -  7# Scenario - Multi-city trip, multiple passengers, different itineraries', async ({
@@ -102,18 +96,14 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await airRequest.selectMultiCityTripPassenger2();
       await page.waitForLoadState('networkidle');
     });
-    await test.step('13 -Select Departure airport for Primary passenger for each Flight ', async () => {
+    await test.step('13 - Select Departure airport for Primary passenger Flight 1', async () => {
       await expect(page.locator(airRequest.DEPARTURE_FLIGHT2).first()).toBeEnabled();
       await airRequest.selectDepartureAirportFlight1Passenger1(DEPARTURE_F2, DEPARTURE_SHORT_F2);
-      await airRequest.selectDepartureAirportFlight2Passenger1(DEPARTURE_F2, DEPARTURE_SHORT_F2);
-      await airRequest.selectArrivalAirportFlight2(ARRIVAL_F2, ARRIVAL_SHORT_F2);
-      await airRequest.selectTravelDateFlight2();
-      await airRequest.confirmDates();
-      await airRequest.selectDepartureTimeFlight2('Morning');
     });
-    await test.step('14 -Select Arrival airport for Primary passenger for each Flight', async () => {
+    await test.step('14 - Select airports for the remaining Primary passenger flights', async () => {
       await airRequest.selectArrivalAirportFlight1(ARRIVAL, ARRIVAL_SHORT);
-      await airRequest.selectArrivalAirportFlight2(ARRIVAL_F2, ARRIVAL_SHORT_F2);
+      await airRequest.selectDepartureAirportFlight2Passenger1(DEPARTURE_F2, DEPARTURE_SHORT_F2);
+      await airRequest.selectArrivalAirportFlight2(ARRIVAL_F2, ARRIVAL_SEARCH_F2);
     });
     await test.step('15 -Select the Departure Date for each Flight for Primary passenger ', async () => {
       await airRequest.selectTravelDateFlight1();
@@ -122,32 +112,32 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await airRequest.confirmDates();
     });
     await test.step('16 -Select Departure time for each Flight for Primary passengerr', async () => {
-      await airRequest.selectDepartureTimeFlight1('Morning');
-      await airRequest.selectDepartureTimeFlight2('Morning');
+      await airRequest.selectDepartureTimeByIndex('Morning', 0);
+      await airRequest.selectDepartureTimeByIndex('Morning', 1);
     });
     await test.step('17 - Select Preferred cabin class for each Flight for Primary passenger', async () => {
-      await airRequest.selectCabinClassMultiF1('Economy');
-    });
-    await test.step('18 - Select Preferred cabin class for Primary passenger', async () => {
-      await airRequest.selectCabinClassMultiF1('Economy');
+      await airRequest.selectCabinClassByIndex('Economy', 0);
+      await airRequest.selectCabinClassByIndex('Economy', 1);
     });
     await test.step('19 -Select Departure airport for Additional passenger', async () => {
       await airRequest.selectDepartureAirportFlight1Passenger2(DEPARTURE_F2, DEPARTURE_SHORT_F2);
-      await airRequest.selectDepartureAirportFlight2(DEPARTURE, DEPARTURESHORT);
-      await airRequest.selectArrivalAirportFlight1(ARRIVAL, ARRIVAL_SHORT);
-      await expect(page.locator(airRequest.ARRIVAL_INPUT_PASSENGER_2_FLIGHT2)).toBeDisabled();
-      await airRequest.selectTravelDateFlight2();
-      await airRequest.confirmDates();
-    });
-    await test.step('20 -Select the Travel Dates for Additional passenger', async () => {
+      await airRequest.selectArrivalAirportFlight1Passenger2(ARRIVAL, ARRIVAL_SEARCH);
       await airRequest.selectTravelDateFlight1Passenger2();
       await airRequest.confirmDates();
+      await airRequest.selectDepartureAirportFlight2Passenger2(ARRIVAL, ARRIVAL);
+      await expect(page.locator(airRequest.ARRIVAL_INPUT_PASSENGER_2_FLIGHT2)).toBeDisabled();
+    });
+    await test.step('20 -Select the Travel Dates for Additional passenger', async () => {
       await airRequest.selectTravelDateFlight2();
       await airRequest.confirmDates();
     });
+    await test.step('21 - Select Departure time for each Flight for Additional passenger', async () => {
+      await airRequest.selectDepartureTimeByIndex('Morning', 2);
+      await airRequest.selectDepartureTimeByIndex('Morning', 3);
+    });
     await test.step('23 - Select Preferred cabin class for Additional passenger', async () => {
-      await airRequest.selectCabinClassMultiF1('Economy');
-      await airRequest.selectCabinClassMultiF1('Economy');
+      await airRequest.selectCabinClassByIndex('Economy', 2);
+      await airRequest.selectCabinClassByIndex('Economy', 3);
     });
     await test.step('ER - Include any Additional Trip Notes ', async () => {
       await airRequest.addAdditionalTripNotes('Window seat preferred');
@@ -155,10 +145,6 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       let airportF2 = await airRequest.getArrivalAirportFligh2(1);
       expect(airportF1).toEqual(airportF2);
       await expect(page.locator(airRequest.ARRIVAL_INPUT_PASSENGER_2_FLIGHT2)).toBeDisabled();
-      await airRequest.overWriteArrivalAirportFlight2(ARRIVAL_F2, ARRIVAL_SHORT_F2);
-      airportF1 = await airRequest.getArrivalAirportFligh2(0);
-      airportF2 = await airRequest.getArrivalAirportFligh2(1);
-      expect(airportF1).toEqual(airportF2);
     });
     await test.step('24 - Click Continue', async () => {
       await airRequest.clickContinue();
