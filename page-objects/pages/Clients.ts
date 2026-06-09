@@ -515,7 +515,7 @@ export class Clients {
     await this.page.getByRole('textbox', { name: 'Search' }).fill(client);
     await this.page.getByRole('textbox', { name: 'Search' }).press('Enter');
     const clientResult = this.page
-      .getByRole('link', { name: new RegExp(`^${this.escapeRegExp(client)}(?:\\s|\\()`) })
+      .getByRole('link', { name: new RegExp(`^${this.escapeRegExp(client)}(?:$|\\s|\\()`) })
       .first();
     await clientResult.waitFor({ state: 'visible' });
     await clientResult.click();

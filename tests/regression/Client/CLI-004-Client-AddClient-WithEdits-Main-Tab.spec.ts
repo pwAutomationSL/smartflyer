@@ -35,11 +35,9 @@ const normalizePhoneNumber = (str: string | null | undefined): string => {
   return str.replace(/\D/g, '');
 };
 
-test.use({
-  launchOptions: { slowMo: 800 },
-});
-
 test.describe('CLI-004 - Client - Add Client - Edits by section and Finally check Logs', () => {
+  test.describe.configure({ mode: 'serial' });
+
   test('Login at Society (env) as an Admin and add a client ', async ({
     loginPage,
     username,
