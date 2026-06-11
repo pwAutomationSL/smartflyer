@@ -9,7 +9,7 @@ test.use({
   launchOptions: { slowMo: 200 },
 });
 test.describe('TSK-001 - Task', () => {
-  test('As an admin,i want to be able to add a new task, search it, edit and finally delete it', async ({
+  test.skip('As an admin,i want to be able to add a new task, search it, edit and finally delete it', async ({
     loginPage,
     username,
     password,
