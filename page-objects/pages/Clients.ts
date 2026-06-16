@@ -528,10 +528,15 @@ export class Clients {
   }
 
   public async deleteAddedTraveler(traveler: string) {
-    const travelerCard = this.page.getByRole('button', { name: new RegExp(traveler) }).first();
+    const travelerCard = this.page
+      .locator('[id^="related-traveler-"]')
+      .filter({ has: this.page.getByRole('link', { name: new RegExp(traveler) }) })
+      .first();
     await travelerCard.waitFor({ state: 'visible' });
-    const travelerRow = travelerCard.locator('xpath=..');
-    const deleteButton = travelerRow.getByRole('button', { name: 'Delete Passenger' });
+    const deleteButton = travelerCard.getByRole('button', {
+      name: 'Delete Passenger',
+      exact: true,
+    });
     await deleteButton.scrollIntoViewIfNeeded();
     await deleteButton.waitFor({ state: 'visible' });
     await deleteButton.click();

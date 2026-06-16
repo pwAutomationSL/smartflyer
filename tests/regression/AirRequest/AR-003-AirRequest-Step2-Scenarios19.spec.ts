@@ -89,7 +89,7 @@ test.describe('AR-003 - Air Request - Step #19 ', () => {
             .locator('div')
             .filter({ hasText: /^Male$/ })
             .nth(1),
-        ).toBeVisible;
+        ).toBeVisible();
         await expect(page.locator(airRequest.DOB_DAY(2))).toHaveValue(DAY);
         await expect(page.locator(airRequest.DOB_YEAR(2))).toHaveValue(YEAR);
         await expect(page.locator(airRequest.DELETE_TRAVELER_BUTTON)).toBeVisible();

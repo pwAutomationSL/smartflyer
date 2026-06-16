@@ -43,24 +43,14 @@ export class PartnersHotel {
     const FIELD_PATH = 'sales_contact';
     await this.fillContacts(FIELD_PATH);
     await this.advisorEmailAndBased(FIELD_PATH);
-    await this.page.waitForTimeout(200);
-    await this.page
-      .locator(
-        `//h4[contains(.,'Sales Contact')]/following-sibling::div[1]//button[contains(.,'Choose From Gallery')]`,
-      )
-      .click();
+    await this.clickContactGalleryButton('Sales Contact');
     await this.uploadPhoto();
   }
   public async fillKeyAccountContact() {
     const FIELD_PATH = 'national_or_key_account_contact';
     await this.fillContacts(FIELD_PATH);
     await this.advisorEmailAndBased(FIELD_PATH);
-    await this.page.waitForTimeout(400);
-    await this.page
-      .locator(
-        `//h4[contains(.,'Key Account Contact')]/following-sibling::div[1]//button[contains(.,'Choose From Gallery')]`,
-      )
-      .click();
+    await this.clickContactGalleryButton('National or Key Account Contact');
     await this.uploadPhoto();
   }
   public async fillGeneralManagerContact() {
@@ -74,11 +64,7 @@ export class PartnersHotel {
     const FIELD_PATH = 'reservation_contact';
     await this.fillContacts(FIELD_PATH);
     await this.advisorEmailAndBased(FIELD_PATH);
-    await this.page
-      .locator(
-        `//h4[contains(.,'Reservations Contact')]/following-sibling::div[1]//button[contains(.,'Choose From Gallery')]`,
-      )
-      .click();
+    await this.clickContactGalleryButton('Reservations Contact');
     await this.uploadPhoto();
   }
   public async fillGroupContact() {
@@ -99,15 +85,12 @@ export class PartnersHotel {
     const FIELD_PATH = 'commission_contact';
     await this.fillContacts(FIELD_PATH);
     await this.advisorEmailAndBased(FIELD_PATH);
-    await this.page
-      .locator(
-        `//h4[contains(.,'Commissions Contact')]/following-sibling::div[1]//button[contains(.,'Choose From Gallery')]`,
-      )
-      .click();
+    await this.clickContactGalleryButton('Commissions Contact');
     await this.uploadPhoto();
   }
   public async fillAdditionalContact() {
     const FIELD_PATH = 'additional_contact';
+    await this.addAdditionalContact();
     await this.fillContacts(FIELD_PATH, '[0]');
     await this.advisorEmailAndBasedGC(FIELD_PATH);
     await this.page
@@ -122,6 +105,7 @@ export class PartnersHotel {
   }
   public async fillAdditionalContactCruise() {
     const FIELD_PATH = 'additional_contact';
+    await this.addAdditionalContact();
     await this.fillContacts(FIELD_PATH, '[0]');
     await this.page
       .locator(
@@ -160,6 +144,21 @@ export class PartnersHotel {
     await this.page
       .locator(`input[name="contacts[${field}]${index}[email]"]`)
       .fill(`${field}_test@test.com`);
+  }
+  private async clickContactGalleryButton(contactTitle: string) {
+    const contactCard = this.page
+      .locator(
+        `//h5[normalize-space(.)='${contactTitle}']/ancestor::div[.//button[contains(.,'Choose From Gallery')]][1]`,
+      )
+      .first();
+    await contactCard.getByRole('button', { name: 'Choose From Gallery' }).click();
+  }
+  private async addAdditionalContact() {
+    await this.page
+      .locator(
+        `//h4[normalize-space(.)='Additional Contacts']/following::button[normalize-space(.)='ADD MORE'][1]`,
+      )
+      .click();
   }
   private async advisorEmailAndBased(field: string) {
     await this.page.locator(`[id="contacts[${field}][include_smartflyer_emails][0]"]`).check();

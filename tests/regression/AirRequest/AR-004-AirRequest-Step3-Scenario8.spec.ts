@@ -99,19 +99,18 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await airRequest.selectOneWayTripPassenger2();
     });
 
-    await test.step('12 -Select Departure airport for Primary passenger', async () => {
-      await airRequest.selectDepartureAirportFlight2(DEPARTURE, DEPARTURESHORT);
+    await test.step('12 -Select Arrival airport for Additional passenger', async () => {
+      await airRequest.selectArrivalAirportFlight1Passenger2(ARRIVAL, ARRIVAL_SHORT);
     });
-
-    await test.step('13 -Select Arrival airport for Primary passenger', async () => {
-      await airRequest.selectArrivalAirportFlight2(ARRIVAL, ARRIVAL_SHORT);
+    await test.step('13 -Select Departure airport for Additional passenger', async () => {
+      await airRequest.selectDepartureAirportFlight1Passenger2(DEPARTURE, DEPARTURE);
     });
-    await test.step('14 - Select the Travel Date for Primary passenger', async () => {
-      await airRequest.selectTravelDateFlight2();
+    await test.step('14 - Select the Travel Date for Additional passenger', async () => {
+      await airRequest.selectTravelDateFlight1Passenger2();
       await expect(page.locator(airRequest.PREVIOUS_MONTH)).toBeDisabled();
       await airRequest.confirmDates();
-      await airRequest.selectDepartureTimeFlight2('Morning');
-      await airRequest.selectCabinClass('Economy');
+      await airRequest.selectDepartureTimeByIndex('Morning', 0);
+      await airRequest.selectCabinClassByIndex('Economy', 0);
     });
     await test.step('17 - Click Continue', async () => {
       await airRequest.clickContinue();

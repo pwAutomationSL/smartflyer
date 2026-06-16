@@ -569,10 +569,11 @@ export class AirRequest {
     await departureInput.evaluate((element) => element.scrollIntoView({ block: 'center' }));
     await departureInput.click();
     await departureInput.clear();
-    await departureInput.fill(airportShort);
-    await this.page.locator(`//div[contains(.,'${airport}')]/../label/span`).first().click();
-    await expect(departureInput).toHaveAttribute('placeholder', airport);
-    await this.clickGeneric();
+    await departureInput.pressSequentially(airportShort, { delay: 100 });
+    await departureInput.press('ArrowDown');
+    await departureInput.press('Enter');
+    await expect(departureInput).toHaveValue(airport);
+    await departureInput.press('Tab');
   }
   public async selectDepartureAirportFlight2Passenger2(airport: string, airportSearch: string) {
     const departureInput = this.page.locator(

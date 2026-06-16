@@ -189,10 +189,11 @@ export class Partners {
   }
   public async fillAdditionalContacts() {
     await this.page.getByRole('textbox', { name: 'Enter POSITION / TITLE' }).fill('Additional');
-    await this.fillContacts('additional_contact', '[1]');
+    await this.fillContacts('additional_contact', '[0]');
     await this.page
-      .locator('[id="additional_contact_div[1]"]')
-      .getByRole('button', { name: 'Choose From Gallery' })
+      .locator(
+        `//h4[contains(.,'Additional Contacts')]/../following-sibling::div[1]//button[contains(.,'Choose From Gallery')]`,
+      )
       .click();
     await this.selectPhoto();
   }
@@ -371,17 +372,19 @@ export class Partners {
     await this.selectPhoto();
   }
   public async articlesMKT() {
-    await this.page.getByRole('textbox', { name: 'Enter article title' }).fill('Test Title');
-    await this.page.getByRole('textbox', { name: 'Enter Link' }).fill('www.test.com');
     await this.page
-      .locator('[id="article_div[1]"]')
-      .getByRole('button', { name: 'Delete' })
+      .locator(
+        `//h4[normalize-space(.)='Articles']/following::button[normalize-space(.)='Add More'][1]`,
+      )
       .click();
-    await this.page.getByRole('textbox', { name: 'Enter article title' }).fill('Test Article');
-    await this.page.getByRole('textbox', { name: 'Enter Link' }).fill('www.test.com');
-    await this.page.getByRole('button', { name: 'Add More', exact: true }).click();
-    await this.page.locator('input[name="marketing[article][3][title]"]').fill('Test 2');
-    await this.page.locator('#property_Search').fill('www.test.com');
+    await this.page
+      .locator(`input[name^="marketing[article]"][name$="[title]"]`)
+      .last()
+      .fill('Test Article');
+    await this.page
+      .locator(`input[name^="marketing[article]"][name$="[link]"]`)
+      .last()
+      .fill('www.test.com');
   }
   public async trainingMKT() {
     await this.page.getByRole('textbox', { name: 'Enter Training Title' }).fill('Training Test');
