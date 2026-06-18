@@ -3,7 +3,7 @@ import { USERS } from '../../../fixtures/users';
 import { uniqueId } from '../../../page-objects';
 
 const env = process.env.ENVIRONMENT ?? 'qa2';
-const HOST = `https://crm.${env}.smartflyer.com/`;
+const HOST = `https://app.${env}.smartflyer.com/`;
 const unique = uniqueId();
 const LAST_NAME = `LastName` + unique;
 const EMAIL = `${LAST_NAME}@smart.com`;

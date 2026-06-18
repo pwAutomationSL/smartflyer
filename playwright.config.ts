@@ -30,7 +30,7 @@ export default defineConfig<MyOptions>({
   retries: process.env.CI ? 1 : 1,
   reporter: [['allure-playwright']],
   use: {
-    baseURL: 'https://crm.test.smartflyer.com/',
+    baseURL: 'https://app.test.smartflyer.com/',
     trace: 'off',
     timezoneId: 'America/New_York',
     screenshot: 'only-on-failure',

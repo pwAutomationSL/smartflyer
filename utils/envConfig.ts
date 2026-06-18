@@ -9,14 +9,14 @@ export function getEnvConfig(): EnvConfig {
   switch (env) {
     case 'stage':
       return {
-        BASE_URL: 'https://crm.stage.smartflyer.com/',
+        BASE_URL: 'https://app.stage.smartflyer.com/',
         USERNAME: process.env.STAGING_USER ?? '',
         PASSWORD: process.env.STAGING_PASS ?? '',
       };
 
     default:
       return {
-        BASE_URL: `https://crm.${env}.smartflyer.com/`,
+        BASE_URL: `https://app.${env}.smartflyer.com/`,
         USERNAME: process.env.TEST_USER ?? '',
         PASSWORD: process.env.TEST_PASS ?? '',
       };

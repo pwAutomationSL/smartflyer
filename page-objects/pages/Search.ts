@@ -17,18 +17,19 @@ export class SearchPage {
   public readonly PARTNERS_BRAND_FILTER_CHECKBOX = `//span[contains(.,'Brand')]/../../label/input`;
   public readonly SEARCH_RESULT_LINKS = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https')]`;
   public readonly SEARCH_RESULT_MATCHES = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https')]/div/div/div/p/span//mark`;
-  public readonly SEARCH_RESULT_MATCHES_FULL_NAME = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//p)[1]`;
-  public readonly SEARCH_RESULT_MATCHES_A = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//mark)[1]`;
-  public readonly SEARCH_RESULT_MATCHES_SPAN = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//span)[1]`;
-  public readonly SEARCH_RESULT_MATCHES_P = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//p[1])`;
+  private readonly APP_OR_CRM_RESULT_LINK = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://app.') or contains(@href,'https://crm.')]`;
+  public readonly SEARCH_RESULT_MATCHES_FULL_NAME = `(${this.APP_OR_CRM_RESULT_LINK}//p)[1]`;
+  public readonly SEARCH_RESULT_MATCHES_A = `(${this.APP_OR_CRM_RESULT_LINK}//mark)[1]`;
+  public readonly SEARCH_RESULT_MATCHES_SPAN = `(${this.APP_OR_CRM_RESULT_LINK}//span)[1]`;
+  public readonly SEARCH_RESULT_MATCHES_P = `(${this.APP_OR_CRM_RESULT_LINK}//p[1])`;
   public readonly SEARCH_RESULT_IMAGES = `//div[contains(@class,'Layout_content')]//a//img`;
-  public readonly SEARCH_RESULT_MATCHES_A_FIRSTONLY = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//span)[1]`;
+  public readonly SEARCH_RESULT_MATCHES_A_FIRSTONLY = `(${this.APP_OR_CRM_RESULT_LINK}//span)[1]`;
   public readonly SEARCH_RESULT_MATCHES_DIRECTORY_FIRSTONLY = `(//div[contains(@class,'Layout_content')]//div//div/p/span)[1]`;
   public readonly HEADER = `//h1`;
   public readonly NO_RESULTS = `//h3`;
   public readonly SUBHEADER = `//div[contains(@class,'toolkit')]//h4`;
-  public readonly SEARCH_RESULT_MATCHES_DETAIL = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//p)[2]`;
-  public readonly SEARCH_RESULT_MATCHES_DETAIL_LAST_PART = `(//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https://crm.')]//p)[3]`;
+  public readonly SEARCH_RESULT_MATCHES_DETAIL = `(${this.APP_OR_CRM_RESULT_LINK}//p)[2]`;
+  public readonly SEARCH_RESULT_MATCHES_DETAIL_LAST_PART = `(${this.APP_OR_CRM_RESULT_LINK}//p)[3]`;
   public readonly SPINNER_LOADER = `//div[contains(@class,'Spinner_load')]`;
   public async clickClientFilter() {
     await this.page.locator(this.CLIENT_FILTER_BUTTON).click();
