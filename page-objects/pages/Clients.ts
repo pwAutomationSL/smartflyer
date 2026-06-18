@@ -336,7 +336,7 @@ export class Clients {
     await this.page.getByRole('button', { name: 'Save' }).click();
   }
   public async startFromScratch() {
-    await this.page.getByRole('button', { name: 'Start from scratch' }).click();
+    await this.page.getByRole('button', { name: /Start from scratch/i }).first().click();
   }
   public async mainInformationQuickAdd(LAST_NAME: string, email: string) {
     await this.page.locator(this.QUICK_ADD_FORM).waitFor();

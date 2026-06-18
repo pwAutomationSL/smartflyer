@@ -241,17 +241,16 @@ export class AirRequest {
     await this.page.locator(this.DRAFTS_ELEMENTS_TIME_ONLY).first().click();
   }
   public async clickAirRequest() {
-    const airRequestButton = this.page.getByRole('button', { name: 'Air Request' }).first();
     const popUpHeader = this.page.locator(this.POP_UP_HEADER);
+    const airRequestButton = () => this.page.getByRole('button', { name: 'Air Request' }).first();
 
-    await airRequestButton.waitFor({ state: 'visible' });
-    await airRequestButton.scrollIntoViewIfNeeded();
-    await airRequestButton.click();
+    await airRequestButton().waitFor({ state: 'visible' });
+    await airRequestButton().click();
 
     try {
       await popUpHeader.waitFor({ state: 'visible', timeout: 5000 });
     } catch {
-      await airRequestButton.click();
+      await airRequestButton().click();
       await popUpHeader.waitFor({ state: 'visible' });
     }
   }
@@ -427,6 +426,11 @@ export class AirRequest {
   public async addNewTraveler() {
     await this.page.locator(this.ADD_NEW_TRAVELER).click();
   }
+  public async submitNewTraveler() {
+    const dialog = this.page.locator(this.POP_UP_DIALOG);
+    await dialog.getByRole('button', { name: 'Add New Traveler' }).click();
+    await expect(dialog).toBeHidden({ timeout: 20000 });
+  }
   public async goBackToTheList() {
     await this.page.locator(this.GO_BACK_TO_THE_LIST).click();
   }
@@ -566,26 +570,30 @@ export class AirRequest {
     const departureInput = this.page.locator(
       'input[name="passengerTrips.1.flights.0.departure"]',
     );
+    const airportOption = this.page.locator(`//div[contains(.,'${airport}')]/../label/span`).first();
+
     await departureInput.evaluate((element) => element.scrollIntoView({ block: 'center' }));
     await departureInput.click();
     await departureInput.clear();
     await departureInput.pressSequentially(airportShort, { delay: 100 });
-    await departureInput.press('ArrowDown');
-    await departureInput.press('Enter');
-    await expect(departureInput).toHaveValue(airport);
+    await airportOption.waitFor({ state: 'visible' });
+    await airportOption.click();
+    await expect(departureInput).toHaveAttribute('placeholder', airport);
     await departureInput.press('Tab');
   }
   public async selectDepartureAirportFlight2Passenger2(airport: string, airportSearch: string) {
     const departureInput = this.page.locator(
       'input[name="passengerTrips.1.flights.1.departure"]',
     );
+    const airportOption = this.page.locator(`//div[contains(.,'${airport}')]/../label/span`).first();
+
     await departureInput.evaluate((element) => element.scrollIntoView({ block: 'center' }));
     await departureInput.click();
     await departureInput.clear();
     await departureInput.pressSequentially(airportSearch, { delay: 100 });
-    await departureInput.press('ArrowDown');
-    await departureInput.press('Enter');
-    await expect(departureInput).toHaveValue(airport);
+    await airportOption.waitFor({ state: 'visible' });
+    await airportOption.click();
+    await expect(departureInput).toHaveAttribute('placeholder', airport);
     await departureInput.press('Tab');
   }
   public async selectDepartureAirport2Letters(airportShort: string) {

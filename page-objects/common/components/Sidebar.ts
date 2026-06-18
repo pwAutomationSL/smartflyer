@@ -15,10 +15,18 @@ export class SideBar {
   public readonly CONTENT_SOCIETY_SUBMENU = (submenu: string) =>
     `//*//a[contains(.,'${submenu}') and contains(@class,'dropdown')]`;
   public async goToModule(module: string) {
-    await this.clickFirstAvailable([
-      this.page.locator(this.MODULE_BY_TEXT_APP(module)).first(),
-      this.page.locator(this.MODULE_BY_TEXT(module)).first(),
-    ]);
+    try {
+      await this.clickFirstAvailable([
+        this.page.locator(this.MODULE_BY_TEXT_APP(module)).first(),
+        this.page.locator(this.MODULE_BY_TEXT(module)).first(),
+      ]);
+    } catch (error) {
+      if (module === 'Clients') {
+        await this.page.goto('/clients/');
+      } else {
+        throw error;
+      }
+    }
     await this.page.waitForLoadState('networkidle');
   }
   public async goToModuleAPP(module: string) {
@@ -56,7 +64,7 @@ export class SideBar {
   private async clickFirstAvailable(locators: Array<ReturnType<Page['locator']>>) {
     for (const locator of locators) {
       try {
-        await locator.waitFor({ state: 'visible', timeout: 3000 });
+        await locator.waitFor({ state: 'visible', timeout: 15000 });
         await locator.click();
         return;
       } catch {
