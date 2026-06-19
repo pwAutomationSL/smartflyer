@@ -330,7 +330,11 @@ export class Clients {
     await this.page.locator(this.QUICK_ADD).click({ force: true });
   }
   public async saveQuickAdd() {
-    await this.page.locator(this.QUICK_ADD_SAVE).click();
+    const saveButton = this.page.locator(this.QUICK_ADD_SAVE);
+    await saveButton.waitFor({ state: 'visible' });
+    await saveButton.waitFor({ state: 'attached' });
+    await saveButton.click();
+    await this.page.locator(this.QUICK_ADD_FORM).waitFor({ state: 'hidden', timeout: 25000 });
   }
   public async oldSaveQuickAdd() {
     await this.page.getByRole('button', { name: 'Save' }).click();
@@ -525,6 +529,14 @@ export class Clients {
     await this.page.getByRole('textbox', { name: 'Search' }).fill(client);
     await this.page.getByRole('textbox', { name: 'Search' }).press('Enter');
     await this.page.waitForTimeout(1500);
+  }
+  public async openClientFromSearch(client: string) {
+    await this.searchClientByName(client);
+    const clientResult = this.page
+      .getByRole('link', { name: new RegExp(this.escapeRegExp(client)) })
+      .first();
+    await clientResult.waitFor({ state: 'visible', timeout: 15000 });
+    await clientResult.click();
   }
 
   public async deleteAddedTraveler(traveler: string) {

@@ -37,6 +37,10 @@ const normalizePhoneNumber = (str: string | null | undefined): string => {
 
 test.describe('CLI-004 - Client - Add Client - Edits by section and Finally check Logs', () => {
   test.describe.configure({ mode: 'serial' });
+  test.fixme(
+    true,
+    'Blocked by API 500 on POST /api/clients/touch: missing uuid column while creating a draft client.',
+  );
 
   test('Login at Society (env) as an Admin and add a client ', async ({
     loginPage,
