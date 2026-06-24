@@ -1,6 +1,7 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { USERS } from '../../../fixtures/users';
 import { uniqueId } from '../../../page-objects';
+import { importPrimaryClient } from '../../../utils/importPrimaryClient';
 
 const unique = uniqueId();
 const LAST_NAME = `ClientTasks${unique}`;
@@ -23,18 +24,17 @@ test.describe.serial('CLI-010 - Client - Client Tasks', () => {
     page,
     sidebar,
     clients,
+    request,
   }) => {
     await test.step('1 - Login as Admin, create a client, and open the client profile', async () => {
+      await importPrimaryClient(request, USERS.ADMIN_MAIN, LAST_NAME, EMAIL);
       await loginPage.login({
         username: USERS.ADMIN_MAIN.username,
         password: USERS.ADMIN_MAIN.password,
       });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 25000 });
       await sidebar.goToModule('Clients');
-      await page.waitForLoadState('networkidle');
-      await clients.quickAddNew();
-      await clients.mainInformationQuickAdd(LAST_NAME, EMAIL);
-      await clients.saveQuickAdd();
+      await clients.openClientFromSearch(`FirstName ${LAST_NAME}`);
       await expect(page.locator(clients.HEADER).first()).toContainText(LAST_NAME, {
         timeout: 25000,
       });

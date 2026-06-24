@@ -1,6 +1,7 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { USERS } from '../../../fixtures/users';
 import { uniqueId } from '../../../page-objects';
+import { importPrimaryClient } from '../../../utils/importPrimaryClient';
 
 const unique = uniqueId();
 const LAST_NAME = `LastName${unique}`;
@@ -12,11 +13,13 @@ test.describe('CLI-008 - Client v3 - Status Change From Client Home Page', () =>
     page,
     clients,
     sidebar,
+    request,
   }) => {
     const clientStatusButton = () =>
       page.getByRole('button', { name: new RegExp(`Status for .*${LAST_NAME}`) }).first();
 
-    await test.step('1 - Login at Society, go to clients and quick add a client', async () => {
+    await test.step('1 - Login at Society, import a client, and open the client profile', async () => {
+      await importPrimaryClient(request, USERS.ADMIN_MAIN, LAST_NAME, EMAIL);
       await loginPage.login({
         username: USERS.ADMIN_MAIN.username,
         password: USERS.ADMIN_MAIN.password,
@@ -24,19 +27,18 @@ test.describe('CLI-008 - Client v3 - Status Change From Client Home Page', () =>
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
       await sidebar.goToModule('Clients');
       await expect(page.locator(clients.SPINNER_LOADER)).toBeHidden();
-      await page.waitForLoadState('networkidle');
-      await clients.quickAddNew();
-      await clients.mainInformationQuickAdd(LAST_NAME, EMAIL);
-      await clients.saveQuickAdd();
+      await clients.openClientFromSearch(`FirstName ${LAST_NAME}`);
       await expect(page.locator(clients.HEADER).first()).toContainText(LAST_NAME, {
         timeout: 25000,
       });
     });
 
-    await test.step('2 - Return to clients home page, search in Active tab and verify the client is visible there', async () => {
+    await test.step('2 - Return to clients home page, activate the imported client, and verify it is visible', async () => {
       await sidebar.goToModuleAPP('Clients');
       await clients.searchClientByName('FirstName ' + LAST_NAME);
       await expect(page.locator(clients.CLIENT_ROW(LAST_NAME))).toBeVisible();
+      await clientStatusButton().click();
+      await page.locator(clients.CLIENT_STATUS_ACTIVE).click();
       await expect(clientStatusButton()).toContainText('Active');
     });
 

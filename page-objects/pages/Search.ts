@@ -35,9 +35,19 @@ export class SearchPage {
     await this.page.locator(this.CLIENT_FILTER_BUTTON).click();
   }
   public async textToSearch(text: string) {
-    await this.page.locator(this.SEARCH_INPUT).clear();
+    const searchResponse = this.page.waitForResponse(
+      (response) => {
+        if (response.request().method() !== 'GET' || !response.url().includes('/api/search?')) {
+          return false;
+        }
+
+        return new URL(response.url()).searchParams.get('query') === text;
+      },
+      { timeout: 15000 },
+    );
+
     await this.page.locator(this.SEARCH_INPUT).fill(text);
-    await this.page.waitForTimeout(1000);
+    await searchResponse;
   }
   public async clickFirstImage() {
     await this.page.locator(this.SEARCH_RESULT_IMAGES).first().click();

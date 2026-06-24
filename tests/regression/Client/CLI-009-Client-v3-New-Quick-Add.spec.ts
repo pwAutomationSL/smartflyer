@@ -1,8 +1,9 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { USERS } from '../../../fixtures/users';
 import { uniqueId } from '../../../page-objects';
+import { importPrimaryClient } from '../../../utils/importPrimaryClient';
 
-const env = process.env.ENVIRONMENT ?? 'qa2';
+const env = process.env.ENVIRONMENT ?? 'stage';
 const HOST = `https://app.${env}.smartflyer.com/`;
 const unique = uniqueId();
 const LAST_NAME = `LastName` + unique;
@@ -13,8 +14,10 @@ test.describe('CLI-009 - Client v3 - New Quick Add', () => {
     page,
     clients,
     sidebar,
+    request,
   }) => {
-    await test.step('1 - Login at Society , go to clients and quick add', async () => {
+    await test.step('1 - Login at Society, import a client, and open its profile', async () => {
+      await importPrimaryClient(request, USERS.ADMIN_MAIN, LAST_NAME, EMAIL);
       await loginPage.login({
         username: USERS.ADMIN_MAIN.username,
         password: USERS.ADMIN_MAIN.password,
@@ -25,10 +28,7 @@ test.describe('CLI-009 - Client v3 - New Quick Add', () => {
       await expect(page.locator(clients.SPINNER_LOADER)).toBeHidden();
       await expect(page.locator(clients.HEADER)).toBeEnabled();
       await expect(page.locator(clients.ADD_CLIENT)).toBeVisible({ timeout: 15000 });
-      await page.waitForLoadState('networkidle');
-      await clients.quickAddNew();
-      await clients.mainInformationQuickAdd(LAST_NAME, EMAIL);
-      await clients.saveQuickAdd();
+      await clients.openClientFromSearch(`FirstName ${LAST_NAME}`);
       await expect(page.locator(clients.HEADER).first()).toContainText(LAST_NAME, {
         timeout: 25000,
       });

@@ -13,7 +13,7 @@ export class SideBar {
   public readonly CONTENT_SOCIETY_MENU = `//*//p[contains(.,'-society crm')]`;
   public readonly SEARCH_APP = `//a[@href="/search/" or .//p[normalize-space(.)="Search"]]`;
   public readonly CONTENT_SOCIETY_SUBMENU = (submenu: string) =>
-    `//*//a[contains(.,'${submenu}') and contains(@class,'dropdown')]`;
+    `//a[normalize-space(.)='${submenu}']`;
   public async goToModule(module: string) {
     try {
       await this.clickFirstAvailable([

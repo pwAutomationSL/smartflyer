@@ -211,9 +211,8 @@ export class AirRequest {
     await this.page.locator(`(//div[contains(@id,'listbox')]/div/p)[2]`).click();
   }
   public async startFromScrath() {
-    await this.page.getByRole('button', { name: 'Start from scratch' }).click({ force: true });
+    await this.page.getByRole('button', { name: 'Start from scratch' }).click();
     await this.page.waitForLoadState('networkidle');
-    await this.page.waitForTimeout(800);
   }
   public async startFromScrathAndGetUserData() {
     const waitForCreate = this.page.waitForResponse(
