@@ -1,6 +1,5 @@
 ﻿import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 
-import { convertToUiDateFormat } from '../../../utils/helpers';
 const CLIENT_NAME = 'Candice & Ben';
 test.describe('AR-002 - Air Request - Step 1', () => {
   test('Scenario 5 - Delete draft', async ({
@@ -31,12 +30,12 @@ test.describe('AR-002 - Air Request - Step 1', () => {
       const draftCreatedAt = new Date();
       await airRequest.clickCancel();
       await expect(page.locator(airRequest.HEADER).first()).toBeVisible();
-      const datePart = draftCreatedAt.toLocaleDateString('en-US', {
-        month: '2-digit',
-        day: '2-digit',
+      const uiDate = draftCreatedAt.toLocaleDateString('en-US', {
+        timeZone: 'America/New_York',
+        month: 'short',
+        day: 'numeric',
         year: 'numeric',
       });
-      const uiDate = convertToUiDateFormat(datePart);
       await airRequest.clickAirRequest();
       await airRequest.startFromDraft();
       const firstDraftTime = await airRequest.returnFirstDraftTime();

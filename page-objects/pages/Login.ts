@@ -25,12 +25,40 @@ export class LoginPage {
     host = getEnvConfig().BASE_URL,
     waitForSuccess = true,
   }: LoginOptions): Promise<void> {
-    await this.page.goto(host);
-    await this.page.locator(this.EMAIL_INPUT).fill(username);
-    await this.page.locator(this.PASSWORD_INPUT).fill(password);
-    await this.page.locator(this.LOGIN_BUTTON).click({ noWaitAfter: true });
-    if (waitForSuccess) {
-      await this.page.locator(this.EMAIL_INPUT).waitFor({ state: 'hidden', timeout: 15000 });
+    const authenticatedShell = this.page
+      .locator(this.USER_DROPDOWN_BUTTON)
+      .or(
+        this.page
+          .locator(
+            `//ul//*[self::a or self::button][.//p[normalize-space(.)="Home"] or normalize-space(.)="Home"]`,
+          )
+          .first(),
+      );
+    const maxAttempts = waitForSuccess ? 2 : 1;
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      await this.page.goto(host);
+      await this.page.locator(this.EMAIL_INPUT).fill(username);
+      await this.page.locator(this.PASSWORD_INPUT).fill(password);
+      await this.page.locator(this.LOGIN_BUTTON).click({ noWaitAfter: true });
+
+      if (!waitForSuccess) {
+        return;
+      }
+
+      try {
+        await authenticatedShell.waitFor({ state: 'visible', timeout: 15000 });
+        return;
+      } catch (error) {
+        const returnedToLogin = await this.page
+          .locator(this.EMAIL_INPUT)
+          .isVisible()
+          .catch(() => false);
+
+        if (!returnedToLogin || attempt === maxAttempts) {
+          throw error;
+        }
+      }
     }
   }
   async logout() {
