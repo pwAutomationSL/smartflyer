@@ -709,6 +709,8 @@ export class Clients {
     await this.page.locator(this.TASK_EDIT_BUTTON(name)).click();
   }
   public async clickTaskDeleteButton(name: string) {
+    const taskRow = this.page.locator(this.TASK_ROW(name));
+    await taskRow.waitFor({ state: 'visible', timeout: 25000 });
     await this.page.locator(this.TASK_DELETE_BUTTON(name)).click();
   }
   public async confirmTaskDelete() {
