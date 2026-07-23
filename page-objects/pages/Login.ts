@@ -17,8 +17,8 @@ export class LoginPage {
   public readonly LOGIN_BUTTON = `//input[@type="submit"]`;
   public readonly ERROR_MESSAGE = `(//form//../div)[1]`;
   public readonly HEADER = `//h1`;
-  public readonly USER_DROPDOWN_BUTTON = `//button[@id="dropdownMenuButton1"] | //p[contains(normalize-space(.),'@')]/../..`;
-  public readonly LOGOUT = `//a[@href="/logout"] | //button[normalize-space(.)='Logout']`;
+  public readonly USER_DROPDOWN_BUTTON = `//button[@id="dropdownMenuButton1"]`;
+  public readonly LOGOUT = `//a[@href="/logout"]`;
   async login({
     username,
     password,
@@ -34,8 +34,17 @@ export class LoginPage {
     }
   }
   async logout() {
-    await this.page.locator(this.USER_DROPDOWN_BUTTON).click();
-    await this.page.locator(this.LOGOUT).click();
+    const legacyProfileMenu = this.page.locator(this.USER_DROPDOWN_BUTTON);
+    if (await legacyProfileMenu.isVisible().catch(() => false)) {
+      await legacyProfileMenu.hover();
+      await this.page.locator(this.LOGOUT).waitFor({ state: 'visible' });
+      await this.page.locator(this.LOGOUT).click();
+      return;
+    }
+
+    const appProfileMenu = this.page.locator(`//p[contains(normalize-space(.),'@')]/../..`);
+    await appProfileMenu.click();
+    await this.page.getByRole('button', { name: 'Logout' }).click();
   }
 }
 export const loginPage = (page: Page) => new LoginPage({ page });

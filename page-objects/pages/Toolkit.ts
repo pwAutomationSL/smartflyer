@@ -1,4 +1,5 @@
 import { Page } from "@playwright/test";
+import * as path from "path";
 
 export class Toolkit {
   public readonly page: Page;
@@ -6,7 +7,6 @@ export class Toolkit {
     this.page = page;
   }
 
-  public readonly INPUT_FILE = `//input[@id="file"]`;
   public readonly UPLOAD_FILES = `//button[contains(.,'Upload Files')]`;
   public readonly CONFIRM_UPLOAD_FILES = `//dialog//button[contains(.,'Upload Files')]`;
   public readonly CLOSE_UPLOAD = `//button[contains(.,'Close')]`;
@@ -19,17 +19,15 @@ export class Toolkit {
   public readonly CLOSE_POPUP = `//header/button`;
   public readonly LOAD_SPINNER = `//*[contains(@class,'animate-spin')]`;
   public readonly SUCCESS_POPUP = `//h2`;
-  public readonly EDIT_TOOLKIT = `//table[@id="toolkitTable"]//tbody//td[5]/a[1]`;
-  public readonly DELETE_TOOLKIT = `//table[@id="toolkitTable"]//tbody//td[5]/a[2]`;
   public readonly CONFIRM_DELETE = `//button[contains(.,'Yes, delete it!')]`;
-  public readonly SHORT_DESCRIPTION = `//label[text()='Short Description']/following-sibling::textarea`;
   public readonly COLUMNS_BY_INDEX = (index: number) =>
     `//table[@id="toolkitTable"]//tbody/tr[1]/td[${index}]`;
 
   public async uploadFile() {
-    await this.page
-      .locator(this.INPUT_FILE)
-      .setInputFiles("./data/images/testImage.jpg");
+    const fileChooserPromise = this.page.waitForEvent("filechooser");
+    await this.page.getByRole("button", { name: "Choose File" }).click();
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles(path.resolve("data/images/testImage.jpg"));
   }
   public async closeUpload() {
     await this.page.locator(this.CLOSE_UPLOAD).last().click();
@@ -60,7 +58,9 @@ export class Toolkit {
     await this.page.getByRole("radio", { name: "Internal" }).click();
   }
   public async enterShortDescription(description: string) {
-    await this.page.locator(this.SHORT_DESCRIPTION).fill(description);
+    await this.page
+      .getByRole("textbox", { name: "Enter highlight here..." })
+      .fill(description);
   }
   public async enterDescription(description: string) {
     await this.page
@@ -84,20 +84,25 @@ export class Toolkit {
     await this.page
       .locator(`//label[text()='Search:']/input`)
       .fill(toolkitName);
-    await this.page.waitForTimeout(500);
   }
-  public async editSearchedToolkit() {
-    await this.page.locator(this.EDIT_TOOLKIT).click();
+  public async editSearchedToolkit(toolkitName: string) {
+    await this.toolkitRow(toolkitName).locator("td:nth-child(6) a").first().click();
   }
   public async changeURLType() {
     await this.page.getByRole("radio", { name: "External" }).click();
   }
 
-  public async deleteSearchedToolkit() {
-    await this.page.locator(this.DELETE_TOOLKIT).click();
+  public async deleteSearchedToolkit(toolkitName: string) {
+    await this.toolkitRow(toolkitName).locator("td:nth-child(6) a").nth(1).click();
   }
   public async confirmDeleteToolkit() {
     await this.page.locator(this.CONFIRM_DELETE).click();
+  }
+
+  private toolkitRow(toolkitName: string) {
+    return this.page
+      .locator('#toolkitTable tbody tr')
+      .filter({ has: this.page.locator('td:nth-child(2)', { hasText: toolkitName }) });
   }
 }
 export const toolkit = (page: Page) => new Toolkit({ page });

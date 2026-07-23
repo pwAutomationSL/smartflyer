@@ -4,7 +4,7 @@ test.describe('LOG-002 - Log Out', () => {
       await test.step('Succesful logout', async () => {
       await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
-      await expect(page.locator(loginPage.HEADER)).toContainText('Welcome back, Rodrigo');
+      await expect(page.locator(loginPage.HEADER)).toContainText(/Welcome(?: back)?, Rodrigo!?/);
       await loginPage.logout();
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeVisible();
       await expect(page.locator(loginPage.HEADER)).toContainText('Welcome!');

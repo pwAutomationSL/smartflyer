@@ -24,6 +24,8 @@ export class AirRequest {
   public readonly HEADER_H2 = `//h2`;
   public readonly HEADER_H4 = `//h4`;
   public readonly USERNAME_HEADER = `//div[contains(@class,"flex items-center gap-6")]//p[2]`;
+  public readonly PROFILE_EMAIL = `(//p[contains(normalize-space(.),'@')])[1]`;
+  public readonly PROFILE_NAME = `${this.PROFILE_EMAIL}/preceding-sibling::p[1]`;
   public readonly DELETE_DRAFTS = `//div[@id="modal-content"]/div/div/div[2]/div/button`;
   public readonly CONFIRM_DELETE_DRAFTS = `//dialog//button[contains(.,'Delete Draft')]`;
   public readonly SEARCH_DRAFT = `//dialog//input[@name="search"]`;
@@ -201,8 +203,19 @@ export class AirRequest {
     return { agent, phone, email };
   }
   public async getLoggedUsername() {
+    const profileEmail = this.page.locator(this.PROFILE_EMAIL);
+
+    if (await profileEmail.isVisible().catch(() => false)) {
+      const name = (await this.page.locator(this.PROFILE_NAME).innerText()).trim();
+      const email = (await profileEmail.innerText()).trim();
+
+      if (name && email) {
+        return `${name} ${email}`;
+      }
+    }
+
     const username = await this.page.locator(this.USERNAME_HEADER).textContent();
-    return username ? username : 'not found';
+    return username?.trim() || 'not found';
   }
   public async selectAgent() {
     await this.page.locator(`(//p[contains(.,'Agent name')]//..//div[@data-value])[1]`).click();

@@ -17,7 +17,9 @@ type LoginResponse = {
 
 type IncludeBasicInformation = {
   toggle: boolean;
-  full_name: boolean;
+  first_name: boolean;
+  middle_name: boolean;
+  last_name: boolean;
   primary_email: boolean;
   date_of_birth: boolean;
   phone: boolean;
@@ -153,7 +155,9 @@ const createGoldenPayload = (): ExportSettingsPayload => ({
   type: 'PDF',
   include_basic_information: {
     toggle: true,
-    full_name: true,
+    first_name: true,
+    middle_name: true,
+    last_name: true,
     primary_email: true,
     date_of_birth: true,
     phone: true,
@@ -228,12 +232,14 @@ test.describe.serial('API-007 - Client Export Data', () => {
     const payload = createGoldenPayload();
 
     const postResponse = await postSettings(request, token, createRequestBody(payload));
-    expect(postResponse.status).toBe(200);
+    expect(postResponse.status, JSON.stringify(postResponse.body)).toBe(200);
 
     const getResponse = await getSettings(request, token);
     const settings = getDefaultViewSettings(getResponse);
 
-    expect(settings?.include_basic_information.full_name).toBe(true);
+    expect(settings?.include_basic_information.first_name).toBe(true);
+    expect(settings?.include_basic_information.middle_name).toBe(true);
+    expect(settings?.include_basic_information.last_name).toBe(true);
     expect(settings?.include_basic_information.primary_email).toBe(true);
     expect(settings?.include_basic_information.phone).toBe(true);
     expect(settings?.include_basic_information.home_airports).toBe(true);

@@ -55,6 +55,9 @@ export class SearchPage {
   public async clickFirstResult() {
     await this.page.locator(this.SEARCH_RESULT_LINKS).first().click();
   }
+  public resultContaining(text: string) {
+    return this.page.locator(this.APP_OR_CRM_RESULT_LINK).filter({ hasText: text }).first();
+  }
   public async getResultsCount(): Promise<number> {
     return await this.page.locator(this.SEARCH_RESULT_LINKS).count();
   }

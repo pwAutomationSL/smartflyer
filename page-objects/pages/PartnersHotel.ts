@@ -1,4 +1,5 @@
 import { Page, APIResponse } from '@playwright/test';
+import path from 'path';
 import { uniqueId } from '..';
 export class PartnersHotel {
   public readonly page: Page;
@@ -34,71 +35,57 @@ export class PartnersHotel {
     const FIELD_PATH = 'global_contact';
     await this.fillContacts(FIELD_PATH);
     await this.advisorEmailAndBased(FIELD_PATH);
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).first().click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadImage(`contacts[${FIELD_PATH}][headshot]`);
   }
 
   public async fillSalesContact() {
     const FIELD_PATH = 'sales_contact';
     await this.fillContacts(FIELD_PATH);
     await this.advisorEmailAndBased(FIELD_PATH);
-    await this.clickContactGalleryButton('Sales Contact');
-    await this.uploadPhoto();
+    await this.uploadImage(`contacts[${FIELD_PATH}][headshot]`);
   }
   public async fillKeyAccountContact() {
     const FIELD_PATH = 'national_or_key_account_contact';
     await this.fillContacts(FIELD_PATH);
     await this.advisorEmailAndBased(FIELD_PATH);
-    await this.clickContactGalleryButton('National or Key Account Contact');
-    await this.uploadPhoto();
+    await this.uploadImage(`contacts[${FIELD_PATH}][headshot]`);
   }
   public async fillGeneralManagerContact() {
     const FIELD_PATH = 'general_manager';
     await this.fillContacts(FIELD_PATH);
     await this.advisorEmailAndBased(FIELD_PATH);
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).nth(1).click();
-    await this.uploadPhoto();
+    await this.uploadImage(`contacts[${FIELD_PATH}][headshot]`);
   }
   public async fillReservationsContact() {
     const FIELD_PATH = 'reservation_contact';
     await this.fillContacts(FIELD_PATH);
     await this.advisorEmailAndBased(FIELD_PATH);
-    await this.clickContactGalleryButton('Reservations Contact');
-    await this.uploadPhoto();
+    await this.uploadImage(`contacts[${FIELD_PATH}][headshot]`);
   }
   public async fillGroupContact() {
     const FIELD_PATH = 'group_contact';
     await this.fillContacts(FIELD_PATH);
     await this.advisorEmailAndBased(FIELD_PATH);
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).nth(1).click();
-    await this.uploadPhoto();
+    await this.uploadImage(`contacts[${FIELD_PATH}][headshot]`);
   }
   public async fillConciergeContact() {
     const FIELD_PATH = 'concierge_contact';
     await this.fillContacts(FIELD_PATH);
     await this.advisorEmailAndBased(FIELD_PATH);
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).nth(1).click();
-    await this.uploadPhoto();
+    await this.uploadImage(`contacts[${FIELD_PATH}][headshot]`);
   }
   public async fillCommissionContact() {
     const FIELD_PATH = 'commission_contact';
     await this.fillContacts(FIELD_PATH);
     await this.advisorEmailAndBased(FIELD_PATH);
-    await this.clickContactGalleryButton('Commissions Contact');
-    await this.uploadPhoto();
+    await this.uploadImage(`contacts[${FIELD_PATH}][headshot]`);
   }
   public async fillAdditionalContact() {
     const FIELD_PATH = 'additional_contact';
     await this.addAdditionalContact();
     await this.fillContacts(FIELD_PATH, '[0]');
     await this.advisorEmailAndBasedGC(FIELD_PATH);
-    await this.page
-      .locator(
-        `//h4[contains(.,'Additional Contacts')]/../following-sibling::div[1]//button[contains(.,'Choose From Gallery')]`,
-      )
-      .click();
-    await this.uploadPhoto();
+    await this.uploadImage(`contacts[${FIELD_PATH}][0][headshot]`);
     await this.page
       .locator(`input[name="contacts[${FIELD_PATH}][0][include_smartflyer_emails][0]"]`)
       .check();
@@ -107,12 +94,7 @@ export class PartnersHotel {
     const FIELD_PATH = 'additional_contact';
     await this.addAdditionalContact();
     await this.fillContacts(FIELD_PATH, '[0]');
-    await this.page
-      .locator(
-        `//h4[contains(.,'Additional Contacts')]/../following-sibling::div[1]//button[contains(.,'Choose From Gallery')]`,
-      )
-      .click();
-    await this.uploadPhoto();
+    await this.uploadImage(`contacts[${FIELD_PATH}][0][headshot]`);
     await this.page
       .locator(`input[name="contacts[${FIELD_PATH}][0][include_smartflyer_emails][0]"]`)
       .check();
@@ -153,6 +135,30 @@ export class PartnersHotel {
       .first();
     await contactCard.getByRole('button', { name: 'Choose From Gallery' }).click();
   }
+  private async uploadImage(inputId: string, fileName = 'testImage.jpg') {
+    await this.page
+      .locator(`input[type="file"][id="${inputId}"]`)
+      .setInputFiles(path.resolve(`data/images/${fileName}`));
+    await this.waitForUploadProcessing();
+  }
+  private async uploadImageInSection(sectionTitle: string) {
+    await this.page
+      .locator(
+        `xpath=//*[self::h4 or self::h5][normalize-space(.)="${sectionTitle}"]/following::input[@type="file"][1]`,
+      )
+      .setInputFiles(path.resolve('data/images/testImage.jpg'));
+    await this.waitForUploadProcessing();
+  }
+  private async waitForUploadProcessing() {
+    await this.page.waitForFunction(
+      () =>
+        !Array.from(document.querySelectorAll('#processing.show')).some(
+          (element) => element.getClientRects().length > 0,
+        ),
+      undefined,
+      { timeout: 20000 },
+    );
+  }
   private async addAdditionalContact() {
     await this.page
       .locator(
@@ -173,9 +179,7 @@ export class PartnersHotel {
     await this.page.getByRole('button', { name: 'Close', exact: true }).click();
   }
   public async accommodationsHeroImage() {
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).nth(1).click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadImage('accomodation_image');
   }
   public async featuredAmenities() {
     await this.page.getByRole('radio', { name: 'Elevate amenities' }).click();
@@ -196,9 +200,7 @@ export class PartnersHotel {
   public async accommodationsPool() {
     await this.page.getByRole('radio', { name: 'Yes Yes' }).click();
     await this.page.locator('input[name="overview[pool_and_gym][title]"]').fill('Main Title pool');
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).nth(2).click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadImage('pool_and_gym');
     await this.page
       .getByRole('textbox', { name: 'Is there a pool? If so,' })
       .fill('Deep pool test');
@@ -206,9 +208,7 @@ export class PartnersHotel {
   public async accommodationsGym() {
     await this.page.locator('#gymYes').click();
     await this.page.locator('input[name="overview[gym][title]"]').fill('Main Title gym');
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).nth(3).click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadImage('gym_hero_image');
     await this.page
       .getByRole('textbox', { name: 'Do you have a fitness' })
       .fill('gym equipment test');
@@ -216,9 +216,7 @@ export class PartnersHotel {
   public async accommodationsSpa() {
     await this.page.locator('#spaYes').click();
     await this.page.locator('input[name="overview[spa][title]"]').fill('Main Title spa');
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).nth(4).click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadImage('spa_image');
     await this.page
       .getByRole('textbox', {
         name: 'Tell us more about whether or not you have a spa',
@@ -230,9 +228,7 @@ export class PartnersHotel {
     await this.page
       .locator('input[name="overview[restaurant_and_bar][title]"]')
       .fill('Main Title restaurant');
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).nth(5).click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadImage('restaurant_image');
     await this.page
       .getByRole('textbox', { name: 'Tell us about the restaurants' })
       .fill('restaurant test');
@@ -240,9 +236,7 @@ export class PartnersHotel {
   public async accommodationsBar() {
     await this.page.locator('#barYes').click();
     await this.page.locator('input[name="overview[bar][title]"]').fill('Main Title bar');
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).nth(6).click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadImage('bar_image');
     await this.page.getByRole('textbox', { name: 'What’s the bar like?' }).fill('restaurant test');
   }
   public async advisorsBook() {
@@ -258,9 +252,7 @@ export class PartnersHotel {
     await this.page.getByRole('textbox', { name: 'Enter Country' }).first().fill('United States');
   }
   public async attachHeroImage() {
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).first().click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadImage('header_image');
   }
   public async insiderTips() {
     await this.page
@@ -355,11 +347,7 @@ export class PartnersHotel {
     await this.page
       .locator('textarea[name="offers_and_training[training][0][description]"]')
       .fill('Description Test');
-    await this.page
-      .locator('[id="training_div[0]"]')
-      .getByRole('button', { name: 'Choose From Gallery' })
-      .click();
-    await this.selectPhoto();
+    await this.uploadImageInSection('Training');
   }
   public async offersAndPromotions() {
     await this.page.getByRole('textbox', { name: 'Enter Offer' }).fill('Offer test');
@@ -389,11 +377,7 @@ export class PartnersHotel {
     await this.page
       .locator('textarea[name="availability[0][additional_info_to_know]"]')
       .fill('Additional information advisors');
-    await this.page
-      .locator('[id="peak_availability_div[0]"]')
-      .getByRole('button', { name: 'Choose From Gallery' })
-      .click();
-    await this.selectPhoto();
+    await this.uploadImageInSection('Peak Availabilities');
   }
   public async propertyUpdates() {
     await this.page
@@ -402,12 +386,7 @@ export class PartnersHotel {
     await this.page
       .locator('textarea[name="offers_and_training[property_updates][0][description]"]')
       .fill('description test');
-    await this.page
-      .locator('[id="updates_div[1]"]')
-      .getByRole('button', { name: 'Choose From Gallery' })
-      .click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadImageInSection('Property Updates');
   }
   public async commissionPaymentDetails() {
     await this.page.getByRole('radio', { name: 'At time of booking' }).check();
@@ -425,22 +404,21 @@ export class PartnersHotel {
     await this.page.getByRole('textbox', { name: 'Story Name' }).fill('Story test');
     await this.page.getByRole('textbox', { name: 'Story link' }).fill('www.test.com');
     await this.page
-      .locator('[id="social_media_story_div[1]"]')
-      .getByRole('button', { name: 'Choose From Gallery' })
-      .click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+      .locator(
+        'xpath=//h5[normalize-space(.)="Social Media Story"]/following::input[@type="file"][1]',
+      )
+      .setInputFiles(path.resolve('data/images/testImage.jpg'));
+    await this.waitForUploadProcessing();
     await this.page.getByRole('textbox', { name: 'Enter hashtag' }).fill('#Test');
   }
   public async socialMediaStoryHotelMKCruise() {
     await this.page.getByRole('textbox', { name: 'Story Name' }).fill('Story test');
     await this.page.getByRole('textbox', { name: 'Story link' }).fill('www.test.com');
     await this.page
-      .locator('[id="social_media_story_div[1]"]')
-      .getByRole('button', { name: 'Choose From Gallery' })
-      .click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.uploadPhoto();
+      .locator(
+        'xpath=//h5[normalize-space(.)="Social Media Story"]/following::input[@type="file"][1]',
+      )
+      .setInputFiles(path.resolve('data/images/testImage.jpg'));
     await this.page.getByRole('textbox', { name: 'Enter hashtag' }).fill('#Test');
   }
 }

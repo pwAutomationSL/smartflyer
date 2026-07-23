@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test';
+import * as path from 'path';
 const env = process.env.ENVIRONMENT ?? 'stage';
 
 export class Partners {
@@ -40,9 +41,9 @@ export class Partners {
     `//span[contains(.,'*')]/../../*[contains(.,'${field}')]`;
   public readonly TEXT_BY_LABEL = (label: string) => `//h4[contains(.,'${label}')]/../p`;
   public async clickShare() {
-    await this.page.waitForTimeout(1000);
-    await this.page.locator(this.SHARE_TOPBAR).isVisible();
-    await this.page.locator(this.SHARE_TOPBAR).click({ force: true });
+    const shareButton = this.page.locator(this.SHARE_TOPBAR);
+    await shareButton.waitFor({ state: 'visible' });
+    await shareButton.click();
   }
   public async clickCreate() {
     await this.page.locator(this.CREATE_BUTTON_MODAL).click();
@@ -50,9 +51,48 @@ export class Partners {
   public async fillSearch(data: string) {
     await this.page.locator(this.SEARCH_INPUT).fill(data);
   }
+  public async showAllSocietyStatuses() {
+    await this.page.locator('#status_filter').selectOption('0');
+  }
   public async clickSearch() {
+    const searchResponse = this.page.waitForResponse(
+      (response) =>
+        response.ok() &&
+        response.request().method() === 'POST' &&
+        response.url().includes('/partners_search'),
+    );
     await this.page.locator(this.SEARCH).click();
-    await this.page.waitForTimeout(800);
+    await searchResponse;
+    await this.page.locator('#partner_table').waitFor({ state: 'visible' });
+  }
+  public async findPartnerNameByTypeAndStatus(
+    type: 'Brand' | 'Hotel' | 'Onsite',
+    status: 'Approved' | 'Draft',
+  ) {
+    await this.page.getByRole('button', { name: 'View All Partners', exact: true }).click();
+    await this.page.locator('#partner_table').waitFor({ state: 'visible' });
+
+    const typeLabel = type === 'Brand' ? 'Brands' : type === 'Hotel' ? 'Hotels' : 'DMC';
+    await this.page.getByText(typeLabel, { exact: true }).click();
+
+    const filterResponse = this.page.waitForResponse(
+      (response) =>
+        response.ok() &&
+        response.request().method() === 'POST' &&
+        response.url().includes('/partners_filter'),
+    );
+    await this.page.getByRole('button', { name: 'SEARCH', exact: true }).click();
+    await filterResponse;
+    await this.page.locator('#partner_table').waitFor({ state: 'visible' });
+
+    await this.page.locator('#status_filter').selectOption(status === 'Draft' ? 'x' : '1');
+    const matchingRow = this.page
+      .locator('#partner_table tbody tr')
+      .filter({ has: this.page.locator('td:nth-child(2)', { hasText: type }) })
+      .filter({ has: this.page.locator('td:nth-child(8)', { hasText: status }) })
+      .first();
+    await matchingRow.waitFor({ state: 'visible' });
+    return (await matchingRow.locator('td').first().innerText()).trim();
   }
   async createAndReturnResponse() {
     const waitForCreate = this.page.waitForResponse(
@@ -84,6 +124,45 @@ export class Partners {
     await this.page.getByRole('button', { name: 'Select' }).nth(3).click();
     await this.page.getByRole('button', { name: 'Close', exact: true }).click();
   }
+  private async uploadImage(inputId: string) {
+    const imagePath = path.resolve(process.cwd(), 'data', 'images', 'testImage.jpg');
+    await this.page.locator(`input[type="file"][id="${inputId}"]`).setInputFiles(imagePath);
+    await this.page.waitForFunction(
+      () =>
+        !Array.from(document.querySelectorAll('#processing.show')).some(
+          (element) => element.getClientRects().length > 0,
+        ),
+      undefined,
+      { timeout: 20000 },
+    );
+  }
+  private async uploadImageInSection(sectionTitle: string) {
+    const imagePath = path.resolve(process.cwd(), 'data', 'images', 'testImage.jpg');
+    await this.page
+      .locator(
+        `xpath=//*[self::h4 or self::h5][normalize-space(.)="${sectionTitle}"]/following::input[@type="file"][1]`,
+      )
+      .setInputFiles(imagePath);
+    await this.page.waitForFunction(
+      () =>
+        !Array.from(document.querySelectorAll('#processing.show')).some(
+          (element) => element.getClientRects().length > 0,
+        ),
+      undefined,
+      { timeout: 20000 },
+    );
+  }
+  private async uploadDocument(inputId: string) {
+    const documentPath = path.resolve(process.cwd(), 'data', 'docs', 'testDoc.txt');
+    await this.page.locator(`input[type="file"][id="${inputId}"]`).setInputFiles(documentPath);
+  }
+  private async uploadPdf(inputId: string) {
+    await this.page.locator(`input[type="file"][id="${inputId}"]`).setInputFiles({
+      name: 'test.pdf',
+      mimeType: 'application/pdf',
+      buffer: Buffer.from('%PDF-1.4\n%%EOF'),
+    });
+  }
   public async destinationsCoverage() {
     await this.page.getByRole('checkbox', { name: 'Caribbean & Mexico' }).check();
     await this.page.getByRole('checkbox', { name: 'Europe' }).check();
@@ -107,9 +186,8 @@ export class Partners {
     await this.page
       .getByRole('textbox', { name: 'e.g. From romantic retreats' })
       .fill('fun pack holidays');
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).first().click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadImage('label-file');
+    await this.uploadImage('brand_hero_image');
     await this.page
       .getByRole('textbox', { name: 'In 4-6 sentences, please' })
       .fill('Brand Ethos Test');
@@ -133,11 +211,8 @@ export class Partners {
     await this.page
       .getByRole('textbox', { name: 'Enter details here' })
       .fill('Testing Qualification');
-    await this.page
-      .locator('#exc_features_div')
-      .getByRole('button', { name: 'Choose From Gallery' })
-      .click();
-    await this.selectPhoto();
+    const hotelLogo = this.page.locator('input[type="file"][id="preferred_partner_logo"]');
+    await this.uploadImage((await hotelLogo.count()) > 0 ? 'preferred_partner_logo' : 'partner_program_logo');
   }
 
   public async fillVirtuosoAmenities() {
@@ -156,15 +231,12 @@ export class Partners {
   }
   public async fillGlobalContactInfo() {
     await this.fillContacts('global_contact');
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).first().click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadImage('label-headshot');
     await this.page.locator('#defaultCheckpp_primary_contact').check();
   }
   public async fillHelpDeskContact() {
     await this.fillContacts('brand_helpdesk');
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).nth(1).click();
-    await this.selectPhoto();
+    await this.uploadImage('label-headshot-vip-contact');
     await this.page.locator('#defaultCheckpp_primary_contact2').check();
   }
   private async fillContacts(field: string, index: string = '') {
@@ -190,12 +262,7 @@ export class Partners {
   public async fillAdditionalContacts() {
     await this.page.getByRole('textbox', { name: 'Enter POSITION / TITLE' }).fill('Additional');
     await this.fillContacts('additional_contact', '[0]');
-    await this.page
-      .locator(
-        `//h4[contains(.,'Additional Contacts')]/../following-sibling::div[1]//button[contains(.,'Choose From Gallery')]`,
-      )
-      .click();
-    await this.selectPhoto();
+    await this.uploadImage('contacts[additional_contact][0][headshot]');
   }
 
   public async saveAndNext() {
@@ -289,9 +356,7 @@ export class Partners {
     await this.page
       .locator('input[name="things_to_know[brand_adviasor_login_instruction]"]')
       .fill('Test Instruction');
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadDocument('things_to_know[advisor_login_instruction_file]');
   }
 
   public async checkCommissionsOffering() {
@@ -310,19 +375,12 @@ export class Partners {
   }
 
   public async agentBenefitsUpload() {
-    await this.page.getByRole('button', { name: 'Choose From Gallery' }).click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadPdf('commission[agent_benefit_pdf]');
   }
   public async bestWayToBook() {
     await this.page.getByRole('checkbox', { name: 'Hotel Website' }).check();
     await this.page.getByRole('textbox', { name: 'Enter answer...' }).fill('Test Answer');
-    await this.page
-      .locator('#Hotel-Website')
-      .getByRole('button', { name: 'Choose From Gallery' })
-      .click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadPdf('commission[booking_website_file]');
   }
   public async comissionPaymentDetails() {
     await this.page.getByRole('radio', { name: 'At time of booking' }).check();
@@ -347,29 +405,19 @@ export class Partners {
     await this.page
       .locator('textarea[name="offers_and_training[latest_updates][0][description]"]')
       .fill('Description Test');
-    await this.page
-      .locator('[id="updates_div[1]"]')
-      .getByRole('button', { name: 'Choose From Gallery' })
-      .click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadImage('offers_and_training[latest_updates][0][file]');
   }
   public async offersAndPromotionsMKT() {
+    const marketingDates = this.page.locator('input[type="date"]:visible');
+
     await this.page.getByRole('textbox', { name: 'Enter Offer' }).fill('Promotion Test');
+    await marketingDates.nth(1).fill('2025-11-11');
+    await marketingDates.nth(2).fill('2025-11-26');
     await this.page
-      .locator('input[name="offers_and_training[offers_and_promotion][0][start_date]"]')
-      .fill('2025-11-11');
-    await this.page
-      .locator('input[name="offers_and_training[offers_and_promotion][0][expire_date]"]')
-      .fill('2025-11-26');
-    await this.page
-      .locator('textarea[name="offers_and_training[offers_and_promotion][0][description]"]')
+      .getByRole('textbox', { name: 'Enter Description...' })
+      .nth(1)
       .fill('This is an offer test');
-    await this.page
-      .locator('[id="promotion_div[0]"]')
-      .getByRole('button', { name: 'Choose From Gallery' })
-      .click();
-    await this.selectPhoto();
+    await this.uploadImageInSection('Offers & Promotions');
   }
   public async articlesMKT() {
     await this.page
@@ -387,19 +435,18 @@ export class Partners {
       .fill('www.test.com');
   }
   public async trainingMKT() {
-    await this.page.getByRole('textbox', { name: 'Enter Training Title' }).fill('Training Test');
+    const marketingDates = this.page.locator('input[type="date"]:visible');
+
     await this.page
-      .locator('input[name="offers_and_training[training][0][start_date]"]')
-      .fill('2025-11-12');
+      .getByRole('textbox', { name: 'Enter Training Title' })
+      .fill('Training Test');
+    await marketingDates.nth(3).fill('2025-11-12');
     await this.page.getByRole('combobox').last().selectOption('2');
     await this.page
-      .locator('textarea[name="offers_and_training[training][0][description]"]')
+      .getByRole('textbox', { name: 'Enter Description...' })
+      .nth(2)
       .fill('Test Training');
-    await this.page
-      .locator('[id="training_div[0]"]')
-      .getByRole('button', { name: 'Choose From Gallery' })
-      .click();
-    await this.selectPhoto();
+    await this.uploadImage('offers_and_training[training][0][file]');
   }
   public async marketingMKT() {
     await this.page.getByRole('textbox', { name: 'Enter Brand Username' }).fill('@test');
@@ -409,12 +456,7 @@ export class Partners {
   public async socialMediaStoryMKT() {
     await this.page.getByRole('textbox', { name: 'Story Name' }).fill('Story test');
     await this.page.getByRole('textbox', { name: 'Story link' }).fill('www.test.com');
-    await this.page
-      .locator('[id="social_media_story_div[1]"]')
-      .getByRole('button', { name: 'Choose From Gallery' })
-      .click();
-    await this.page.getByRole('tab', { name: 'Media Library' }).click();
-    await this.selectPhoto();
+    await this.uploadImage('social_media_story[0][file]');
     await this.page.getByRole('textbox', { name: 'Enter hashtag' }).fill('#Test');
     await this.page.getByRole('radio', { name: 'Yes' }).check();
     await this.page.getByRole('textbox', { name: 'insert property name and' }).fill('Q3 Test');

@@ -54,7 +54,7 @@ test.describe('CRM-009 - Toolkit', () => {
       await toolkit.searchToolkit(TOOLKIT_NAME);
       await expect(page.locator(toolkit.COLUMNS_BY_INDEX(2))).toContainText(TOOLKIT_NAME);
       await expect(page.locator(toolkit.COLUMNS_BY_INDEX(3))).toContainText('internal');
-      await expect(page.locator(toolkit.COLUMNS_BY_INDEX(4)).locator(`a`)).toHaveAttribute(
+      await expect(page.locator(toolkit.COLUMNS_BY_INDEX(5)).locator(`a`)).toHaveAttribute(
         'target',
         '_blank',
       );
@@ -84,7 +84,7 @@ test.describe('CRM-009 - Toolkit', () => {
       await toolkit.searchToolkit(TOOLKIT_NAME);
       await page.waitForLoadState('load');
       await page.waitForLoadState('networkidle');
-      await toolkit.editSearchedToolkit();
+      await toolkit.editSearchedToolkit(TOOLKIT_NAME);
       await expect(page.locator(toolkit.SAVE)).toBeVisible();
       await toolkit.changeURLType();
       await toolkit.clickSave();
@@ -92,7 +92,7 @@ test.describe('CRM-009 - Toolkit', () => {
       await expect(page.locator(toolkit.TOOLKIT_TABLE)).toBeVisible();
       await expect(page.locator(toolkit.COLUMNS_BY_INDEX(2))).toContainText(TOOLKIT_NAME);
       await expect(page.locator(toolkit.COLUMNS_BY_INDEX(3))).toContainText('external');
-      await expect(page.locator(toolkit.COLUMNS_BY_INDEX(4)).locator(`a`)).toHaveAttribute(
+      await expect(page.locator(toolkit.COLUMNS_BY_INDEX(5)).locator(`a`)).toHaveAttribute(
         'target',
         '_blank',
       );
@@ -118,7 +118,7 @@ test.describe('CRM-009 - Toolkit', () => {
       await toolkit.searchToolkit(TOOLKIT_NAME);
       await page.waitForLoadState('load');
       await page.waitForLoadState('networkidle');
-      await toolkit.deleteSearchedToolkit();
+      await toolkit.deleteSearchedToolkit(TOOLKIT_NAME);
       await expect(page.locator(toolkit.CONFIRM_DELETE)).toBeVisible();
       await toolkit.confirmDeleteToolkit();
       await expect(page.locator(toast.TOAST_MESSAGE)).toContainText(`Data deleted`);

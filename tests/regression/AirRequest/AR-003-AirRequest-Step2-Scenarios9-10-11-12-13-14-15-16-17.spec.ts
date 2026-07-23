@@ -3,10 +3,10 @@
 const PASSENGER_FIRST_NAME = 'Test';
 const PASSENGER_LAST_NAME = 'LastName';
 const EMAIL = 'theo.pougeon+43@scrumlaunch.com';
-const PHONE = '18333333333';
-const PHONE_FORMATTED = '+1 (833) 333-3333';
-const ALTERNATE_PHONE = '18333333334';
-const ALTERNATE_PHONE_FORMATTED = '+1 (833) 333-3334';
+const PHONE = '12393434354';
+const PHONE_FORMATTED = '+1 (239) 343-4354';
+const ALTERNATE_PHONE = '12393434355';
+const ALTERNATE_PHONE_FORMATTED = '+1 (239) 343-4355';
 const WRONG_EMAIL = 'theo.pougeon+43scrumlaunch.com';
 let passengerCompleteName: string;
 let passengerName: string;
