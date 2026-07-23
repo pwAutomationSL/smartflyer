@@ -32,7 +32,7 @@ export class Partners {
   public readonly CONFIRM_POPUP = `//button[contains(.,'Yes , Proceed!')]`;
   public readonly BRAND_SUBMISSION_FORM_H1 = `//H1`;
   public readonly PROPERTIES_OPTIONS_RESULTS = `//ul[contains(@class,'results')]/li`;
-  public readonly SEARCH_RESULTS_A = `//table//td[1]//a[contains(@class,'link')]`;
+  public readonly SEARCH_RESULTS_A = `//table[@id="partner_table"]//tbody/tr/td[1]//a`;
   public readonly SEARCH_RESULTS_SOCIETY_STATUS = `(//tbody)[1]/tr/td[8]`;
   public readonly SEARCH_RESULTS_HEADERS = `//table[@id="partner_table"]/thead/tr/th`;
   public readonly DESTINATIONS_CHECKBOXES = (destination: string) =>
@@ -55,6 +55,7 @@ export class Partners {
     await this.page.locator('#status_filter').selectOption('0');
   }
   public async clickSearch() {
+    const searchTerm = await this.page.locator(this.SEARCH_INPUT).inputValue();
     const searchResponse = this.page.waitForResponse(
       (response) =>
         response.ok() &&
@@ -62,8 +63,20 @@ export class Partners {
         response.url().includes('/partners_search'),
     );
     await this.page.locator(this.SEARCH).click();
-    await searchResponse;
-    await this.page.locator('#partner_table').waitFor({ state: 'visible' });
+    const response = await searchResponse;
+    const results = (await response.json()) as { data?: unknown[] };
+    const table = this.page.locator('#partner_table');
+    await table.waitFor({ state: 'visible' });
+
+    if (results.data?.length) {
+      await table
+        .locator('tbody tr')
+        .filter({ hasText: searchTerm })
+        .first()
+        .waitFor({ state: 'visible', timeout: 15000 });
+    } else {
+      await table.locator('tbody td:first-child a').waitFor({ state: 'hidden', timeout: 15000 });
+    }
   }
   public async findPartnerNameByTypeAndStatus(
     type: 'Brand' | 'Hotel' | 'Onsite',
