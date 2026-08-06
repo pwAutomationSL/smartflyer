@@ -29,7 +29,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
@@ -45,13 +45,53 @@ jobs:
         run: npx playwright install chromium --with-deps
 
       - name: Run stage tests
+        id: stage-tests
+        continue-on-error: true
         run: npm run test:chromium:allure:stage
         env:
           CI: true
 
       - name: Generate Allure report and pages site
+        id: generate-report
         if: always()
+        continue-on-error: true
         run: npm run report
+
+      - name: Ensure deploy and notification artifacts exist
+        if: always()
+        run: |
+          node -e "
+          const fs = require('fs');
+          const path = require('path');
+
+          const siteDir = path.join(process.cwd(), 'site');
+          if (!fs.existsSync(siteDir)) {
+            fs.mkdirSync(siteDir, { recursive: true });
+          }
+
+          const siteIndex = path.join(siteDir, 'index.html');
+          if (!fs.existsSync(siteIndex)) {
+            fs.writeFileSync(
+              siteIndex,
+              '<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Playwright Report</title></head><body><h1>Playwright report was not generated</h1><p>Check the GitHub Actions logs for this run.</p></body></html>',
+              'utf8'
+            );
+          }
+
+          if (!fs.existsSync('slack-data.json')) {
+            fs.writeFileSync(
+              'slack-data.json',
+              JSON.stringify({ total: 0, passed: 0, failed: 0, broken: 1, skipped: 0, unknown: 0 }, null, 2)
+            );
+          }
+
+          if (!fs.existsSync('report-meta.json')) {
+            fs.writeFileSync(
+              'report-meta.json',
+              JSON.stringify({ reportUrlPath: '/' }, null, 2)
+            );
+          }
+          "
 
       - name: Save Slack data
         if: always()
@@ -151,9 +191,13 @@ jobs:
         with:
           path: site
 
+      - name: Fail build when stage tests or report generation failed
+        if: steps.stage-tests.outcome == 'failure' || steps.generate-report.outcome == 'failure'
+        run: exit 1
+
   deploy:
     needs: build
-    if: always()
+    if: always() && needs.build.result != 'cancelled'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -164,7 +208,7 @@ jobs:
 
   notify:
     needs: [build, deploy]
-    if: always()
+    if: always() && needs.build.result != 'cancelled'
     runs-on: ubuntu-latest
 
     steps:
@@ -174,7 +218,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Download Slack data artifact
         uses: actions/download-artifact@v5
