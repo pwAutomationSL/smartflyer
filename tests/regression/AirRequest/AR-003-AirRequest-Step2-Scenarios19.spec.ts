@@ -65,7 +65,7 @@ test.describe('AR-003 - Air Request - Step #19 ', () => {
         await expect(page.locator(airRequest.POP_UP_CANCEL)).toBeVisible();
         await expect(page.locator(airRequest.POP_UP_ADD_PASSENGERS)).toBeVisible();
         await expect(page.locator(airRequest.POP_UP_HEADER)).toContainText('Who is traveling?');
-        await airRequest.addNewTraveler();
+        await airRequest.openNewTravelerForm();
         await expect(page.locator(airRequest.POP_UP_HEADER)).toContainText('Add new traveler');
       });
       await test.step('19# Add client First name, Last name, Gender, Date of birth ', async () => {
@@ -108,7 +108,7 @@ test.describe('AR-003 - Air Request - Step #19 ', () => {
           .allTextContents();
         await expect(allNames).toContain(`${PASSENGER_FIRST_NAME} ${PASSENGER_LAST_NAME}`);
         expect(allNames.length).toBe(1);
-        await airRequest.addNewTraveler();
+        await airRequest.openNewTravelerForm();
         await airRequest.goBackToTheList();
         await expect(page.locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES).first()).toBeVisible();
       });

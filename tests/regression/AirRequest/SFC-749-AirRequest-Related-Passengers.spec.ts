@@ -1,9 +1,6 @@
 ﻿import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { USERS } from '../../../fixtures/users';
 const CLIENT_NAME = 'Candice & Ben';
-test.use({
-  launchOptions: { slowMo: 800 },
-});
 let addedRelatedPassenger: string[];
 let addedRelatedPassengerStep2AR: string[];
 const expectVisiblePassengerListToMatch = (
@@ -30,7 +27,7 @@ test.describe('SFC-749 Inconsistent related passengers name showing in Air Reque
     });
     await test.step('2 - Search the client and go to the client page', async () => {
       await clients.searchClient(CLIENT_NAME);
-      await page.waitForLoadState('networkidle');
+      await expect(page.locator(clients.RELATED_PASSENGERS_TAB)).toBeVisible();
     });
     await test.step('3 - 4 - Go to the Related Passengers tab', async () => {
       await clients.goToRelatedTravelersTab();
@@ -71,7 +68,7 @@ test.describe('SFC-749 Inconsistent related passengers name showing in Air Reque
     await test.step('2 - Search the client and go to the client page', async () => {
       await clients.searchClientByName('Dr Ragan');
       await clients.clickFirstResult();
-      await page.waitForLoadState('networkidle');
+      await expect(page.locator(clients.RELATED_PASSENGERS_TAB)).toBeVisible();
     });
     await test.step('3 - 4 - Go to the Related Passengers tab', async () => {
       await clients.goToRelatedTravelersTab();
@@ -84,8 +81,11 @@ test.describe('SFC-749 Inconsistent related passengers name showing in Air Reque
       await airRequest.startFromScrath();
     });
     await test.step('6 - Select the Agent and Click on Continue button', async () => {
+      await expect(page.locator(airRequest.AGENT_SELECT)).toContainText('User Agent Agent');
+      await expect(page.locator(airRequest.EMAIL_INPUT(1))).toHaveValue(
+        USERS.AGENT_USERNAME.username,
+      );
       await expect(page.locator(airRequest.CONTINUE_BUTTON)).toBeEnabled();
-      await page.waitForTimeout(1500);
       await airRequest.clickContinue();
       await expect(page.locator(airRequest.HEADER_H2)).toContainText('Passenger details');
       await expect(page.locator(airRequest.AGENT_SUCCESS)).toHaveCSS(
@@ -110,7 +110,7 @@ test.describe('SFC-749 Inconsistent related passengers name showing in Air Reque
     });
     await test.step('2 - Search the client and go to the client page', async () => {
       await clients.searchClient(CLIENT_NAME);
-      await page.waitForLoadState('networkidle');
+      await expect(page.locator(clients.RELATED_PASSENGERS_TAB)).toBeVisible();
     });
     await test.step('3 - 4 - Go to the Related Passengers tab', async () => {
       await clients.goToRelatedTravelersTab();
@@ -150,7 +150,7 @@ test.describe('SFC-749 Inconsistent related passengers name showing in Air Reque
     });
     await test.step('2 - Search the client and go to the client page', async () => {
       await clients.searchClient(CLIENT_NAME);
-      await page.waitForLoadState('networkidle');
+      await expect(page.locator(clients.RELATED_PASSENGERS_TAB)).toBeVisible();
     });
     await test.step('3 - 4 - Go to the Related Passengers tab', async () => {
       await clients.goToRelatedTravelersTab();
@@ -190,7 +190,7 @@ test.describe('SFC-749 Inconsistent related passengers name showing in Air Reque
     });
     await test.step('2 - Search the client and go to the client page', async () => {
       await clients.searchClient(CLIENT_NAME);
-      await page.waitForLoadState('networkidle');
+      await expect(page.locator(clients.RELATED_PASSENGERS_TAB)).toBeVisible();
     });
     await test.step('3 - 4 - Go to the Related Passengers tab', async () => {
       await clients.goToRelatedTravelersTab();

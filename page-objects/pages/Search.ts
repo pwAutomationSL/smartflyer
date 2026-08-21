@@ -23,6 +23,8 @@ export class SearchPage {
   public readonly SEARCH_RESULT_MATCHES_SPAN = `(${this.APP_OR_CRM_RESULT_LINK}//span)[1]`;
   public readonly SEARCH_RESULT_MATCHES_P = `(${this.APP_OR_CRM_RESULT_LINK}//p[1])`;
   public readonly SEARCH_RESULT_IMAGES = `//div[contains(@class,'Layout_content')]//a//img`;
+  public readonly CLIENT_RESULT = (clientIdentity: string) =>
+    `//a[contains(@href,'/client-detail/') and .//*[normalize-space(.)='${clientIdentity}']]`;
   public readonly SEARCH_RESULT_MATCHES_A_FIRSTONLY = `(${this.APP_OR_CRM_RESULT_LINK}//span)[1]`;
   public readonly SEARCH_RESULT_MATCHES_DIRECTORY_FIRSTONLY = `(//div[contains(@class,'Layout_content')]//div//div/p/span)[1]`;
   public readonly HEADER = `//h1`;

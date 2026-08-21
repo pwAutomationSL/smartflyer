@@ -45,30 +45,26 @@ test.describe('CLI-008 - Client v3 - Status Change From Client Home Page', () =>
     await test.step('3 - Archive the client from the Active tab using the Actions column', async () => {
       await clientStatusButton().click();
       await page.locator(clients.CLIENT_STATUS_ARCHIVED).click();
-      await page.waitForLoadState('networkidle');
       await expect(clientStatusButton()).toContainText('Archived');
     });
 
-    await test.step('4 -Wait for reload, activate the client from status column and verify it returns to Active', async () => {
+    await test.step('4 - Activate the client from status column and verify it returns to Active', async () => {
       await clientStatusButton().click();
       await page.locator(clients.CLIENT_STATUS_ACTIVE).click();
-      await page.waitForLoadState('networkidle');
       await expect(clientStatusButton()).toContainText('Active');
     });
 
     await test.step('5 - Archive the client again from Active tab', async () => {
       await clientStatusButton().click();
       await page.locator(clients.CLIENT_STATUS_ARCHIVED).click();
-      await page.waitForLoadState('networkidle');
       await expect(clientStatusButton()).toContainText('Archived');
     });
 
     await test.step('6 - Go to Archive tab and verify the available actions before deleting the client', async () => {
-      await page.locator(clients.CLIENT_ACTIONS_BUTTON(LAST_NAME)).last().click();
-      await page.locator(clients.CLIENT_DELETE_OPTION).click();
+      await page.locator(clients.CLIENT_ACTIONS_BUTTON(LAST_NAME)).click();
+      await page.locator(clients.CLIENT_DELETE_OPTION(LAST_NAME)).click();
       await page.locator(clients.CONFIRM_DELETE).click();
-      await page.waitForLoadState('networkidle');
-      await clients.searchClientByName('FirstName ' + LAST_NAME);
+      await clients.filterClientsByName('FirstName ' + LAST_NAME);
       await expect(page.locator(clients.CLIENT_NOT_FOUND)).toBeVisible();
     });
   });

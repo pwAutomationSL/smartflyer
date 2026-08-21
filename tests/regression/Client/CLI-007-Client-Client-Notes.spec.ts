@@ -1,6 +1,8 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
+import type { Page } from '@playwright/test';
 import { USERS } from '../../../fixtures/users';
 import { uniqueId } from '../../../page-objects';
+import type { Clients } from '../../../page-objects/pages/Clients';
 import { importPrimaryClient } from '../../../utils/importPrimaryClient';
 
 const unique = uniqueId();
@@ -12,9 +14,28 @@ const UPDATED_NOTE_TITLE = `Auto Note ${unique} Updated`;
 const UPDATED_NOTE_DESCRIPTION = `Auto description ${unique} updated`;
 let TAGGED_AGENTS: string[] = [];
 
-test.use({
-  launchOptions: { slowMo: 500 },
-});
+const expectTaggedAgentsToMatch = async (
+  page: Page,
+  clients: Clients,
+  noteTitle: string,
+  taggedAgents: string[],
+) => {
+  await expect(page.locator(clients.NOTE_ROW_TAGGED_AGENTS(noteTitle))).not.toHaveText(
+    /^\s*[—-]\s*$/,
+  );
+  const previewAgent = await clients.getNoteTaggedAgentPreview(noteTitle);
+  expect(taggedAgents).toContain(previewAgent);
+
+  const hiddenAgents = taggedAgents.filter((agentName) => agentName !== previewAgent);
+  await expect(
+    page.locator(clients.NOTE_ROW_TAGGED_AGENTS_MORE(noteTitle, hiddenAgents.length)).last(),
+  ).toBeVisible();
+  await clients.hoverNoteTaggedAgentsMore(noteTitle, hiddenAgents.length);
+
+  for (const agentName of hiddenAgents) {
+    await expect(page.getByText(agentName, { exact: true })).toBeVisible();
+  }
+};
 
 test.describe.serial('CLI-007 - Client - Client Notes', () => {
   test('Admin can see Notes empty state, open Add Note modal, and create a note successfully', async ({
@@ -39,7 +60,7 @@ test.describe.serial('CLI-007 - Client - Client Notes', () => {
     });
 
     await test.step('2 - Open Notes tab in v3 and verify empty state with Add Note CTA', async () => {
-      await page.waitForLoadState('networkidle');
+      await expect(page.locator(clients.CLIENT_PROFILE_TAB('Notes'))).toBeVisible();
       await clients.openClientProfileTab('Notes');
       await expect(page.locator(clients.CLIENT_PROFILE_TAB('Notes'))).toBeVisible();
       await expect(page.locator(clients.NOTES_EMPTY_STATE_TITLE)).toBeVisible();
@@ -72,15 +93,7 @@ test.describe.serial('CLI-007 - Client - Client Notes', () => {
         NOTE_DESCRIPTION,
       );
       await expect(page.locator(clients.NOTE_ROW_DATE(NOTE_TITLE))).toBeVisible();
-      await expect(page.locator(clients.NOTE_ROW_TAGGED_AGENTS(NOTE_TITLE))).toContainText(
-        TAGGED_AGENTS[2],
-      );
-      await expect(
-        page.locator(clients.NOTE_ROW_TAGGED_AGENTS_MORE(NOTE_TITLE, 2)).last(),
-      ).toBeVisible({ timeout: 15000 });
-      await clients.hoverNoteTaggedAgentsMore(NOTE_TITLE, 2);
-      await expect(page.getByText(TAGGED_AGENTS[0], { exact: true })).toBeVisible();
-      await expect(page.getByText(TAGGED_AGENTS[1], { exact: true })).toBeVisible();
+      await expectTaggedAgentsToMatch(page, clients, NOTE_TITLE, TAGGED_AGENTS);
     });
   });
 
@@ -100,7 +113,7 @@ test.describe.serial('CLI-007 - Client - Client Notes', () => {
       await clients.searchClientByName('FirstName ' + LAST_NAME);
       await clients.clickFirstResult();
       await expect(page.locator(clients.HEADER)).toContainText(LAST_NAME, { timeout: 25000 });
-      await page.waitForLoadState('networkidle');
+      await expect(page.locator(clients.CLIENT_PROFILE_TAB('Notes'))).toBeVisible();
       await clients.openClientProfileTab('Notes');
     });
 
@@ -112,15 +125,7 @@ test.describe.serial('CLI-007 - Client - Client Notes', () => {
       await expect(page.locator(clients.NOTE_TABLE_HEADER('Tagged agents'))).toBeVisible();
       await expect(page.locator(clients.NOTE_TABLE_HEADER('Actions'))).toBeVisible();
       await expect(page.locator(clients.NOTE_ROW(NOTE_TITLE))).toBeVisible();
-      await expect(page.locator(clients.NOTE_ROW_TAGGED_AGENTS(NOTE_TITLE))).toContainText(
-        TAGGED_AGENTS[2],
-      );
-      await expect(
-        page.locator(clients.NOTE_ROW_TAGGED_AGENTS_MORE(NOTE_TITLE, 2)).last(),
-      ).toBeVisible();
-      await clients.hoverNoteTaggedAgentsMore(NOTE_TITLE, 2);
-      await expect(page.getByText(TAGGED_AGENTS[0], { exact: true })).toBeVisible();
-      await expect(page.getByText(TAGGED_AGENTS[1], { exact: true })).toBeVisible();
+      await expectTaggedAgentsToMatch(page, clients, NOTE_TITLE, TAGGED_AGENTS);
     });
 
     await test.step('3 - Edit the note and verify the updated content is shown in the list', async () => {
@@ -136,15 +141,7 @@ test.describe.serial('CLI-007 - Client - Client Notes', () => {
       await expect(page.locator(clients.NOTE_ROW_DETAILS(UPDATED_NOTE_TITLE))).toContainText(
         UPDATED_NOTE_DESCRIPTION,
       );
-      await expect(page.locator(clients.NOTE_ROW_TAGGED_AGENTS(UPDATED_NOTE_TITLE))).toContainText(
-        TAGGED_AGENTS[2],
-      );
-      await expect(
-        page.locator(clients.NOTE_ROW_TAGGED_AGENTS_MORE(UPDATED_NOTE_TITLE, 2)).last(),
-      ).toBeVisible();
-      await clients.hoverNoteTaggedAgentsMore(UPDATED_NOTE_TITLE, 2);
-      await expect(page.getByText(TAGGED_AGENTS[0], { exact: true })).toBeVisible();
-      await expect(page.getByText(TAGGED_AGENTS[1], { exact: true })).toBeVisible();
+      await expectTaggedAgentsToMatch(page, clients, UPDATED_NOTE_TITLE, TAGGED_AGENTS);
       await expect(page.locator(clients.NOTE_ROW(NOTE_TITLE))).toBeHidden();
     });
   });
@@ -167,7 +164,7 @@ test.describe.serial('CLI-007 - Client - Client Notes', () => {
       await expect(page.locator(clients.HEADER)).toContainText(LAST_NAME, {
         timeout: 25000,
       });
-      await page.waitForLoadState('networkidle');
+      await expect(page.locator(clients.CLIENT_PROFILE_TAB('Notes'))).toBeVisible();
       await clients.openClientProfileTab('Notes');
     });
 

@@ -58,11 +58,13 @@ test.describe('AR-003 - Air Request - Step #20 ', () => {
       await expect(page.locator(airRequest.POP_UP_HEADER)).toContainText('Who is traveling?');
     });
     await test.step('20# Add client First name, Last name, Gender, Date of birth ', async () => {
+      await expect(page.locator(airRequest.AVAILABLE_TRAVELERS).first()).toBeVisible();
       const firstCount = await page.locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES).count();
       allNamesBefore = await page
         .locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES)
         .allTextContents();
       await airRequest.searchTraveler('Mahiax');
+      await expect(page.locator(airRequest.TRAVELER_BY_NAME('Mahiax Marg'))).toBeVisible();
       const secondCount = await page.locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES).count();
       expect(firstCount).toBeGreaterThan(secondCount);
       const allNames = await page
@@ -75,6 +77,9 @@ test.describe('AR-003 - Air Request - Step #20 ', () => {
     });
     await test.step('20# Verify if clearing the search field shows the full traveler list again ', async () => {
       await airRequest.searchTraveler('');
+      await expect(page.locator(airRequest.AVAILABLE_TRAVELERS)).toHaveCount(
+        allNamesBefore.length,
+      );
       allNames = await page.locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES).allTextContents();
       expect(allNamesBefore).toEqual(allNames);
     });

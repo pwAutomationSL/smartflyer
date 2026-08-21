@@ -13,9 +13,10 @@ export class GalleryPage {
   public readonly UPLOAD_FILES = `//button[contains(.,'Upload Files')]`;
   public readonly CONFIRM_UPLOAD_FILES = `//dialog//button[contains(.,'Upload Files')]`;
   public readonly CLOSE_UPLOAD = `//button[contains(.,'Close')]`;
-  public readonly HEADER_H2 = `//h2`;
-  public readonly IMAGE_NAME = `//input[@id="title"]`;
-  public readonly CLOSE_POPUP = `//header/button`;
+  public readonly IMAGE_INFORMATION_DIALOG = `//dialog[.//h2[normalize-space(.)='Image information']]`;
+  public readonly HEADER_H2 = `${this.IMAGE_INFORMATION_DIALOG}//h2`;
+  public readonly IMAGE_NAME = `${this.IMAGE_INFORMATION_DIALOG}//input[@id="title"]`;
+  public readonly CLOSE_POPUP = `${this.IMAGE_INFORMATION_DIALOG}//header//button`;
   public readonly LOAD_SPINNER = `//*[contains(@class,'animate-spin')]`;
   public readonly DELETE_IMAGE = `//button[@aria-label="Delete"]`;
   public readonly CONFIRM_DELETE_IMAGE = `//button[contains(.,'Delete Files')]`;
@@ -63,6 +64,7 @@ export class GalleryPage {
   }
   public async closePopUp() {
     await this.page.locator(this.CLOSE_POPUP).click();
+    await this.page.locator(this.IMAGE_INFORMATION_DIALOG).waitFor({ state: 'hidden' });
   }
   public async searchImageAndDelete(name: string) {
     await this.page.getByRole('textbox', { name: 'Search files' }).fill(name);
@@ -142,9 +144,7 @@ export class GalleryPage {
   public async confirmDeleteFolder() {
     const waitForDeleteFolder = this.page.waitForResponse(
       (res) =>
-        res.request().method() === 'DELETE' &&
-        res.url().includes('/api/folders') &&
-        res.ok(),
+        res.request().method() === 'DELETE' && res.url().includes('/api/folders') && res.ok(),
       { timeout: 40000 },
     );
     await this.page.locator(this.CONFIRM_DELETE_FOLDER).click();

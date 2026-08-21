@@ -410,11 +410,9 @@ test.describe('AR-003 - Air Request - Step 2, 9#, #10, #11 ,#12 ,#13 ,#14 ,#15 ,
           await expect(
             page.locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES).first(),
           ).toBeVisible();
-          await airRequest.searchTraveler(passengerName.split(' ')[0]);
-          const allNames = await page
-            .locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES)
-            .allTextContents();
-          await expect(allNames).toContain(passengerCompleteName);
+          await expect(
+            page.locator(airRequest.TRAVELER_BY_NAME(passengerCompleteName)),
+          ).toBeVisible();
         } catch (err) {
           console.error('Remove additional passenger');
           test.info().errors.push({

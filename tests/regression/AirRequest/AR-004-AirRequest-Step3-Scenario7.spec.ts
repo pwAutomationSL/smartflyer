@@ -9,6 +9,7 @@ const ARRIVAL_SEARCH_F2 = 'SFO';
 const ARRIVAL = 'Los Angeles International Airport';
 const DEPARTURE_F2 = 'Chicago Rockford Airport';
 const DEPARTURE_SHORT_F2 = 'RFD';
+const ADDITIONAL_PASSENGER_FLIGHT_2_DEPARTURE = 'Aberdeen Airport';
 test.setTimeout(250000);
 test.describe('AR-004 - Air Request - Step 3', () => {
   test('Air Request - Step 3 -  7# Scenario - Multi-city trip, multiple passengers, different itineraries', async ({
@@ -124,7 +125,9 @@ test.describe('AR-004 - Air Request - Step 3', () => {
       await airRequest.selectArrivalAirportFlight1Passenger2(ARRIVAL, ARRIVAL_SEARCH);
       await airRequest.selectTravelDateFlight1Passenger2();
       await airRequest.confirmDates();
-      await airRequest.selectDepartureAirportFlight2Passenger2(ARRIVAL, ARRIVAL);
+      await airRequest.selectDepartureAirportFlight2Passenger2(
+        ADDITIONAL_PASSENGER_FLIGHT_2_DEPARTURE,
+      );
       await expect(page.locator(airRequest.ARRIVAL_INPUT_PASSENGER_2_FLIGHT2)).toBeDisabled();
     });
     await test.step('20 -Select the Travel Dates for Additional passenger', async () => {

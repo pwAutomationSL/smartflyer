@@ -1,7 +1,9 @@
 ﻿import { test, expect } from '../../../fixtures/PlaywrightFixtures';
+import { uniqueId } from '../../../page-objects';
 
 const PASSENGER_FIRST_NAME = 'firstNameNT';
-const PASSENGER_LAST_NAME = 'LastNameNT';
+const PASSENGER_LAST_NAME = `LastNameNT${uniqueId()}`;
+const PASSENGER_FULL_NAME = `${PASSENGER_FIRST_NAME} ${PASSENGER_LAST_NAME}`;
 const CLIENT_NAME = 'Candice & Ben';
 const MONTH = 'June';
 const DAY = '7';
@@ -57,7 +59,7 @@ test.describe('AR-003 - Air Request - Step #18 ', () => {
         await expect(page.locator(airRequest.POP_UP_CANCEL)).toBeVisible();
         await expect(page.locator(airRequest.POP_UP_ADD_PASSENGERS)).toBeVisible();
         await expect(page.locator(airRequest.POP_UP_HEADER)).toContainText('Who is traveling?');
-        await airRequest.addNewTraveler();
+        await airRequest.openNewTravelerForm();
         await expect(page.locator(airRequest.POP_UP_HEADER)).toContainText('Add new traveler');
       });
       await test.step('18# Add client First name, Last name, Gender, Date of birth (all fields required)', async () => {
@@ -82,28 +84,27 @@ test.describe('AR-003 - Air Request - Step #18 ', () => {
             .locator('div')
             .filter({ hasText: /^Male$/ })
             .nth(1),
-        ).toBeVisible;
+        ).toBeVisible();
         await expect(page.locator(airRequest.DOB_DAY(2))).toHaveValue(DAY);
         await expect(page.locator(airRequest.DOB_YEAR(2))).toHaveValue(YEAR);
         await expect(page.locator(airRequest.DELETE_TRAVELER_BUTTON)).toBeVisible();
         await airRequest.deleteTraveler();
+        await expect(page.locator(airRequest.FIRST_NAME_PASSENGER(1))).toBeHidden();
       });
       await test.step('18# Verify new user is not visible in Who is Travelling dialog since it was not save to the client', async () => {
         await airRequest.addAdditionalPassenger();
-        await expect(page.locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES).first()).toBeVisible();
-        const allNames = await page
-          .locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES)
-          .allTextContents();
-        await expect(allNames).not.toContain(PASSENGER_LAST_NAME);
+        await expect(page.locator(airRequest.POP_UP_DIALOG)).toBeVisible();
+        await expect(page.locator(airRequest.POP_UP_HEADER)).toContainText('Who is traveling?');
+        await expect(page.locator(airRequest.AVAILABLE_TRAVELERS).first()).toBeVisible();
+        await expect(page.locator(airRequest.TRAVELER_BY_NAME(PASSENGER_FULL_NAME))).toHaveCount(0);
       });
       await test.step('18# Verify that user can go back to the list by clicking “Go back to the List button”', async () => {
-        await airRequest.addNewTraveler();
+        await airRequest.openNewTravelerForm();
         await airRequest.goBackToTheList();
-        await expect(page.locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES).first()).toBeVisible();
-        const allNames = await page
-          .locator(airRequest.NAMES_FOR_AVAILABLE_CHECKBOXES)
-          .allTextContents();
-        await expect(allNames).not.toContain(PASSENGER_LAST_NAME);
+        await expect(page.locator(airRequest.POP_UP_DIALOG)).toBeVisible();
+        await expect(page.locator(airRequest.POP_UP_HEADER)).toContainText('Who is traveling?');
+        await expect(page.locator(airRequest.AVAILABLE_TRAVELERS).first()).toBeVisible();
+        await expect(page.locator(airRequest.TRAVELER_BY_NAME(PASSENGER_FULL_NAME))).toHaveCount(0);
       });
     });
   });

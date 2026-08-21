@@ -90,8 +90,11 @@ export class AirRequest {
   public readonly FILES_UPLOAD_POPUP_SUCCESS_BAR = `(//form[@id="passenger-form"]/../div//div[contains(@style,'width: 100%')])[1]`;
   public readonly FILES_UPLOAD_POPUP_SUCCESS_BAR_2 = `(//form[@id="passenger-form"]/../div//div[contains(@style,'width: 100%')])[2]`;
   public readonly UPLOADED_IMAGES = `//form[@id="passenger-form"]/..//button//../div/img[contains(@src,'https')]`;
-  public readonly AVAILABLE_CHECKBOXES = `//dialog//input[contains(@type,"checkbox")]/../span[1]`;
-  public readonly NAMES_FOR_AVAILABLE_CHECKBOXES = `//dialog//input[contains(@type,"checkbox")]/../span[2]`;
+  public readonly AVAILABLE_CHECKBOXES = `//dialog//input[@type='checkbox']/following-sibling::span[1]`;
+  public readonly AVAILABLE_TRAVELERS = `//dialog//label[.//input[@type='checkbox']]`;
+  public readonly NAMES_FOR_AVAILABLE_CHECKBOXES = this.AVAILABLE_TRAVELERS;
+  public readonly TRAVELER_BY_NAME = (travelerName: string) =>
+    `//dialog//label[.//input[@type='checkbox'] and normalize-space(.)='${travelerName}']`;
   public readonly SELECTED_PASSENGER_IN_INPUT = `//dialog/div/div/div/div/span`;
   public readonly UPLOAD_MORE_FILES = `//button[contains(.,'Upload More Files')]`;
   public readonly ADD_NEW_TRAVELER = `//button[contains(.,'Add New Traveler')]`;
@@ -148,6 +151,10 @@ export class AirRequest {
   public readonly DEPARTURE_TIME = `//p[contains(normalize-space(.), 'Preferred departure time')]/following-sibling::div//p`;
   public readonly ARRIVAL_TIME = `//p[contains(normalize-space(.), 'Preferred arrival time')]/following-sibling::div//p`;
   public readonly CABIN_CLASS = `//p[contains(normalize-space(.), 'Preferred cabin class')]/following-sibling::div//p`;
+  public readonly PREFERRED_CABIN_CLASS_FIELD = `//p[normalize-space(.)='Preferred cabin class']/following-sibling::div[1]`;
+  public readonly PREFERRED_CABIN_CLASS_COMBOBOX = `//p[normalize-space(.)='Preferred cabin class']/following-sibling::div[1]//input[@role='combobox']`;
+  public readonly CABIN_CLASS_OPTION = (cabin: string) =>
+    `//div[normalize-space(.)='${cabin}']/../label/span`;
   public readonly AIRLINES = `//p[contains(normalize-space(.), 'Airlines')]/following-sibling::div//p`;
   public readonly AIRCRAFT = `//p[contains(normalize-space(.), 'Aircraft')]/following-sibling::div//p`;
   public readonly SEATS = `//p[contains(normalize-space(.), 'Seats')]/following-sibling::p`;
@@ -360,8 +367,14 @@ export class AirRequest {
     }
   }
   public async addAdditionalPassenger() {
-    await this.page.locator(this.ADD_ADDITIONAL_PASSENGER).click();
-    await this.page.waitForTimeout(2000);
+    const addPassengerButton = this.page.locator(this.ADD_ADDITIONAL_PASSENGER);
+    const travelerDialog = this.page.locator(this.POP_UP_DIALOG);
+
+    await addPassengerButton.click();
+
+    if (!(await travelerDialog.isVisible())) {
+      await addPassengerButton.click();
+    }
   }
   public async scrollPassengers() {
     await this.page.locator(this.ADDITIONAL_PASSENGERS_LIST).hover();
@@ -410,7 +423,10 @@ export class AirRequest {
     await this.page.locator(this.AVAILABLE_CHECKBOXES).first().click();
   }
   public async deleteTraveler() {
-    await this.page.locator(this.DELETE_TRAVELER_BUTTON).click();
+    const deleteTravelerButton = this.page.locator(this.DELETE_TRAVELER_BUTTON);
+
+    await deleteTravelerButton.click();
+    await deleteTravelerButton.waitFor({ state: 'hidden' });
   }
   public async addPassenger() {
     const waitForCreate = this.page.waitForResponse(
@@ -434,6 +450,16 @@ export class AirRequest {
     await this.page.locator(this.DOB_YEAR(index)).fill(year);
     await this.page.locator(this.DOB_MONTH(index)).click();
     await this.page.locator(this.MONTH_OPTION(month)).click();
+  }
+  public async openNewTravelerForm() {
+    const addNewTravelerButton = this.page.locator(this.ADD_NEW_TRAVELER);
+    const goBackToListButton = this.page.locator(this.GO_BACK_TO_THE_LIST);
+
+    await addNewTravelerButton.click();
+
+    if (!(await goBackToListButton.isVisible())) {
+      await addNewTravelerButton.click();
+    }
   }
   public async addNewTraveler() {
     await this.page.locator(this.ADD_NEW_TRAVELER).click();
@@ -476,7 +502,6 @@ export class AirRequest {
   }
   public async searchTraveler(traveler: string) {
     await this.page.locator(this.SEARCH_TRAVELERS).fill(traveler);
-    await this.page.waitForTimeout(1500);
   }
   public async addFrequentFlyerProgram() {
     await this.page.waitForTimeout(300);
@@ -587,22 +612,23 @@ export class AirRequest {
     await departureInput.evaluate((element) => element.scrollIntoView({ block: 'center' }));
     await departureInput.click();
     await departureInput.clear();
-    await departureInput.pressSequentially(airportShort, { delay: 100 });
+    await departureInput.fill(airportShort);
     await airportOption.waitFor({ state: 'visible' });
     await airportOption.click();
     await expect(departureInput).toHaveAttribute('placeholder', airport);
     await departureInput.press('Tab');
   }
-  public async selectDepartureAirportFlight2Passenger2(airport: string, airportSearch: string) {
+  public async selectDepartureAirportFlight2Passenger2(airport: string) {
     const departureInput = this.page.locator(
       'input[name="passengerTrips.1.flights.1.departure"]',
     );
     const airportOption = this.page.locator(`//div[contains(.,'${airport}')]/../label/span`).first();
-
     await departureInput.evaluate((element) => element.scrollIntoView({ block: 'center' }));
+    const waitForAirports = this.page.waitForResponse(
+      (response) => response.url().includes('/api/airports') && response.status() === 200,
+    );
     await departureInput.click();
-    await departureInput.clear();
-    await departureInput.pressSequentially(airportSearch, { delay: 100 });
+    await waitForAirports;
     await airportOption.waitFor({ state: 'visible' });
     await airportOption.click();
     await expect(departureInput).toHaveAttribute('placeholder', airport);
@@ -785,10 +811,12 @@ export class AirRequest {
   }
 
   public async confirmDates(date: string = '15th') {
-    await this.page
+    const dateOption = this.page
       .locator(`//div[contains(@aria-label,'${date}') and contains(@aria-disabled,"false")]`)
-      .last()
-      .click();
+      .last();
+
+    await dateOption.click();
+    await expect(dateOption).toHaveAttribute('aria-selected', 'true');
     await this.page.getByRole('button', { name: 'Confirm dates' }).click();
   }
   public async confirmDatesRoundTrip() {
@@ -899,15 +927,18 @@ export class AirRequest {
     await this.clickGeneric();
   }
   public async selectCabinClassByIndex(cabin: string, index: number) {
-    const cabinClassCombobox = this.page
-      .locator(
-        `//p[normalize-space(.)='Preferred cabin class']/following-sibling::div//*[@role='combobox']`,
-      )
-      .nth(index);
+    const cabinClassField = this.page.locator(this.PREFERRED_CABIN_CLASS_FIELD).nth(index);
+    const cabinClassCombobox = this.page.locator(this.PREFERRED_CABIN_CLASS_COMBOBOX).nth(index);
+    const cabinClassOption = this.page.locator(this.CABIN_CLASS_OPTION(cabin)).first();
+
     await cabinClassCombobox.click();
-    await cabinClassCombobox.fill(cabin);
-    await cabinClassCombobox.press('Enter');
-    await expect(cabinClassCombobox.locator('xpath=../..')).toContainText(cabin);
+
+    if (!(await cabinClassOption.isVisible())) {
+      await cabinClassField.click();
+    }
+
+    await cabinClassOption.click();
+    await expect(cabinClassField).toContainText(cabin);
   }
   public async addAdditionalTripNotes(notes: string) {
     await this.page.locator(this.TRIP_NOTES).last().fill(notes);

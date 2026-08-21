@@ -1,6 +1,5 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 const CLIENT_ID = 'SQ4715';
-const CLIENT_RECORD_ID = '106179';
 const CLIENT_NAME = 'Candice & Ben (Conway) Winikoff';
 const EMAIL = 'fake_candiceconway84@gmail.com';
 test.describe('GS-001 - Search - Clients filter', () => {
@@ -12,8 +11,7 @@ test.describe('GS-001 - Search - Clients filter', () => {
     sidebar,
     searchPage,
   }) => {
-    const clientResult = () =>
-      page.locator(`//a[contains(@href,'/client-detail/${CLIENT_RECORD_ID}')]`);
+    const clientResult = () => page.locator(searchPage.CLIENT_RESULT(CLIENT_ID));
 
     await test.step('1 - Login at Society as an Admin', async () => {
       await loginPage.login({ username, password });

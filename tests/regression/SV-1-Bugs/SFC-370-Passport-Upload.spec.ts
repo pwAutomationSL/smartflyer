@@ -1,9 +1,6 @@
 import { test, expect } from '../../../fixtures/PlaywrightFixtures';
 import { uniqueId } from '../../../page-objects';
 const CLIENT_NAME = 'Dr Ragan';
-test.use({
-  launchOptions: { slowMo: 350 },
-});
 const PASSPORT = uniqueId();
 const passPortName = `testImage.jpg`;
 test.describe('SFC-370 -  upload a passport file', () => {
@@ -22,27 +19,21 @@ test.describe('SFC-370 -  upload a passport file', () => {
       await clients.searchClientByName(CLIENT_NAME);
       await clients.clickFirstResult();
     });
-    await test.step('Click on Start from scratch', async () => {
-      await page.waitForLoadState('networkidle');
-      await page.waitForLoadState('load');
+    await test.step('Add and upload a passport document', async () => {
       await clients.goToPreferencesTab();
-      await page.waitForLoadState('networkidle');
-      await page.waitForLoadState('load');
       await clients.addDocument();
       await clients.thisIsAPassport();
       await clients.addNewPassportv2(PASSPORT.toString());
-      await page.waitForLoadState('networkidle');
-      await page.waitForLoadState('load');
       await page.reload();
-      await page.waitForLoadState('networkidle');
-      await page.waitForLoadState('load');
       await expect(page.locator(clients.PASSPORT_DOCUMENT_ROW(PASSPORT.toString()))).toContainText(
         passPortName,
       );
     });
     await test.step('Verify it was uploaded correctly', async () => {
       await clients.editPassport(PASSPORT.toString());
-      await expect(page.locator(clients.POPUP_HEADER_H2)).toContainText('Document information');
+      await expect(
+        page.getByRole('heading', { name: 'Document information', exact: true }),
+      ).toBeVisible();
       await expect(page.locator(clients.PASSPORT_NAME)).toHaveValue(passPortName);
       await expect(page.locator(clients.PASSPORT_NUMBER)).toHaveValue(PASSPORT.toString());
       await expect(page.locator(clients.PASSPORT_IMAGE)).toBeVisible();

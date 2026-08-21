@@ -19,7 +19,6 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
     await test.step('2- Search the client and go to the client page', async () => {
       await clients.searchClientByName(CLIENT_NAME);
       await clients.clickFirstResult();
-      await clients.setAgentIfNotPresent();
     });
     await test.step('3- Click Send Forms Button', async () => {
       await clients.clickSendForms();

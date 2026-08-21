@@ -63,6 +63,7 @@ export class Clients {
   public readonly PRIMARY_PASSENGER = `//button[contains(.,'Primary Passenger')]`;
   public readonly RELATED_PASSENGERS = `//button[contains(.,'Related Passengers')]`;
   public readonly RELATED_PASSENGERS_TAB = `//button[text()="Related passengers"]`;
+  public readonly RELATED_PASSENGERS_HEADING = `//h3[starts-with(normalize-space(.),'Passengers')]`;
   public readonly PREFERENCES_TAB = `//h3[text()='Travel Profile & Preferences']/following-sibling::div`;
   public readonly SHARE_BUTTON = `//button[text()="Share"]`;
   public readonly SEND_FORMS = `//button[text()="Send Forms"]`;
@@ -142,7 +143,7 @@ export class Clients {
   public readonly COMFORT_RELATED_DETAILS_HEIGHT_SECTION = `//span[text()='Height']/following-sibling::span`;
   public readonly COMFORT_RELATED_DETAILS_WHEIGHT_SECTION = `//span[text()='Weight']/following-sibling::span`;
   public readonly COMFORT_RELATED_DETAILS_SECTION = `//span[text()='Weight']/../../../following-sibling::div`;
-  public readonly RELATED_PASSENGER_NAMES = `//*[contains(normalize-space(.),'Delete Passenger')]/preceding-sibling::*[1]//a[contains(@href,'client-detail')]`;
+  public readonly RELATED_PASSENGER_NAMES = `//div[starts-with(@id,'related-traveler-')]//a[contains(@href,'client-detail')]`;
   public readonly RELATED_PASSENGER_NAMES_STEP2 = `//div[@id="modal-content"]//label/span[2]`;
   public readonly CLIENT_LOGS = `(//span[text()='Client profile form updated by '])[1]`;
   public readonly AUDIT_LOGS = `//span[contains(.,'Audit Logs')]`;
@@ -216,11 +217,12 @@ export class Clients {
   public readonly CLIENT_STATUS_BUTTON = (clientName: string) =>
     `//table//tr[.//*[contains(normalize-space(.),'${clientName}')]]//button[.//*[normalize-space(.)='Active' or normalize-space(.)='Archived' or normalize-space(.)='Pending']]`;
   public readonly CLIENT_ACTIONS_BUTTON = (clientName: string) =>
-    `${this.CLIENT_ROW(clientName)}//td[last()]//button`;
+    `${this.CLIENT_ROW(clientName)}//td[last()]//button[not(.//button) and not(normalize-space(.))]`;
   public readonly CLIENT_ACTION_OPTION = (option: string) =>
     `//ul[contains(@class,'dropdown-menu') and contains(@class,'show')]//*[normalize-space(.)='${option}']`;
   public readonly CLIENT_NOT_FOUND = `//p[contains(text(),'No results found')]`;
-  public readonly CLIENT_DELETE_OPTION = `//button[normalize-space(.)='Delete']`;
+  public readonly CLIENT_DELETE_OPTION = (clientName: string) =>
+    `${this.CLIENT_ROW(clientName)}//button[normalize-space(.)='Delete' and not(.//button)]`;
   public readonly CLIENT_STATUS_CONFIRM_POPUP = `//*[contains(@class,'swal2-popup')]`;
   public readonly CLIENT_STATUS_CONFIRM_YES = `//button[normalize-space(.)='Yes']`;
   public readonly CLIENT_ARCHIVE_CONFIRM_BUTTON = `//button[normalize-space(.)='Yes, archive it!']`;
@@ -340,7 +342,10 @@ export class Clients {
     await this.page.getByRole('button', { name: 'Save' }).click();
   }
   public async startFromScratch() {
-    await this.page.getByRole('button', { name: /Start from scratch/i }).first().click();
+    await this.page
+      .getByRole('button', { name: /Start from scratch/i })
+      .first()
+      .click();
   }
   public async mainInformationQuickAdd(LAST_NAME: string, email: string) {
     await this.page.locator(this.QUICK_ADD_FORM).waitFor();
@@ -524,11 +529,14 @@ export class Clients {
     await clientResult.waitFor({ state: 'visible' });
     await clientResult.click();
   }
-  public async searchClientByName(client: string) {
+  public async filterClientsByName(client: string) {
     await this.page.getByRole('textbox', { name: 'Search' }).waitFor({ state: 'visible' });
     await this.page.getByRole('textbox', { name: 'Search' }).fill(client);
     await this.page.getByRole('textbox', { name: 'Search' }).press('Enter');
-    await this.page.waitForTimeout(1500);
+  }
+  public async searchClientByName(client: string) {
+    await this.filterClientsByName(client);
+    await this.page.locator(this.ALL_ACTIVE_CLIENTS).first().waitFor({ state: 'visible' });
   }
   public async openClientFromSearch(client: string) {
     await this.searchClientByName(client);
@@ -633,6 +641,10 @@ export class Clients {
   }
   public async hoverNoteTaggedAgentsMore(title: string, count: number) {
     await this.page.locator(this.NOTE_ROW_TAGGED_AGENTS_MORE(title, count)).last().hover();
+  }
+  public async getNoteTaggedAgentPreview(title: string): Promise<string> {
+    const summary = await this.page.locator(this.NOTE_ROW_TAGGED_AGENTS(title)).innerText();
+    return summary.replace(/,\s*\+\d+\s*$/, '').trim();
   }
   public async confirmNoteDelete() {
     await this.page.locator(this.NOTE_DELETE_CONFIRM).click();
@@ -919,7 +931,7 @@ export class Clients {
     const tab = this.page.getByRole('button', { name: 'Related passengers' });
     await tab.waitFor({ state: 'visible' });
     await tab.click();
-    await this.page.waitForLoadState('networkidle');
+    await this.page.locator(this.RELATED_PASSENGERS_HEADING).waitFor({ state: 'visible' });
   }
   public async goToPreferencesTab() {
     await this.page.locator(this.PREFERENCES_TAB).click();
@@ -955,7 +967,9 @@ export class Clients {
     await this.page.locator(`//textarea[@id="clientMessage"]`).fill(message);
   }
   public async sendForm() {
-    await this.page.locator(this.SHARE_SEND_FORM).click();
+    const sendButton = this.page.locator(this.SHARE_SEND_FORM);
+    await sendButton.focus();
+    await sendButton.press('Enter');
   }
 
   public async expandTravelProfileAndPreferences() {
@@ -1179,32 +1193,36 @@ export class Clients {
     await this.page.locator(this.PASSPORT_NUMBER).fill(passport_name);
     await this.page.locator(this.PASSPORT_ISSUE_COUNTRY).click();
     await this.page.locator(this.PASSPORT_ISSUE_COUNTRY_OPTION('United States')).click();
-    await this.page.waitForTimeout(100);
     await this.page.locator(this.PASSPORT_DATE_OF_ISSUE).click();
     await this.page.locator(`//div[@class="react-datepicker__week"][3]/div[3]`).click();
     await this.page.locator(this.PASSPORT_DATE_OF_EXPIRY).click();
     await this.page.locator(`//div[@class="react-datepicker__week"][4]/div[6]`).click();
     await this.page.locator(this.ADD_DOCUMENT_BUTTON).click();
-    await this.page.waitForTimeout(2500);
+    await this.page.locator(this.PASSPORT_MODAL).waitFor({ state: 'hidden' });
   }
   public async editNameEvent(name: string) {
     await this.page.locator(this.NAME_EVENT).fill(name);
   }
   public async deletePassport(value: string) {
+    const passportRow = this.page.locator(this.PASSPORT_DOCUMENT_ROW(value));
     await this.page
       .locator(`${this.PASSPORT_DOCUMENT_ROW(value)}//button[@aria-label="Delete document"]`)
       .first()
       .click();
+    await this.page.locator(this.PASSPORT_MODAL).waitFor({ state: 'visible' });
     await this.page.locator(this.CONFIRM_DELETE_PASSPORT).click();
+    await passportRow.waitFor({ state: 'hidden' });
   }
   public async editPassport(value: string) {
     await this.page
       .locator(`${this.PASSPORT_DOCUMENT_ROW(value)}//button[@aria-label="Edit document"]`)
       .first()
       .click();
+    await this.page.locator(this.PASSPORT_MODAL).waitFor({ state: 'visible' });
   }
   public async cancelPopUp() {
     await this.page.getByRole('button', { name: 'Cancel' }).click();
+    await this.page.locator(this.PASSPORT_MODAL).waitFor({ state: 'hidden' });
   }
   public async addDate() {
     await this.page.getByRole('textbox', { name: 'MM/DD/YYYY' }).press('Enter');
