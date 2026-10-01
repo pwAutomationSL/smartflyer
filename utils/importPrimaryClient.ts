@@ -4,6 +4,8 @@ import path from 'node:path';
 
 import { expect, type APIRequestContext } from '@playwright/test';
 
+const RETRIABLE_MEDIA_UPLOAD_STATUSES = new Set([408, 429, 500, 502, 503, 504]);
+
 type Credentials = {
   username: string;
   password: string;
@@ -57,17 +59,27 @@ export const importPrimaryClient = async (
       `first_name,last_name,email,agent_id,agency_id\nFirstName,${lastName},${email},1,1\n`,
     );
 
-    const mediaResponse = await request.post(`${apiBaseUrl}/media`, {
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-        'X-Upload-Context': 'GENERAL',
-      },
-      multipart: {
-        'files[]': createReadStream(csvPath),
-      },
-    });
-    expect(mediaResponse.ok()).toBeTruthy();
+    const uploadMedia = () =>
+      request.post(`${apiBaseUrl}/media`, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+          'X-Upload-Context': 'GENERAL',
+        },
+        multipart: {
+          'files[]': createReadStream(csvPath),
+        },
+      });
+
+    let mediaResponse = await uploadMedia();
+    if (RETRIABLE_MEDIA_UPLOAD_STATUSES.has(mediaResponse.status())) {
+      mediaResponse = await uploadMedia();
+    }
+
+    const mediaUploadError = mediaResponse.ok()
+      ? ''
+      : `Media upload failed with status ${mediaResponse.status()}: ${await mediaResponse.text()}`;
+    expect(mediaResponse.ok(), mediaUploadError).toBeTruthy();
 
     const mediaBody = (await mediaResponse.json()) as MediaUploadResponse;
     const mediaUuid = mediaBody.data?.[0]?.uuid;

@@ -17,8 +17,8 @@ test.describe('GS-005 - Search - Announcements filter', () => {
       await loginPage.login({ username, password });
       await expect(page.locator(loginPage.EMAIL_INPUT)).toBeHidden({ timeout: 15000 });
     });
-    await test.step('2 - Go to Forum, Add new Post', async () => {
-      await sidebar.goToModule('Forum');
+    await test.step('2 - Go to Community Forum, Add new Post', async () => {
+      await sidebar.goToModule('Community Forum');
       await expect(page.locator(forum.ADD_NEW_POST)).toBeEnabled();
       await forum.clickAddNewpost();
       await forum.newForumPostawait(TITLE, DETAILS);

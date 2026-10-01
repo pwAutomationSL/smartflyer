@@ -123,7 +123,7 @@ export class AirRequest {
   public readonly DELETE_FF_PROGRAM = `//p[contains(.,'Frequent flyer program')]/../div//button`;
   public readonly TRIP_NOTES = `//label[contains(.,'Additional trip notes')]/../following-sibling::div//textarea`;
   public readonly CITY_COUNTRY_RESULT = `//div/div/../../../li/div/div/div/p[2]`;
-  public readonly EMPTY_RESULTS = `//div/div/div/ul/li/div`;
+  public readonly EMPTY_RESULTS = `//li/div[.//b[normalize-space(.)='No results found.'] and contains(normalize-space(.),'Please check the spelling or try another city or airport.')]`;
   public readonly PREVIOUS_MONTH = `(//button[@aria-label="Previous Month"])[1]`;
   public readonly ROUND_TRIP_RADIO = `//*[@id="radio-round-trip-0"]`;
   public readonly ADDED_IMAGE_TRIP_OVERVIEW = `//form//img`;

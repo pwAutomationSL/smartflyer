@@ -17,7 +17,7 @@ export class PartnersOnsite {
   public readonly MARKETING_TAB_TOP = `//button[@id="pills-marketing-tab"]`;
   public readonly SETTINGS_TAB_TOP = `//button[@id="pills-settings-tab"]`;
   public readonly INFO_TEXT_THINGS_TO_KNOW_TOP = `(//div[@aria-labelledby="pills-things_to_know-tab"]//div/p)[1]`;
-  public readonly SHARE_TOPBAR = `//div[contains(@class,'topbar')]//button[contains(.,'Share')]`;
+  public readonly SHARE_TOPBAR = `//div[contains(@class,'topbar')]//button[normalize-space(.)='Share']`;
   public readonly CREATE_BUTTON_MODAL = `(//div[contains(@class,'modal')]//button[contains(.,'Create')])[2]`;
   public readonly SEARCH_RESULT_MATCHES = `//div[contains(@class,'Layout_content')]//div/a[contains(@href,'https')]/div/div/div/p/span//mark`;
   public readonly PARTNER_TYPE_SELECT = `//select[@id="form_type"]`;

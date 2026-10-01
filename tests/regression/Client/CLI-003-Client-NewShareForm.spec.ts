@@ -30,10 +30,14 @@ test.describe('CLI-003 - Client - Validate new share form', () => {
       await expect(page.locator(clients.SHARE_EMAIL_CC)).toBeVisible();
       await expect(page.locator(clients.SHARE_EMAIL_BCC)).toBeVisible();
       await expect(page.locator(clients.SHARE_EMAIL_MESSAGE)).toBeVisible();
-      await expect(page.locator(clients.SHARE_EMAIL_MESSAGE_LIMIT)).toContainText('0/1000');
+      const defaultMessage = await page.locator(clients.SHARE_EMAIL_MESSAGE).inputValue();
+      await expect(page.locator(clients.SHARE_EMAIL_MESSAGE_LIMIT)).toHaveText(
+        `${defaultMessage.length}/1000`,
+      );
       await expect(page.locator(clients.SHARE_CANCEL)).toBeVisible();
       await expect(page.locator(clients.SHARE_SEND_FORM)).toBeVisible();
-      await expect(page.locator(clients.SHARE_SEND_FORM)).toBeDisabled();
+      await expect(page.locator(clients.SHARE_EMAIL_INPUT)).toHaveValue(/.+/);
+      await expect(page.locator(clients.SHARE_SEND_FORM)).toBeEnabled();
     });
   });
   test('Credit Card Form - Login as an Admin, click Share Form, fill data and send ', async ({

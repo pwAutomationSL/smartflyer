@@ -362,8 +362,8 @@ test.describe('API-002 - Primary Client Import', () => {
       try {
         expect(getNumericCount(importBody.data?.invalid_count)).toBe(1);
         expect(
-          Array.isArray(importBody.data?.invalid) ? importBody.data.invalid[0].errors.email : [],
-        ).toContain('The email field is required.');
+          Array.isArray(importBody.data?.invalid) ? importBody.data.invalid[0].errors.emails : [],
+        ).toContain('The emails field is required.');
       } catch (error) {
         await dumpResponseOnFailure('PRI_TC-005-import', importBody, error);
       }

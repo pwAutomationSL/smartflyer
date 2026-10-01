@@ -68,15 +68,18 @@ export class Clients {
   public readonly SHARE_BUTTON = `//button[text()="Share"]`;
   public readonly SEND_FORMS = `//button[text()="Send Forms"]`;
   public readonly PROFILE_FORM_CARD = `//button/h5[text()="Profile Form"]`;
+  public readonly PROFILE_FORM_BUTTON = `//button[.//h5[normalize-space(.)="Profile Form"]]`;
   public readonly PROFILE_FORM_CARD_RADIO = `//button/h5[text()="Profile Form"]/preceding-sibling::span`;
   public readonly CREDIT_CARD_FORM = `//button/h5[text()="Credit Card Form"]`;
+  public readonly CREDIT_CARD_FORM_BUTTON = `//button[.//h5[normalize-space(.)="Credit Card Form"]]`;
   public readonly CREDIT_CARD_FORM_RADIO = `//button/h5[text()="Credit Card Form"]/preceding-sibling::span`;
   public readonly SHARE_EMAIL = `//label[@for="email"]`;
+  public readonly SHARE_EMAIL_INPUT = `//input[@id="clientEmail"]`;
   public readonly SHARE_EMAIL_CC = `//label[@for="cc_email"]`;
   public readonly SHARE_EMAIL_BCC = `//label[@for="bcc_email"]`;
   public readonly SHARE_EMAIL_MESSAGE = `//textarea[@id="clientMessage"]`;
-  public readonly SHARE_EMAIL_MESSAGE_LIMIT = `//label[@for="message"]/../following-sibling::div//span`;
-  public readonly SHARE_CANCEL = `//button[text()="Cancel"]`;
+  public readonly SHARE_EMAIL_MESSAGE_LIMIT = `//textarea[@id="clientMessage"]/parent::div/following-sibling::div[1]/span`;
+  public readonly SHARE_CANCEL = `//dialog//button[normalize-space(.)="Cancel" and not(ancestor::*[@inert])]`;
   public readonly SHARE_SEND_FORM = `//button[text()="Send form"]`;
   public readonly RELATED_PASSENGER_ADDED_NAME = `(//button[contains(.,'Related Passengers')]/following-sibling::div//button)[1]//h4`;
   public readonly EDIT_CLIENT_DETAILS = `//button[text()='Edit']`;
@@ -949,10 +952,16 @@ export class Clients {
     await this.page.locator(this.SEND_FORMS).click();
   }
   public async checkCCForm() {
-    await this.page.locator(this.CREDIT_CARD_FORM_RADIO).click();
+    const creditCardForm = this.page.locator(this.CREDIT_CARD_FORM_BUTTON);
+    if ((await creditCardForm.getAttribute('aria-pressed')) !== 'true') {
+      await creditCardForm.click();
+    }
   }
   public async checkProfileForm() {
-    await this.page.locator(this.PROFILE_FORM_CARD_RADIO).click();
+    const profileForm = this.page.locator(this.PROFILE_FORM_BUTTON);
+    if ((await profileForm.getAttribute('aria-pressed')) !== 'true') {
+      await profileForm.click();
+    }
   }
   public async fillShareEmail(email: string) {
     await this.page.locator(`//input[@id="clientEmail"]`).fill(email);
