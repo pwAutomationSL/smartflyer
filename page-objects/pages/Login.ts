@@ -14,7 +14,7 @@ export class LoginPage {
   }
   public readonly EMAIL_INPUT = `//input[@type="email"]`;
   public readonly PASSWORD_INPUT = `//input[@type="password"]`;
-  public readonly LOGIN_BUTTON = `//input[@type="submit"]`;
+  public readonly LOGIN_BUTTON = `//button[@type="submit" and normalize-space(.)="Login"]`;
   public readonly ERROR_MESSAGE = `(//form//../div)[1]`;
   public readonly HEADER = `//h1`;
   public readonly USER_DROPDOWN_BUTTON = `//button[@id="dropdownMenuButton1"]`;
