@@ -130,6 +130,7 @@ export class Clients {
   public readonly CLIENT_EMAIL_SEARCH_RESULT = `(//table//tbody//tr[1]/td)[3]`;
   public readonly CLIENT_PHONE_SEARCH_RESULT = `(//table//tbody//tr[1]/td)[4]`;
   public readonly CLIENT_STATUS_SEARCH_RESULT = `(//table//tbody//tr[1]/td)[7]`;
+  public readonly CLIENTS_LOAD_ERROR = `//p[normalize-space(.)='We could not load clients. Try again later.'] | //div[normalize-space(.)='We could not load clients. Try again later.']`;
   public readonly ADD_PASSENGER = `//button[text()="Add Passenger"]`;
   public readonly RELATED_PASSENGER_EXPAND = `(//button[contains(.,'Related Passengers')]/following-sibling::div//button)[1]`;
   public readonly RELATED_PASSENGER_EXPAND_FROM_TAB = `(//div//button//div//a)[2]/parent::div/../..`;
@@ -533,9 +534,17 @@ export class Clients {
     await clientResult.click();
   }
   public async filterClientsByName(client: string) {
-    await this.page.getByRole('textbox', { name: 'Search' }).waitFor({ state: 'visible' });
-    await this.page.getByRole('textbox', { name: 'Search' }).fill(client);
-    await this.page.getByRole('textbox', { name: 'Search' }).press('Enter');
+    const searchInput = this.page.getByRole('textbox', { name: 'Search' });
+    const clientsLoadError = this.page.locator(this.CLIENTS_LOAD_ERROR).first();
+
+    await searchInput.or(clientsLoadError).first().waitFor({ state: 'visible' });
+    if (await clientsLoadError.isVisible()) {
+      await this.page.reload();
+    }
+
+    await searchInput.waitFor({ state: 'visible' });
+    await searchInput.fill(client);
+    await searchInput.press('Enter');
   }
   public async searchClientByName(client: string) {
     await this.filterClientsByName(client);
